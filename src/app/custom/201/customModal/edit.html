@@ -1,0 +1,84 @@
+  <div class="container-fluid  " (click)="clickInContainer()" (mousewheel)="onMouseWheelModal($event)" >
+    <div class="row backgroundcolor" style="padding-top:20px;padding-left:20px;text-align:initial;font-family: 'Roboto', sans-serif;height:50px">
+      <span aria-hidden="true">
+        <img angulartics2On="click" angularticsEvent="closeEdit" angularticsCategory="{{ context.obj.sessionId }}"  (click)="closeWindow('nosave')" src="{{assetsUrl}}/assets/tools/cl/ic_close_white_24dp_2x.png" style="right: 20px;position: absolute;cursor: pointer;width:24px" alt="submit" />
+      </span>
+     <span style="font-size:24px;color:#fff;font-weight: 300;">Manual Background Remover</span>
+    </div>
+  <div style="padding-left:20px" class="row editModalTopButtons backgroundcolor" >
+
+    <div class="backgroundcolor"  aria-label="..." style="float:left;height:50px">
+
+      <button angulartics2On="click" angularticsEvent="colorFG" angularticsCategory="{{ context.obj.sessionId }}" [disabled]="disableColorFG" #colorFG (click)="setColor('colorFG')" id="fg" style="padding: 8px 10px;" type="button" class="btn btn-default  fgUnChosen tooltipPu" >
+
+      <i class="material-icons" style="color:#7cb342;font-size: 22px;">add_circle</i> <span style="font-size:14px;color:#7cb342" class="btna">Mark Object</span>
+      <div class="tooltiptextPu" >
+        <div style="font-weight:bold;font-size:13px;padding-bottom: 3px;" [style.direction]="setdirection">Mark Background</div>
+        <div [style.direction]="setdirection">Draw lines to mark areas</div>
+        <div [style.direction]="setdirection">you want to remove from the image</div>
+      </div>
+        </button>
+      <button angulartics2On="click" angularticsEvent="colorBG" angularticsCategory="{{ context.obj.sessionId }}"  [disabled]="disableColorBG" #colorBG  id="bg" (click)="setColor('colorBG')"  style="padding: 8px 10px;"  type="button" class="btn btn-default  bgChosen tooltipPu">
+      <i class="material-icons" style="color:#f44336;font-size: 22px;">remove_circle</i> <span style="font-size:14px;color:#f44336" class="btna">Mark Background</span>
+      <div class="tooltiptextPu" >
+        <div style="font-weight:bold;font-size:13px;padding-bottom: 3px;" [style.direction]="setdirection">Mark Object</div>
+        <div [style.direction]="setdirection">Draw lines to mark areas</div>
+        <div [style.direction]="setdirection">you want to remove from the image</div>
+      </div>
+      </button>
+      <button angulartics2On="click" angularticsEvent="undoEdit" angularticsCategory="{{ context.obj.sessionId }}" [disabled]="disableUndoButton" #undoButton (click)="undoEdit()" style="padding: 8px 10px;" type="button" class="btn btn-default btna">
+        <span style="font-size:14px;color:#fff" class="btna" >UNDO</span></button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="progress">
+        <div class="progress-bar progress-bar-info" [style.width.%]="progressPercent"></div>
+      </div>
+    </div>
+    <div class="row" style="">
+        <div class="col-xs-12" style="background-color: #fff">
+          <div class="text-centered" >
+              <div #imagewrapper class="imagewrapper" [style.width.px]="imagewrapperSizeWidth" [style.height.px]="imagewrapperSizeheight" style=""
+                  [style.max-height.px]="imageWrapperMaxHeight" [style.overflow]="imagewrapperOverflow" angulartics2On="click" angularticsEvent="draw" angularticsCategory="{{ context.obj.sessionId }}" >
+                <img #image1Element  id="image1Element" src="{{context.originalImageUrl}}" [style.width.px]="imageSizeWidth" [style.height.px]="imageSizeHeight"  style=" position: relative; top: 0; left: 0;"/>
+                <img #image2Element id="image2Element" src="{{context.resultEditMaskImageUrl}}" [style.width.px]="imageSizeWidth" [style.height.px]="imageSizeHeight" [hidden]="maskHidden" style="position: absolute; top: 0; left: 0;"  />
+                <canvas #canvasElement class="cursorRed " [ngClass]="{cursorGreen : isGreen}" (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)"
+                    (mouseup)="onMouseUp($event)" (mouseout)="onMouseLeave($event)"  (mouseleave)="onMouseLeave($event)" width="{{canvasWidth}}" height="{{canvasHeight}}" [hidden]="maskHidden" style=" position: absolute; top: 0; left: 0;"></canvas>
+                <img src="{{srcImageResult}}" [style.display]="showResultImage" class="nodrag" [style.width.px]="imageSizeWidth" [style.height.px]="imageSizeHeight"
+                  style=" position: absolute; top: 0; left: 0;background-image: url(/assets/tools/transparent_bg.png)"/>
+              </div>
+          </div>
+          <div class="btn-group-vertical buttonGroup" role="group" style="position: absolute;" >
+            <button (mousedown)="doLongZoomDown('in')" (mouseup)="doLongZoomUp('in')" (mouseout)="doLongZoomUp('in')" type="button" class="btn btn-default zoomIn" angulartics2On="click" angularticsEvent="zoomIn" angularticsCategory="{{ context.obj.sessionId }}" ></button>
+            <button (mousedown)="doLongZoomDown('out')" (mouseup)="doLongZoomUp('out')"type="button" (mouseout)="doLongZoomUp('in')" class="btn btn-default zoomOut"  angulartics2On="click" angularticsEvent="zoomOut" angularticsCategory="{{ context.obj.sessionId }}" ></button>
+          </div>
+        </div>
+        <!-- The Modal -->
+
+        <div class="showInstructions" [style.display]="displayShowInstructions">
+          <div style="postion:relative;position: relative;background-color:white;width: 342px;height: 160px;font-size:14px;
+            margin-left: 28px;margin-top: px;padding: 12px;margin-top: 40px;      -webkit-box-shadow: 0 5px 15px rgba(0,0,0,.5);
+                    box-shadow: 0 5px 15px rgba(0,0,0,.5);cursor: default;    text-align: -webkit-auto;" [style.direction]="setdirection" [style.text-align]="setTextAlignDirection">
+            Use the <span class="red">MARK BACKGROUND</span> marker to adjust the background.<br>
+            Use the <span class="green">MARK OBJECT</span> for the object.<br>
+            The background remover will automaticly make adjustments, so there is no need to be precise.
+            <br><br>
+            GOT IT
+           </div>
+           <div style="position: relative;margin-left: 156px;margin-top: 24px; -webkit-box-shadow: 0 5px 15px rgba(0,0,0,.5);
+                  box-shadow: 0 5px 15px rgba(0,0,0,.5);">
+
+          </div>
+        </div>
+    </div>
+    <div class="row">
+      <div style="margin:10px 10px 0px 10px;direction:initial;float:right">
+
+        <button angulartics2On="click" angularticsEvent="closeEdit" angularticsCategory="{{ context.obj.sessionId }}" (click)="closeWindow('nosave')" class="btn btn-default ">Cancel</button>
+
+        <button angulartics2On="click" angularticsEvent="showResult" angularticsCategory="{{ context.obj.sessionId  }}" [disabled]="disableShowResult" (click)="showResult()" class="btn btn-default greenFont  ">preview result</button>
+        <button angulartics2On="click" angularticsEvent="saveChanges" angularticsCategory="{{ context.obj.sessionId }}" [disabled]="disableSaveImage" (click)="saveImage()" style="background-color: #568b3e; padding: 20px !important;color: white;" class="btn btn-raised ">save changes</button>
+
+      </div>
+    </div>
+</div>

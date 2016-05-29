@@ -1,69 +1,64 @@
 /*
  * Angular 2 decorators and services
  */
-import { Component, ViewEncapsulation } from '@angular/core';
-import { RouteConfig, Router } from '@angular/router-deprecated';
+import { Component, ViewEncapsulation, ElementRef, NgZone} from '@angular/core';
 
-import { AppState } from './app.service';
-import { Home } from './home';
-import { RouterActive } from './router-active';
+import { _settings } from './settings';
+import {Angulartics2GoogleAnalytics} from 'angulartics2/src/providers/angulartics2-google-analytics';
+
+import {Editpage} from './editpage.component';
+import {ShowimageService} from './custom/showimage.service';
+
 
 /*
  * App Component
  * Top Level Component
  */
 @Component({
-  selector: 'app',
+  selector: 'app-malabi',
   pipes: [ ],
-  providers: [ ],
-  directives: [ RouterActive ],
+  providers: [ Angulartics2GoogleAnalytics, ShowimageService],
+  directives: [ Editpage ],
   encapsulation: ViewEncapsulation.None,
   styles: [
     require('./app.css')
   ],
   template: `
-    <span router-active>
-      <button [routerLink]=" ['Index'] ">
-        Index
-      </button>
-    </span>
-    <span router-active>
-      <button [routerLink]=" ['Home'] ">
-        Home
-      </button>
-    </span>
-    <span router-active>
-      <button [routerLink]=" ['About'] ">
-        About
-      </button>
-    </span>
-
-    <main>
-      <router-outlet></router-outlet>
-    </main>
-
-    <pre class="app-state">this.appState.state = {{ appState.state | json }}</pre>
-  `
+<editpage></editpage>
+     `
 })
-@RouteConfig([
-  { path: '/',      name: 'Index', component: Home, useAsDefault: true },
-  { path: '/home',  name: 'Home',  component: Home },
-  // Async load a component using Webpack's require with es6-promise-loader and webpack `require`
-  { path: '/about', name: 'About', loader: () => require('es6-promise!./about')('About') }
-])
-export class App {
-  angularclassLogo = 'assets/img/angularclass-avatar.png';
-  loading = false;
-  name = 'Angular 2 Webpack Starter';
-  url = 'https://twitter.com/AngularClass';
 
-  constructor(
-    public appState: AppState) {
+export class App {
+
+  
+  constructor(private elementRef: ElementRef, private showimageService: ShowimageService, private _ngZone: NgZone) {
+      var native = this.elementRef.nativeElement;
+      showimageService.native = native;
+
+      showimageService.originalImageUrl = native.getAttribute("originalImageUrl");
+      showimageService.resultImageUrl = native.getAttribute("resultImageUrl");
+      showimageService.imageSizeWidth = native.getAttribute("imageSizeWidth");
+      showimageService.imageSizeHeight = native.getAttribute("imageSizeHeight");
+      var shadow = native.getAttribute("shadow");  
+      if(shadow !== null){
+        showimageService.applyShadow = shadow;
+      }
+      var transparent = native.getAttribute("transparent");  
+      if(transparent !== null){
+        showimageService.applyTransparent= transparent;
+
+      }
+      showimageService.apiUrl = _settings.apiUrl ;
+      showimageService.customerId = native.getAttribute("customerId");
+      window.camera51App = {
+        zone: this._ngZone,
+        componentFnaa: (value) => this.callFromOutside(value),
+        component: this
+      };
 
   }
 
   ngOnInit() {
-    console.log('Initial App State', this.appState.state);
   }
 
 }

@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html lang="">
+<head></head>
+<body>
+<style type="text/css">
+	body{
+		background-color: whitesmoke;
+	}
+</style>
+<div style="margin-left:20px">
+<h2>buttons</h2>
+
+<button  onclick="camera51.setColor('colorFG');">Mark Object</button>
+<button  onclick="camera51.setColor('colorBG');">Mark Background</button>
+<button  onclick="camera51.undo()">UNDO</button>
+<br>
+<button  onclick="camera51.zoomIn()">Zoom in</button>
+<button  onclick="camera51.zoomOut()">Zoom out</button>
+
+<button  onmousedown="camera51.onclickLongZoomIn()" onmouseup="camera51.onmouseupLongZoomIn()" >Long Zoom in</button>
+<button  onmousedown="camera51.onclickLongZoomOut()" onmouseup="camera51.onmouseupLongZoomOut()" >Long Zoom out</button>
+
+<br>
+<button  onclick="camera51.showResult()">Show Result</button>
+<button  onclick="camera51.saveImage()">Save Image</button>
+
+<p>
+<h2>I/O</h2>
+<label> Customer Id</label>  <input type="text" id="customerId" width="250" value="201">
+<label> Track Id</label>  <input type="text" id="trackId" width="250"> <button onclick="submitData()">Submit data</button>
+<br>
+<label> Result url</label>  <input type="text" name="resultUrl" id="resultUrl">
+
+</p>
+</div>
+<h2>Iframe</h2>
+<div style="width:870px;height:500px;border:0px;margin: 0 auto;" id="ad54">
+
+</div>
+
+<textarea id='code'>ronene</textarea>
+<button id='unsafe'>eval() in a sandboxed frame.</button>
+
+
+<script>
+
+function submitData(){
+	var customerId = document.getElementById('customerId').value;
+	var trackId = document.getElementById('trackId').value;
+	runCamera(customerId,trackId);
+}	
+
+function runCamera(customerId,trackId){
+	camera51.setData({customerId: customerId,
+		trackId: trackId});
+}
+
+window.onload = function(){
+	initCamera51({
+		elementId: "ad54",
+		//customerId: customerId,
+		//trackId: trackId,
+		callBackFuncSave: function(response){
+			// then user return a url
+			console.log("new callBackFuncSave " + response );
+		},
+		callBackFuncClose: function(response){
+			console.log("close "+ a);
+		},
+		callBackFuncBack: function(response){
+			console.log("callBackFuncBack  "+ a);
+		}
+
+	});
+}
+</script>
+<script type="text/javascript" src="/assets/camera51.js"></script>
+</body>
+</html>
