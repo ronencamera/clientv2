@@ -1,0 +1,83 @@
+
+<div class="container-fluid custom-modal-container " (click)="clickInContainer()" (mousewheel)="onMouseWheelModal($event)">
+    <div class="row custom-modal-header" style="text-align:center;padding:10px">
+    <span aria-hidden="true"><img angulartics2On="click" angularticsEvent="closeEdit" angularticsCategory="{{ context.obj.sessionId }}"  (click)="closeWindow('nosave')" src="{{assetsUrl}}/assets/tools/light_X_bkg-01.png" style="right: 7px;position: absolute;cursor: pointer;" alt="submit" /></span>
+    <span style="font-size:22px">{{ 'EDIT_PAGE_HEADER' | translate }}</span>
+    </div>
+    <div class="row editModalTopButtons" >
+      <span class="disLoader color" [style.display]="displayLoader">
+        <img  style="width: 53px;"  [src]="loaderImage">
+        Processing
+      </span>
+      <div class="btn-group " role="group" aria-label="..." style="float:left">
+        <button angulartics2On="click" angularticsEvent="colorBG" angularticsCategory="{{ context.obj.sessionId }}"  [disabled]="disableColorBG" #colorBG  id="bg" (click)="setColor('colorBG')"  type="button" class="btn btn-default bgButton bgChosen tooltipPu">
+          <div class="tooltiptextPu" >
+            <div style="font-weight:bold;font-size:13px;padding-bottom: 3px;" [style.direction]="setdirection">{{ "EDIT_PAGE_HOVER_OVER_BACKGROUND_TITLE" | translate}}</div>
+            <div [style.direction]="setdirection">{{ "EDIT_PAGE_HOVER_OVER_BACKGROUND_1" | translate }}</div>
+            <div [style.direction]="setdirection">{{ "EDIT_PAGE_HOVER_OVER_BACKGROUND_2" | translate }}</div>
+          </div>
+        </button>
+        <button angulartics2On="click" angularticsEvent="colorFG" angularticsCategory="{{ context.obj.sessionId }}" [disabled]="disableColorFG" #colorFG (click)="setColor('colorFG')" id="fg"  type="button" class="btn btn-default fgButton fgUnChosen tooltipPu">
+        <div class="tooltiptextPu" >
+          <div style="font-weight:bold;font-size:13px;padding-bottom: 3px;" [style.direction]="setdirection">{{ "EDIT_PAGE_HOVER_OVER_FOREGROUND_TITLE" | translate}}</div>
+          <div [style.direction]="setdirection">{{ "EDIT_PAGE_HOVER_OVER_BACKGROUND_1" | translate }}</div>
+          <div [style.direction]="setdirection">{{ "EDIT_PAGE_HOVER_OVER_FOREGROUND_2" | translate }}</div>
+        </div>
+          </button>
+        <button angulartics2On="click" angularticsEvent="undoEdit" angularticsCategory="{{ context.obj.sessionId }}" [disabled]="disableUndoButton" #undoButton (click)="undoEdit()" type="button" class="btn btn-default undo"></button>
+      </div>
+    </div>
+    <div class="row" style="position:relative">
+        <div class="col-xs-12" style="background-color: #E1E3E4">
+          <div class="text-centered" >
+              <div #imagewrapper class="imagewrapper" [style.width.px]="imagewrapperSizeWidth" [style.height.px]="imagewrapperSizeheight" style=""
+                  [style.max-height.px]="imageWrapperMaxHeight" [style.overflow]="imagewrapperOverflow" angulartics2On="click" angularticsEvent="draw" angularticsCategory="{{ context.obj.sessionId }}" >
+                <img #image1Element  id="image1Element" src="{{context.originalImageUrl}}" [style.width.px]="imageSizeWidth" [style.height.px]="imageSizeHeight"  style=" position: relative; top: 0; left: 0;"/>
+                <img #image2Element id="image2Element" src="{{context.resultEditMaskImageUrl}}" [style.width.px]="imageSizeWidth" [style.height.px]="imageSizeHeight" [hidden]="maskHidden" style="position: absolute; top: 0; left: 0;"  />
+                <canvas #canvasElement class="cursorRed " [ngClass]="{cursorGreen : isGreen}" (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)"
+                    (mouseup)="onMouseUp($event)" (mouseout)="onMouseLeave($event)"  (mouseleave)="onMouseLeave($event)" width="{{canvasWidth}}" height="{{canvasHeight}}" [hidden]="maskHidden" style=" position: absolute; top: 0; left: 0;"></canvas>
+                <img src="{{srcImageResult}}" [style.display]="showResultImage" class="nodrag" [style.width.px]="imageSizeWidth" [style.height.px]="imageSizeHeight"
+                  style=" position: absolute; top: 0; left: 0;background-image: url(/assets/tools/transparent_bg.png)"/>
+              </div>
+          </div>
+          <div class="btn-group-vertical buttonGroup" role="group" style="" >
+            <button (mousedown)="doLongZoomDown('in')" (mouseup)="doLongZoomUp('in')" (mouseout)="doLongZoomUp('in')" type="button" class="btn btn-default zoomIn" angulartics2On="click" angularticsEvent="zoomIn" angularticsCategory="{{ context.obj.sessionId }}" ></button>
+            <button (mousedown)="doLongZoomDown('out')" (mouseup)="doLongZoomUp('out')"type="button" (mouseout)="doLongZoomUp('in')" class="btn btn-default zoomOut"  angulartics2On="click" angularticsEvent="zoomOut" angularticsCategory="{{ context.obj.sessionId }}" ></button>
+          </div>
+        </div>
+        <!-- The Modal -->
+
+        <div class="showInstructions" [style.display]="displayShowInstructions">
+        <img src="{{assetsUrl}}/assets/tools/tutorial_arrows.png" style="position: absolute;left: 40px;top: 6px;">
+          <div style="postion:relative;position: relative;background-color:white;width: 342px;height: 95px;border-radius:5px;font-size:12px;font-weight:bold;
+            margin-left: 28px;margin-top: px;padding: 12px;margin-top: -28px;      -webkit-box-shadow: 0 5px 15px rgba(0,0,0,.5);
+                    box-shadow: 0 5px 15px rgba(0,0,0,.5);cursor: default;    text-align: -webkit-auto;" [style.direction]="setdirection" [style.text-align]="setTextAlignDirection">
+            {{ "EDIT_PAGE_TUTORIAL1_1" | translate }} <span class="red">{{ "EDIT_PAGE_TUTORIAL_RED" | translate}}</span> {{ "EDIT_PAGE_TUTORIAL1_2" | translate }}<br>
+            {{ "EDIT_PAGE_TUTORIAL1_1" | translate }} <span class="green">{{ "EDIT_PAGE_TUTORIAL2_GREEN" | translate}}</span> {{ "EDIT_PAGE_TUTORIAL2_1" | translate }}<br>
+            {{ "EDIT_PAGE_TUTORIAL2" | translate}}
+           </div>
+           <div style="position: relative;margin-left: 156px;margin-top: 24px; -webkit-box-shadow: 0 5px 15px rgba(0,0,0,.5);
+                  box-shadow: 0 5px 15px rgba(0,0,0,.5);">
+            <div  class="gotIt">
+              <span align="center" style="color: white;  font-size: 17px;  font-weight: bold;">{{ "EDIT_PAGE_TUTORIAL_GOTIT" | translate }}</span>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="row">
+      <div style="margin:10px 10px 0px 10px;direction:initial;height:35px;">
+        <span style="display: inline-block;vertical-align:middle;background: lightgray; border-color: red;  border-width: 1px; border-style: solid;height:40px;
+          width:321px; border-radius: 4px; font-size:12px" [style.width.px]="showProccessErrorWidth" [style.display]="showProccessError" [style.direction]="setdirection">
+          <span>
+          <span class="glyphicon glyphicon-info-sign" aria-hidden="true" style="color: red;font-size: 30px;padding: 4px;" [style.float]="setTextAlignDirection"></span>
+          <span > <div style="padding-top:2px;">{{showProccessErrorMessageTitle}}</div><div>{{showProccessErrorMessage}}</div></span>
+          </span>
+        </span>
+        <button angulartics2On="click" angularticsEvent="saveChanges" angularticsCategory="{{ context.obj.sessionId }}" [disabled]="disableSaveImage" (click)="saveImage()" class="btn btn-default saveimage">{{ 'EDIT_PAGE_SAVE_BUTTON' | translate }}</button>
+        <button angulartics2On="click" angularticsEvent="showResult" angularticsCategory="{{ context.obj.sessionId  }}" [disabled]="disableShowResult" (click)="showResult()" class="btn btn-default viewResult">{{ View_Result | translate }}</button>
+        <button md-button alt="Home" class="md-icon-button" ><i class="" md-icon>home</i></button>
+        <md-divider></md-divider>
+
+      </div>
+    </div>
+</div>

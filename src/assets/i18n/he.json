@@ -1,0 +1,57 @@
+{
+  "BACKGROUNG_REMOVER_PAGE_HEADER": "מסיר רקע",
+
+  "BACKGROUNG_REMOVER_PAGE_ORIGINAL_IMAGE_BUTTON": "השתמש בתמונה המקורית",
+  "BACKGROUNG_REMOVER_PAGE_ENHANCED_IMAGE_BUTTON": "השתמשה בתמונה משופרת",
+
+  "BACKGROUNG_REMOVER_PAGE_TOUCHUP_BUTTON": "ערוך",
+
+  "EDIT_PAGE_HEADER": "עריכה",
+  "EDIT_PAGE_SAVE_BUTTON": "שמור תמונה",
+  "EDIT_PAGE_VIEW_BUTTON": "הצג תוצאה",
+  "EDIT_PAGE_BACK_TO_EDIT_BUTTON": "חזור לעריכה",
+  "EDIT_PAGE_TUTORIAL": "שימוש בסמןהירוק והאדום מאפשר תיקון מהיר של בחירת האובייקט והרע בתמונה. אין צורך לדייק בבחירתך, סימון האיזור הכללי יאפשר למסיר הרקע להשלים את העבודה בצורה אוטומאטית",
+
+  "EDIT_PAGE_TUTORIAL1_1": " שימוש בסמן",
+  "EDIT_PAGE_TUTORIAL_RED": "אדום",
+  "EDIT_PAGE_TUTORIAL1_2": "  מאפשר תיקון מהיר של בחירת הרקע בתמונה",
+  "EDIT_PAGE_TUTORIAL2_GREEN":"ירוק",
+  "EDIT_PAGE_TUTORIAL2_1": "מאפשר תיקון מהיר של בחירת האובייקט",
+  "EDIT_PAGE_TUTORIAL2":" אין צורך לדייק בבחירתך, סימון האזור הכללי יאפשר למסיר הרקע להשלים את העבודה בצורה אוטומאטית",
+
+
+  "EDIT_PAGE_HOVER_OVER_UNDO": "בטל שינוי",
+
+
+  "EDIT_PAGE_HOVER_OVER_BACKGROUND_TITLE": "סמן רקע",
+  "EDIT_PAGE_HOVER_OVER_BACKGROUND_TITLE": "סמן רקע",
+  "EDIT_PAGE_HOVER_OVER_BACKGROUND_1": "סמן אילו איזורים בתמונה" ,
+  "EDIT_PAGE_HOVER_OVER_BACKGROUND_2": "תהיה מעוניין להסיר",
+  "EDIT_PAGE_HOVER_OVER_FOREGROUND_TITLE": "סמן אובייקט",
+  "EDIT_PAGE_HOVER_OVER_FOREGROUND_2": "תהיה מעוניין להשאיר",
+
+  "EDIT_PAGE_TUTORIAL_GOTIT": "הבנתי",
+
+  "PROCCESS_ERROR_MESSAGE": {
+    "TITLE": "הסרת רקע אוטומאטית הופסקה",
+    "TITLE_EDITOR" : "יכול להיות שיהיה קשה להסיר רקע",
+
+        "1" :"יש בעיה בעיבוד התמונה, נסה לעלות אותה מחדש",
+        "2" : " נמצא שהקונטרסט בין המוצר לרקע נמוך מידי",
+        "3" : "נמצאו נתוני תאורה בעייתיים בתמונה",
+        "4" :  "נמצא שהרקע בתמונה רועש מידי",
+        "5" :  "אין צורך בהסרת רקע אוטומאטית מתמונה זו",
+        "1_2" : "יש בעיה בעיבוד התמונה, נסה לעלות אותה מחדש",
+        "2_2" : "הסרת רקע אוטומאטית הופסקה נמצא שהקונטרסט בין המוצר לרקע נמוך מידי",
+        "3_2" :"הסרת רקע אוטומאטית הופסקה נמצאו נתוני תאורה בעייתיים בתמונה",
+        "4_2" :  "הסרת רקע אוטומאטית הופסקה נמצא שהרקע בתמונה רועש מידי",
+        "5_2" :  "אין צורך בהסרת רקע אוטומאטית מתמונה זו"
+  },
+  "YAD2": {
+    "HEADLINE1": "חדש!",
+    "HEADLINE1.2": "הסרת רקע מתמונה",
+    "HEADLINE2": "הידעת?",
+    "HEADLINE3": "שימוש בתמונה עם רקע לב מוגדילה את הסיכוי למכירה",
+    "BUTTONSAVE": "חינם, הוסף תמונה עם רקע לבן"
+  }
+}

@@ -1,0 +1,45 @@
+{
+    "BACKGROUNG_REMOVER_PAGE_HEADER": "Background Remover",
+    "BACKGROUNG_REMOVER_PAGE_ORIGINAL_IMAGE_BUTTON": "Use original image",
+    "BACKGROUNG_REMOVER_PAGE_ENHANCED_IMAGE_BUTTON": "Use enhanced image",
+
+    "BACKGROUNG_REMOVER_PAGE_TOUCHUP_BUTTON": "Touch up",
+
+
+    "EDIT_PAGE_HEADER": "Background Remover Edit",
+    "EDIT_PAGE_SAVE_BUTTON": "Save Changes",
+    "EDIT_PAGE_VIEW_BUTTON": "View Result",
+    "EDIT_PAGE_BACK_TO_EDIT_BUTTON": "Back to edit",
+
+    "EDIT_PAGE_TUTORIAL1_1": "Use the ",
+    "EDIT_PAGE_TUTORIAL_RED": "Red",
+    "EDIT_PAGE_TUTORIAL1_2": "marker to adjust the background.",
+    "EDIT_PAGE_TUTORIAL2_GREEN":"Green",
+    "EDIT_PAGE_TUTORIAL2_1": "for the object.",
+    "EDIT_PAGE_TUTORIAL2":" The background remover will automaticly make adjustments, so there is no need to be precise.",
+
+    "EDIT_PAGE_HOVER_OVER_UNDO": "Undo",
+    "EDIT_PAGE_HOVER_OVER_BACKGROUND_TITLE": "Mark Background",
+    "EDIT_PAGE_HOVER_OVER_BACKGROUND_1": "Draw lines to mark areas" ,
+    "EDIT_PAGE_HOVER_OVER_BACKGROUND_2": "you want to remove from the image",
+    "EDIT_PAGE_HOVER_OVER_FOREGROUND_TITLE": "Mark Object",
+    "EDIT_PAGE_HOVER_OVER_FOREGROUND_2": "you want to keep in the image",
+    "EDIT_PAGE_RESULT_CODE_LOW_CONTRAST_2": "It may be difficult to remove background in this image Low contrast between the object and background was detected",
+    "EDIT_PAGE_RESULT_CODE_BAD_LIGHTING_3": "It may be difficult to remove background in this image Poor image lighting was detected",
+    "EDIT_PAGE_RESULT_CODE_BG_NOISE_4": "It may be difficult to remove background in this image Cluttered background was detected",
+    "EDIT_PAGE_TUTORIAL_GOTIT": "GOT IT",
+
+    "PROCCESS_ERROR_MESSAGE": {
+      "TITLE" : "Automatic background removal is disabled.",
+      "TITLE_EDITOR" : "It may be difficult to remove background in this image",
+      "1" : "Could not process, try uploading image again",
+      "2" : "Low contrast between the object and background was detected",
+      "3" : "Poor image lighting was detected",
+      "4" : "Cluttered background was detected",
+      "5" : "No need for automatic background removal"
+    },
+    "YAD2": {
+      "HEADLINE": "Select enchaned image"
+    }
+
+}
