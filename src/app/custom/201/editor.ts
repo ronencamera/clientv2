@@ -1,4 +1,4 @@
-import {Component, Input, ViewChild , ElementRef, 
+import {Component, Input, ViewChild , ElementRef,
 ChangeDetectorRef,ViewEncapsulation,NgZone} from '@angular/core';
 import {CORE_DIRECTIVES,NgClass} from '@angular/common';
 import {Injectable}     from '@angular/core';
@@ -108,10 +108,10 @@ export class Editoraa {
     progressPercent = 0;
 
     constructor(private elementRef: ElementRef,private cdr: ChangeDetectorRef, private showimageService: ShowimageService,
-      private requestEditImage: RequestEditImage, private _dom: BrowserDomAdapter,private http:Http, 
+      private requestEditImage: RequestEditImage, private _dom: BrowserDomAdapter,private http:Http,
        private _ngZone: NgZone
       ) {
-      console.log(showimageService.native);
+
 
         this.srcImageResult = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
         this.apiUrl = showimageService.apiUrl + "processImage";
@@ -122,18 +122,18 @@ export class Editoraa {
       		"originalImageUrl": "data:image/gif;bas-e64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
             "resultEditMaskImageUrl": "data:image/gif;bas-e64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
       	};
-       
+
     //    sessionId = 1;
       //  var url = url.substring(0, url.lastIndexOf("/") + 1);
         this.editRequestSubject
           .switchMap((c) => this.http.post(c.a,  c.b,{ headers: c.header}))
           .map((res: Response) => res.json())
           .subscribe(res => this.showEditResponse(res.response));
-        
+
         this.getSessionInfo
           .switchMap((c) => this.http.get(c.url))
           .map((res: Response) => res.json())
-          .subscribe(res => this.foundTrackId(res));  
+          .subscribe(res => this.foundTrackId(res));
 
 		    console.log(showimageService);
         window.camera51Edit = {
@@ -155,7 +155,7 @@ export class Editoraa {
 
     getSession(path){
     	var url = path.substring(0, path.lastIndexOf("/") + 1);
-       
+
         var m = path.match(/([^:\\/]*?)(?:\.([^ :\\/.]*))?$/)
         var fileName = (m === null)? "" : m[0]
         var fileExt  = (m === null)? "" : m[1]
@@ -165,9 +165,11 @@ export class Editoraa {
 
     setTrackId(customerId, trackId){
       this.initDrawArrays(null);
-      console.log(customerId, trackId); 
+      if(customerId == '' || customerId == null){
+        return;
+      }
       this.showimageService.customerId = customerId;
-      this.getSessionInfo.next({'url': this.apiTrackId + '?track_id='+ trackId+'&customerId='+customerId });
+      this.getSessionInfo.next({'url': this.apiTrackId + '?trackId='+ trackId+'&customerId='+customerId });
       return true;
     }
 
@@ -187,13 +189,13 @@ export class Editoraa {
           _this.calculateImageSize();
 
            var dataURL = _this.canvasElement.nativeElement.toDataURL();
-        _this.undoDataUrl.push(dataURL);
-        _this.undoEditResponse.push(_this.obj);
 
-
+          _this.undoDataUrl.push(dataURL);
+          _this.undoEditResponse.push(_this.obj);
+          _this.doZoom('out');
+          //_this.resetSize('up');_this.resetSize('down');
         }
         img.src = url;
-
       }
 
 
@@ -210,8 +212,8 @@ export class Editoraa {
       this.maskUrl = response.resultEditMaskImageUrl;
       this.showimageService.resultImageUrl = response.resultImageUrl;
       this.sessionId = response.sessionId;
-      
-      
+
+
 
       this.initViewOnData(this.sessionId);
 
@@ -220,8 +222,8 @@ export class Editoraa {
     initViewOnData(sessionId){
 		  this.preversioResponseObj = {};
     	//var sessionId = this.getSession(this.showimageService.originalImageUrl);
-    	
-      this.showimageService.resultEditMaskImageUrl = this.maskUrl;  
+
+      this.showimageService.resultEditMaskImageUrl = this.maskUrl;
       this.preversioResponseObj.resultEditMaskImageUrl = this.maskUrl;
     	this.obj = {
           "originalImageUrl": this.showimageService.originalImageUrl,
@@ -234,16 +236,16 @@ export class Editoraa {
 
       this.applyShadow = this.showimageService.applyShadow;
       this.applyTransparent = this.showimageService.applyTransparent;
-     
+
       this.showimageService = this.showimageService;
       this.showimageService.obj = this.obj;
 
         // console.log("Aaaaaaaaaaaaaaa", this.showimageService.resultImageUrl);
 
        this.getImageDimensions(this.showimageService.originalImageUrl);
-        
 
-       
+
+
     }
 
     initData(outsideData){
@@ -459,7 +461,7 @@ export class Editoraa {
     doLongZoomPressDown(type){
       this.longPress = false;
       var _this = this;
-      
+
       var repeat = function(){
         _this.doZoom(type);
         _this.pressTimer =  TimerWrapper.setTimeout(repeat, 100);
@@ -478,8 +480,6 @@ export class Editoraa {
 
       var AMOUNT_ZOOM = this.AMOUNT_ZOOM;//0.09;
       var multiply = 0;
-      var imgSizeWidth = document.getElementById('image1Element').offsetWidth;
-      var imgSizeHeight = document.getElementById('image1Element').offsetHeight;
       var zoomW = 0;
       var zoomH = 0;
     //  console.log("totalZoomInitial", this.totalZoomInitial, this.totalZoom);
@@ -567,16 +567,18 @@ export class Editoraa {
       //this.imagewrapper.nativeElement.overflow = 'auto';
   //    console.log(type,scale, zoomW, zoomH);
     //  console.log(this.totalZoom);
-
+      var yMove = (zoomH - this.imagewrapperSizeheight);
+      var xMove = (zoomW - this.imagewrapperSizeWidth);
       this.imagewrapperSizeWidth = zoomW;
       this.imagewrapperSizeheight = zoomH;
 
-      this.imageSizeHeight = zoomH;
       this.imageSizeWidth = zoomW;
+      this.imageSizeHeight = zoomH;
+
       this.redrawSimple();
 
       this.totalScale = 1+(this.AMOUNT_ZOOM * this.totalZoom);
-
+      window.scrollBy(xMove/2,  yMove/2);
 //      console.log(this.image1Element.nativeElement);
     }
 
@@ -595,8 +597,7 @@ export class Editoraa {
           this.imagewrapperSizeheight = zoomH;
         //  this.ctx.scale(-scale,-scale);
         } else {
-          var imgSizeWidth = document.getElementById('image1Element').offsetWidth;
-          var imgSizeHeight = document.getElementById('image1Element').offsetHeight;
+
           var scale =  (this.AMOUNT_ZOOM * this.totalZoom);
           if(this.totalZoom < 0 ){
 
@@ -873,7 +874,7 @@ export class Editoraa {
       	this.undoButton.nativeElement.classList.add("undoDisabled");
      	  this.undoButton.nativeElement.setAttribute("disabled", "disabled");
       }
-      
+
       this.runMatting();
       return false;
     }
@@ -893,14 +894,14 @@ export class Editoraa {
         this.apiUrl,
         this.showimageService.resultEditMaskImageUrl,
         true,
-        this.applyShadow, 
-        this.showimageService.applyTransparent
+        this.applyShadow,
+        this.showimageService.applyTransparent, isSaveRequest
         ).subscribe(a => this.showResultResponse(a.response,isSaveRequest));
         this.startLoader();
     }
 
     startLoader(){
-
+      window.callbackEdit({'loader':true});
       this.width = 0;
       this.progressPercent = 30;
 
@@ -918,6 +919,7 @@ export class Editoraa {
     }
 
     stopLoader(){
+      window.callbackEdit({'loader':false});
       if(this.progressPercent > 0)
         TimerWrapper.clearInterval(this.timeProgress);
       this.progressPercent = 0;
@@ -966,7 +968,7 @@ export class Editoraa {
         'undoDataUrl':this.undoDataUrl,
         'undoEditResponse':this.undoEditResponse
       }
-
+      window.callbackEdit({'url':this.resultImageUrl});
      // this.dialog.close('openResult');
     }
 

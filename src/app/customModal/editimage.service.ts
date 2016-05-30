@@ -8,7 +8,7 @@ export class RequestEditImage {
 
   constructor(private http: Http) {}
 
-  search (term, origImgUrl:string, imageId:string, customerId, sessionId, apiUrl, maskUrl, doMatting = false, shadow = true, transparent) {
+  search (term, origImgUrl:string, imageId:string, customerId, sessionId, apiUrl, maskUrl, doMatting = false, shadow = true, transparent, saveResult = false) {
 
     //let wikiUrl = 'http://cam51-lb-1440631109.us-east-1.elb.amazonaws.com/Camera51Server/processImage';
 
@@ -27,7 +27,7 @@ export class RequestEditImage {
 var creds = {"origImgUrl": origImgUrl,
   "imageId": imageId,
   "sessionId": sessionId,
-
+  "saveResult": saveResult,
   "customerId": customerId,
   "doMatting": doMatting,
   "previousMaskUrl": maskUrl,

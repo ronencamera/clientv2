@@ -49,15 +49,17 @@
 
     var parentDocHeight = document.documentElement.clientHeight;
     var parentDocWidth = document.documentElement.clientWidth;
-    
 
+    var mainWindow ;
+    var eventPost;
      window.addEventListener('message', function (e) {
-       var mainWindow = e.source;
+       mainWindow = e.source;
+       eventPost = e;
        if(e.data == '') return;
        var result = '';
        try {
          result = e.data;
-        
+
          if(e.data.trackId != '' && e.data.trackId !== null && e.data.height !== undefined){
            window.camera51App.zone.run(function () { window.camera51Edit.setTrackId(e.data.customerId, e.data.trackId)});
            return;
@@ -120,6 +122,13 @@
        //result = "a";
        mainWindow.postMessage(result, event.origin);
      });
+
+
+     function callbackEdit (mes){
+
+        mainWindow.postMessage(mes, eventPost.origin);
+        return true;
+     }
    </script>
 </body>
 </html>

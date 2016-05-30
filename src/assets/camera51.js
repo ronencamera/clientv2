@@ -6,10 +6,10 @@ function initCamera51(obj) {
 }
 
 function camera51obj(obj){
- 
+
 	var link = "index.html"
 	var iframe = document.createElement('iframe');
-
+  this.obj = obj;
   this.setData = function(code){
     unsandboxedFrame.contentWindow.postMessage({'height': 2,'customerId':obj.customerId,  'trackId': obj.trackId}, '*');
     return true;
@@ -35,9 +35,9 @@ function camera51obj(obj){
       _this.setData(obj);
       return true;
     }
-    
+
   });
-    
+
   this.setData = function(obj){
     unsandboxedFrame.contentWindow.postMessage({'height': 2,'customerId':obj.customerId,  'trackId': obj.trackId}, '*');
     return true;
@@ -47,12 +47,12 @@ function camera51obj(obj){
     unsandboxedFrame.contentWindow.postMessage('setColor_'+code, '*');
     return 1;
   }
-  this.showResult = function(code){  
+  this.showResult = function(code){
     unsandboxedFrame.contentWindow.postMessage('showResult', '*');
     return 1;
   }
   this.saveImage = function(code){
-    
+
     unsandboxedFrame.contentWindow.postMessage('saveImage', '*');
     return 1;
   }
@@ -87,22 +87,30 @@ function camera51obj(obj){
 
   // Listen for response messages from the frames.
   window.addEventListener('message', function (e) {
-  	
+
      if ( (e.origin === (window.location.protocol + "//" + window.location.host)
             && e.source === unsandboxedFrame.contentWindow)) {
       var data = e.data;
+
       if(e.data == false){
-         obj.callBackFuncClose(e.data);
+         camera51.obj.callBackFuncClose(e.data);
       }
       if(e.data == 'back'){
-         obj.callBackFuncBack(e.data);
+         camera51.obj.callBackFuncBack(e.data);
       }
-      if(data.url > 5){
-         obj.callBackFuncSave(e.data);
+      if(e.data.hasOwnProperty('url') && data.url.length > 5){
+        camera51.obj.callBackFuncSave(data.url);
+      }
+      if(e.data.hasOwnProperty('loader') ){
+        if(data.loader == true){
+          camera51.obj.callBackStartLoader(data.loader);
+        }
+        if(data.loader == false){
+          camera51.obj.callBackStopLoader(data.loader);
+        }
       }
     }
   });
 
 
 }
- 

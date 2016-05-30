@@ -226,10 +226,12 @@ module.exports = {
      *
      * See: https://www.npmjs.com/package/copy-webpack-plugin
      */
-    new CopyWebpackPlugin([{
-      from: 'src/assets',
-      to: 'assets'
-    }]),
+    new CopyWebpackPlugin([
+      {
+        from: 'src/assets',
+        to: 'assets'
+      },
+       { from: 'src/start.html', to: 'start.html' }, ]),
 
     /*
      * Plugin: HtmlWebpackPlugin

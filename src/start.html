@@ -27,29 +27,24 @@
 
 <p>
 <h2>I/O</h2>
-<label> Customer Id</label>  <input type="text" id="customerId" width="250" value="201">
-<label> Track Id</label>  <input type="text" id="trackId" width="250"> <button onclick="submitData()">Submit data</button>
+<label> Customer Id</label>  <input type="text" id="customerId" style="width:40px" value="201">
+<label> Track Id</label>  <input type="text" id="trackId" style="width:250px" value="http://s3.amazonaws.com/cam-dev-server/19052016/1231234/SID_ed69efad9948419b90e6a7500c42bda4/5588751fc6d340fc9ed2982f9a77ef80.jpg"> <button onclick="submitData()">Submit data</button>
 <br>
-<label> Result url</label>  <input type="text" name="resultUrl" id="resultUrl">
-
+<label> Result url</label>  <input type="text" name="resultUrl" style="width:250px" disabled="disabled" id="resultUrl">
+<label> Loader (see callback)</label>  <input type="text"  disabled="disabled" id="loader">
 </p>
 </div>
 <h2>Iframe</h2>
 <div style="width:870px;height:500px;border:0px;margin: 0 auto;" id="ad54">
 
 </div>
-
-<textarea id='code'>ronene</textarea>
-<button id='unsafe'>eval() in a sandboxed frame.</button>
-
-
 <script>
 
 function submitData(){
 	var customerId = document.getElementById('customerId').value;
 	var trackId = document.getElementById('trackId').value;
 	runCamera(customerId,trackId);
-}	
+}
 
 function runCamera(customerId,trackId){
 	camera51.setData({customerId: customerId,
@@ -61,15 +56,19 @@ window.onload = function(){
 		elementId: "ad54",
 		//customerId: customerId,
 		//trackId: trackId,
-		callBackFuncSave: function(response){
+		callBackStartLoader: function(){
 			// then user return a url
-			console.log("new callBackFuncSave " + response );
+			document.getElementById('loader').value = "START";
+			document.getElementById('loader').style.backgroundColor = "red";
+		//	console.log("new callBackFuncSave " + response );
 		},
-		callBackFuncClose: function(response){
-			console.log("close "+ a);
+		callBackStopLoader: function(){
+			document.getElementById('loader').style.backgroundColor = "";
+			document.getElementById('loader').value = "STOP";
 		},
-		callBackFuncBack: function(response){
-			console.log("callBackFuncBack  "+ a);
+		callBackFuncSave: function(response){
+			document.getElementById('resultUrl').value = response;
+
 		}
 
 	});
