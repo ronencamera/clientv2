@@ -189,10 +189,16 @@ export class Editoraa {
           _this.calculateImageSize();
 
            var dataURL = _this.canvasElement.nativeElement.toDataURL();
-
           _this.undoDataUrl.push(dataURL);
           _this.undoEditResponse.push(_this.obj);
-          _this.doZoom('out');
+          TimerWrapper.setTimeout(function(){
+            _this.ctx.scale(_this.totalScale,_this.totalScale);
+            console.log("scale", _this.totalScale);
+
+          }, 200);
+
+          //_this.doZoom('out');
+
           //_this.resetSize('up');_this.resetSize('down');
         }
         img.src = url;
@@ -289,7 +295,7 @@ export class Editoraa {
       this.obj.origWidth = this.canvasWidth;
       this.obj.origHeight = this.canvasHeight;
 
-      var windowWidth = window.innerWidth ;
+      var windowWidth = window.innerWidth -5;
       var windowHeight = window.innerHeight -5;//(window.innerHeight -240) * 0.9; // 80 + 50+60+50
       this.imageWrapperMaxHeight = windowHeight;
       //windowWidth = windowWidth.toPrecision(2);
@@ -1082,13 +1088,10 @@ export class Editoraa {
         this.undoEditResponse.push(this.obj);
 
       }
-
-      //console.log("ngAfterViewInit",this.undoDataUrl);
     }
 
     ngOnChanges(){
 //        console.log("changes",document.getElementById('image1Element').offsetWidth);
-
     }
     ngOnInit() {
      // we need to detach the change detector initially, to prevent a
@@ -1101,7 +1104,6 @@ export class Editoraa {
           _this.calculateImageSize();
         //  console.log("resize");
           _this.redrawSimple();
-
         //  console.log((window.outerWidth - 8) / window.innerWidth);
 
        };
