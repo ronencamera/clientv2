@@ -1,6 +1,4 @@
 
-@import url(https://fonts.googleapis.com/css?family=Roboto:400,500,300);
-@import url(https://fonts.googleapis.com/icon?family=Material+Icons);
 
 button:focus {outline:0;}
 html {
@@ -114,15 +112,8 @@ html {
 .undoDisabled{
 
 }
-.cursorRed{
-  cursor: url('/assets/tools/red_pointer_6_lastone.cur'), auto;
-  cursor: url('/assets/tools/red_pointer_6.png') 0 0, auto;
 
-}
-.cursorGreen{
-  cursor: url('/assets/tools/green_pointer_6_lastone.cur'), auto;
-  cursor: url('/assets/tools/green_pointer_6.png') 0 0, auto;
-}
+
 .editModalTopButtons{
 
   box-shadow: 0px 10px 0px 0px #888888;

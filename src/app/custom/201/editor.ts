@@ -21,7 +21,11 @@ import {ShowimageService} from '../showimage.service';
 
 import 'rxjs/Rx';
 
+var greenloader = require("url?mimetype=image/png!../../../assets/tools/green_pointer_6.png");
+var greenloaderCur = require("url?mimetype=image/png!../../../assets/tools/green_pointer_6_lastone.cur");
 
+var redloader = require("url?mimetype=image/png!../../../assets/tools/red_pointer_6.png");
+var redloaderCur = require("url?mimetype=image/png!../../../assets/tools/red_pointer_6_lastone.cur");
 
 @Component({
     selector: 'editor',
@@ -30,7 +34,18 @@ import 'rxjs/Rx';
    // pipes: [TranslatePipe],
     encapsulation: ViewEncapsulation.Emulated,
 
-    styles: [ require('./customModal/editor.css')],
+    styles: [ require('./customModal/editor.css'),
+
+    `
+    .cursorRed{
+      cursor: url(` + greenloaderCur+ ` ), auto;
+      cursor: url(` + redloaderCur+ ` ) 0 0, auto
+    }
+    .cursorGreen {
+      cursor: url(` + redloader+ `), auto;
+      cursor: url(` + greenloader+ `) 0 0, auto;
+    }`
+  ],
     template: require('./customModal/editor.html')
 })
 @Injectable()
@@ -49,6 +64,8 @@ export class Editoraa {
     showProccessError = 'none';
     maskHidden = false;
     imageWrapperMaxHeight;
+    greenloader = greenloader ;//= require("url?mimetype=image/png!../../../assets/tools/green_pointer_6.png");
+
     imagewrapperSizeWidth;
     isGreen = false;
     flagShowResult = false;
@@ -113,7 +130,7 @@ export class Editoraa {
        private _ngZone: NgZone
       ) {
 
-
+        this.greenloaderImage = greenloader;
         this.srcImageResult = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
         this.apiUrl = showimageService.apiUrl + "processImage";
         this.apiTrackId = showimageService.apiUrl + "retrieveSession";
