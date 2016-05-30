@@ -70,7 +70,8 @@ export class Editoraa {
     public clickLineWidth = new Array();
     public canvas_simple;
     public context_simple;
-    applyShadow = false;
+    applyShadow = true;
+    applyTransparent = false;
     countEdits:Number = 0;
     public canvasWidth = 236;
     public canvasHeight =314;
@@ -98,7 +99,7 @@ export class Editoraa {
   //  View_Result= "";
     editRequestSubject = new Subject();
     getSessionInfo = new Subject();
-    flagShouldInitizlize = true;
+    flagShouldInitizlize = false;
     showProccessErrorMessageTitle = "";
     showProccessErrorMessage = "";
     public showProccessErrorWidth = 397;
@@ -106,7 +107,7 @@ export class Editoraa {
     apiTrackId:string;
     progressPercent = 0;
 
-    constructor(private elementRef: ElementRef,private cdr: ChangeDetectorRef, public showimageService: ShowimageService,
+    constructor(private elementRef: ElementRef,private cdr: ChangeDetectorRef, private showimageService: ShowimageService,
       private requestEditImage: RequestEditImage, private _dom: BrowserDomAdapter,private http:Http, 
        private _ngZone: NgZone
       ) {
@@ -184,6 +185,12 @@ export class Editoraa {
           _this.obj.imageSize.width = width;//this.image1Element.nativeElement.naturalWidth;
 
           _this.calculateImageSize();
+
+           var dataURL = _this.canvasElement.nativeElement.toDataURL();
+        _this.undoDataUrl.push(dataURL);
+        _this.undoEditResponse.push(_this.obj);
+
+
         }
         img.src = url;
 
@@ -215,7 +222,7 @@ export class Editoraa {
     	//var sessionId = this.getSession(this.showimageService.originalImageUrl);
     	
       this.showimageService.resultEditMaskImageUrl = this.maskUrl;  
-
+      this.preversioResponseObj.resultEditMaskImageUrl = this.maskUrl;
     	this.obj = {
           "originalImageUrl": this.showimageService.originalImageUrl,
           "resultImageUrl": this.showimageService.resultImageUrl,
@@ -225,15 +232,15 @@ export class Editoraa {
           "customerId":this.showimageService.customerId
         }
 
-        this.applyShadow = this.showimageService.applyShadow;
-        this.applyTransparent = this.showimageService.applyTransparent;
-       
-        this.showimageService = this.showimageService;
-        this.showimageService.obj = this.obj;
+      this.applyShadow = this.showimageService.applyShadow;
+      this.applyTransparent = this.showimageService.applyTransparent;
+     
+      this.showimageService = this.showimageService;
+      this.showimageService.obj = this.obj;
 
-         console.log("Aaaaaaaaaaaaaaa", this.showimageService.resultImageUrl);
+        // console.log("Aaaaaaaaaaaaaaa", this.showimageService.resultImageUrl);
 
-       this.getImageDimensions(this.showimageService.resultImageUrl);
+       this.getImageDimensions(this.showimageService.originalImageUrl);
         
 
        

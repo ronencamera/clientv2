@@ -17,5 +17,5 @@ export class ShowimageService{
   applyShadow:boolean = true;
   applyTransparent:boolean = false;
   editedStuff;
-  resultEditMaskImageUrl:string;
+  resultEditMaskImageUrl;
 }
