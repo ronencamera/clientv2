@@ -106,6 +106,7 @@ export class Editoraa {
     loaderImage ;
     apiTrackId:string;
     progressPercent = 0;
+    showEditorView = "hidden";
 
     constructor(private elementRef: ElementRef,private cdr: ChangeDetectorRef, private showimageService: ShowimageService,
       private requestEditImage: RequestEditImage, private _dom: BrowserDomAdapter,private http:Http,
@@ -196,7 +197,7 @@ export class Editoraa {
             console.log("scale", _this.totalScale);
 
           }, 200);
-
+          _this.showEditorView = 'visible';
           //_this.doZoom('out');
 
           //_this.resetSize('up');_this.resetSize('down');

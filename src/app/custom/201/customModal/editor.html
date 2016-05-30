@@ -1,7 +1,7 @@
 
 <div class="row" style="">
     <div class="col-xs-12" style="background-color: #fff">
-      <div class="text-centered" >
+      <div class="text-centered" [style.visibility]="showEditorView">
           <div #imagewrapper class="imagewrapper" [style.width.px]="imagewrapperSizeWidth" [style.height.px]="imagewrapperSizeheight" style=""
               [style.max-height.px]="imageWrapperMaxHeight"  angulartics2On="click" angularticsEvent="draw" angularticsCategory="{{ obj.sessionId }}" >
             <img #image1Element  id="image1Element" src="{{obj.originalImageUrl}}" [style.width.px]="imageSizeWidth" [style.height.px]="imageSizeHeight"  style=" position: relative; top: 0; left: 0;"/>
