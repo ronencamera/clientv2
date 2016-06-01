@@ -43,7 +43,7 @@
     var mainWindow ;
     var eventPost;
      window.addEventListener('message', function (e) {
-       
+
        mainWindow = e.source;
        eventPost = e;
        if(e.data == '') return;
@@ -51,9 +51,20 @@
        try {
          result = e.data;
          if(e.data.trackId != '' && e.data.trackId !== null && e.data.customerId !== undefined){
-           window.camera51App.zone.run(function () {
-             window.camera51Edit.setTrackId(e.data.objInJsonString);
-            });
+          if(e.data.hasOwnProperty('objInJsonString')){
+            window.camera51App.zone.run(function () {
+              window.camera51Edit.setTrackId(e.data.objInJsonString);
+             });
+          } else {
+             var ob = {};
+             ob.trackId = e.data.trackId;
+             ob.customerId = e.data.customerId;
+             window.camera51App.zone.run(function () {
+               window.camera51Edit.setTrackId(JSON.stringify(ob));
+              });
+          }
+
+
            return;
          }
 
@@ -125,5 +136,5 @@
         return true;
      }
    </script>
-</body>
+<script type="text/javascript" src="polyfills.0a5fa375cda8df736015.bundle.js"></script><script type="text/javascript" src="vendor.b5b0402ed86ea48b5e65.bundle.js"></script><script type="text/javascript" src="main.5f37f6e843bd7ea19e97.bundle.js"></script></body>
 </html>

@@ -1,5 +1,5 @@
 
-export var _settings = {
+export var _settingsD = {
 	buildPath: 'scripts/build',
   assetsUrl: '', // NO SLASH AT THE END
   lang: 'he',
@@ -8,7 +8,7 @@ export var _settings = {
 	applyShadow: true,
 	customerCss:''
 };
-export var _settingss = {
+export var _settings = {
 	buildPath: 'scripts/build',
   assetsUrl: 'http://crazylister.s3-website-us-east-1.amazonaws.com', // NO SLASH AT THE END
   lang: 'en',
