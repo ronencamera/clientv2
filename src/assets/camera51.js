@@ -2,13 +2,14 @@
 var camera51;
 function initCamera51(obj) {
  camera51 = new camera51obj(obj);
-
 }
 
 function camera51obj(obj){
-  var link = "http://crazylister.s3-website-us-east-1.amazonaws.com/index.html"
-  var frameDomain = camera51HelperextractDomain(link);
-
+  var iframeSrc = "http://crazylister.s3-website-us-east-1.amazonaws.com/index.html"
+  if(obj.hasOwnProperty('iframeSrc') && obj.iframeSrc.length > 1){
+    iframeSrc = obj.iframeSrc;
+  }
+  var frameDomain = camera51HelperextractDomain(iframeSrc);
 
 	var iframe = document.createElement('iframe');
   this.obj = obj;
@@ -21,11 +22,12 @@ function camera51obj(obj){
   {
     // exists
   } else {
+    this.obj.callBackStartLoader()
     iframe.frameBorder=0;
     iframe.width="100%";
     iframe.height="100%";
     iframe.id="camera51Frame";
-    iframe.setAttribute("src", link);
+    iframe.setAttribute("src", iframeSrc);
     iframe.style = "border:0;"
     document.getElementById(obj.elementId).appendChild(iframe);
   }
@@ -33,6 +35,7 @@ function camera51obj(obj){
   var _this = this;
   iframe.addEventListener("load", function() {
     unsandboxedFrame = document.getElementById('camera51Frame');
+    _this.obj.callBackStopLoader();
     if(obj.trackId !== ''){
       _this.setData(obj);
       return true;
@@ -104,11 +107,14 @@ function camera51obj(obj){
       }
       if(e.data.hasOwnProperty('loader') ){
         if(data.loader == true){
-          camera51.obj.callBackStartLoader(data.loader);
+          camera51.obj.callBackStartLoader();
         }
         if(data.loader == false){
-          camera51.obj.callBackStopLoader(data.loader);
+          camera51.obj.callBackStopLoader();
         }
+      }
+      if(e.data.hasOwnProperty('error') ){
+          camera51.obj.callBackError(data);
       }
 
   });
@@ -118,6 +124,7 @@ function camera51obj(obj){
 
 function camera51HelperextractDomain(url) {
     var domain;
+
     //find & remove protocol (http, ftp, etc.) and get domain
     if (url.indexOf("://") > -1) {
         domain = url.split('/')[0];
@@ -126,6 +133,10 @@ function camera51HelperextractDomain(url) {
     }
     else {
         domain = url.split('/')[0];
+        var url = window.location.href
+        var arr = url.split("/");
+      domain = arr[0] + "//" + arr[2]
+
     }
 
     //find & remove port number

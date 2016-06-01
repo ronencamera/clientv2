@@ -60,7 +60,7 @@
        try {
          result = e.data;
 
-         if(e.data.trackId != '' && e.data.trackId !== null && e.data.height !== undefined){
+         if(e.data.trackId != '' && e.data.trackId !== null && e.data.customerId !== undefined){
            window.camera51App.zone.run(function () { window.camera51Edit.setTrackId(e.data.customerId, e.data.trackId)});
            return;
          }
@@ -124,7 +124,7 @@
 
 
      function callbackEdit (mes){
-
+       
         mainWindow.postMessage(mes, eventPost.origin);
         return true;
      }

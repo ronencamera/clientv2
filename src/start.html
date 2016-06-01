@@ -31,7 +31,8 @@
 <label> Track Id</label>  <input type="text" id="trackId" style="width:250px" value="http://s3.amazonaws.com/cam-dev-server/19052016/1231234/SID_ed69efad9948419b90e6a7500c42bda4/5588751fc6d340fc9ed2982f9a77ef80.jpg"> <button onclick="submitData()">Submit data</button>
 <br>
 <label> Result url</label>  <input type="text" name="resultUrl" style="width:250px" disabled="disabled" id="resultUrl">
-<label> Loader (see callback)</label>  <input type="text"  disabled="disabled" id="loader">
+<label> Loader (see callback)</label>  <input type="text"  disabled="disabled" id="loader"><br><br>
+<label style="vertical-align: top;"> Error found (see callback)</label>  <textarea   disabled="disabled" id="responseError" rows="3" cols="40"></textarea>
 </p>
 </div>
 <h2>Iframe</h2>
@@ -55,6 +56,7 @@ function runCamera(customerId,trackId){
 window.onload = function(){
 	initCamera51({
 		elementId: "ad54",
+		iframeSrc: "index.html",
 		//customerId: customerId,
 		//trackId: trackId,
 		callBackStartLoader: function(){
@@ -69,7 +71,11 @@ window.onload = function(){
 		},
 		callBackFuncSave: function(response){
 			document.getElementById('resultUrl').value = response;
-
+		},
+		callBackError: function(response){
+			// response.error = (types:  trackerIdNotFound)
+			// response.message
+			document.getElementById('responseError').value = JSON.stringify(response);
 		}
 
 	});
