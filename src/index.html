@@ -27,7 +27,7 @@
 
 <div style="text-align:center">
   <app-malabi lang="en" customerID="201" shadow="true" >
-    Loading </app-malabi>
+     </app-malabi>
 </div>
 
 
@@ -67,7 +67,6 @@
       //   console.log(result);
          if(result == "openEdit"){
           window.camera51App.zone.run(function () { window.camera51Edit.openEdit()});
-          console.log('open edit');
           return;
          }
          if(result == 'setColor_colorBG'){
@@ -120,7 +119,7 @@
          result = 'eval() threw an exception.';
        }
        //result = "a";
-       mainWindow.postMessage(result, event.origin);
+       mainWindow.postMessage(result, eventPost.origin);
      });
 
 

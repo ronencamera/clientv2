@@ -148,12 +148,12 @@ export class Editoraa {
           .map((res: Response) => res.json())
           .subscribe(res => this.showEditResponse(res.response));
 
+
         this.getSessionInfo
-          .switchMap((c) => this.http.get(c.url))
+          .switchMap((c) => this.http.post(c.url, c.b, {headers: c.headers}))
           .map((res: Response) => res.json())
           .subscribe(res => this.foundTrackId(res));
 
-		    console.log(showimageService);
         window.camera51Edit = {
              zone: this._ngZone,
              doZoom: (value) => this.doZoom(value),
@@ -181,13 +181,42 @@ export class Editoraa {
         return url.substring(url.lastIndexOf("SID"),url.lastIndexOf("/"));
     }
 
+    param(object) {
+     var encodedString = '';
+     for (var prop in object) {
+         if (object.hasOwnProperty(prop)) {
+             if (encodedString.length > 0) {
+                 encodedString += '&';
+             }
+             encodedString += encodeURI(prop + '=' + object[prop]);
+         }
+     }
+     return encodedString;
+   }
+
     setTrackId(customerId, trackId){
       this.initDrawArrays(null);
       if(customerId == '' || customerId == null){
         return;
       }
       this.showimageService.customerId = customerId;
-      this.getSessionInfo.next({'url': this.apiTrackId + '?trackId='+ trackId+'&customerId='+customerId });
+
+      c = {};
+
+      var creds = {
+        "trackId" : trackId,
+        "customerId": customerId
+      };
+
+      var  credsa = this.param(creds);
+      console.log(credsa);
+      var c = {};
+      c.url = this.apiTrackId;
+      c.b = credsa;
+      var headers = new Headers();
+        headers.append('Content-Type', 'application/x-www-form-urlencoded');
+        c.headers = headers;
+      this.getSessionInfo.next(c);
       return true;
     }
 
@@ -225,10 +254,11 @@ export class Editoraa {
 
     foundTrackId(foundTrackId){
       var response;
-      console.log("foundTrackId", foundTrackId.response);
+
       if(foundTrackId.response){
         response = foundTrackId.response;
       } else {
+        console.log("foundTrackId", foundTrackId.response);
         console.log('track id not found');
         return;
       }
@@ -236,8 +266,6 @@ export class Editoraa {
       this.maskUrl = response.resultEditMaskImageUrl;
       this.showimageService.resultImageUrl = response.resultImageUrl;
       this.sessionId = response.sessionId;
-
-
 
       this.initViewOnData(this.sessionId);
 
@@ -313,11 +341,11 @@ export class Editoraa {
       this.obj.origWidth = this.canvasWidth;
       this.obj.origHeight = this.canvasHeight;
 
-      var windowWidth = window.innerWidth -5;
-      var windowHeight = window.innerHeight -5;//(window.innerHeight -240) * 0.9; // 80 + 50+60+50
+      var windowWidth = window.innerWidth ;
+      var windowHeight = window.innerHeight -10;//(window.innerHeight -240) * 0.9; // 80 + 50+60+50
       this.imageWrapperMaxHeight = windowHeight;
       //windowWidth = windowWidth.toPrecision(2);
-      console.log(windowWidth, windowHeight);
+  //    console.log(windowWidth, windowHeight);
       this.imagewrapperSizeWidth = this.obj.origWidth;
       var divide = 0;
 
@@ -325,8 +353,8 @@ export class Editoraa {
       var divideWidth = this.obj.origWidth / windowWidth;
 
     //  console.log(this.obj.imageSize.height, this.obj.origHeight);
-      console.log('height',windowHeight - this.obj.imageSize.height, divideHeight, this.obj.origHeight / divideHeight);
-      console.log('width',windowWidth - this.obj.origWidth, divideWidth);
+    //  console.log('height',windowHeight - this.obj.imageSize.height, divideHeight, this.obj.origHeight / divideHeight);
+    //  console.log('width',windowWidth - this.obj.origWidth, divideWidth);
 
       if((windowHeight - this.obj.imageSize.height   ) < 0 ||   (windowWidth - this.obj.origWidth) < 0 ) {
 
@@ -387,7 +415,7 @@ export class Editoraa {
       }
 
       this.totalScale = 1+(this.AMOUNT_ZOOM * this.totalZoom);
-      console.log("totalScale",this.totalScale);
+//      console.log("totalScale",this.totalScale);
     }
 
     undoEdit(){
@@ -949,29 +977,36 @@ export class Editoraa {
       this.progressPercent = 0;
     }
 
+
+
     // after matting
     showResultResponse(ob,isSaveRequest){
-      console.log(ob);
-      this.displayLoader = 'none';
-      this.loaderImage = this.assetsUrl+ "/assets/tools/smallloader.gif";
-      this.stopLoader();
+    //  console.log(ob);
+      var _this = this;
+      var image = new Image();
+      image.onload = function(){
+        _this.displayLoader = 'none';
+        _this.loaderImage = this.assetsUrl+ "/assets/tools/smallloader.gif";
+        _this.stopLoader();
 
-      var resImage= ob.resultImageUrl;
-      this.srcImageResult = ob.resultImageUrl;
-      this.resultImageUrl = ob.resultImageUrl;
-      console.log(ob.resultImageUrl);
-      //this.showimageService.resultEditMaskImageUrl = resImage;
-      this.showResultImage = 'block';
-      this.maskHidden = true;
-  //    this.image1Element.style.visibility = 'hidden';
-  //    this.canvasElement.style.visibility = 'hidden';
-      this.flagShowResult = true;
-      this.View_Result= "EDIT_PAGE_BACK_TO_EDIT_BUTTON";
 
-      if(isSaveRequest){
-        this.openResultWindow();
+        _this.srcImageResult = this.src;
+        _this.resultImageUrl = this.src;
+    //    console.log(ob.resultImageUrl);
+        //this.showimageService.resultEditMaskImageUrl = resImage;
+        _this.showResultImage = 'block';
+        _this.maskHidden = true;
+    //    this.image1Element.style.visibility = 'hidden';
+    //    this.canvasElement.style.visibility = 'hidden';
+        _this.flagShowResult = true;
+        _this.View_Result= "EDIT_PAGE_BACK_TO_EDIT_BUTTON";
 
+        if(isSaveRequest){
+          _this.openResultWindow();
+
+        }
       }
+      image.src= ob.resultImageUrl;
     }
 
     openResultWindow(){

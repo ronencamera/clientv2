@@ -6,8 +6,10 @@ function initCamera51(obj) {
 }
 
 function camera51obj(obj){
+  var link = "http://crazylister.s3-website-us-east-1.amazonaws.com/index.html"
+  var frameDomain = camera51HelperextractDomain(link);
 
-	var link = "index.html"
+
 	var iframe = document.createElement('iframe');
   this.obj = obj;
   this.setData = function(code){
@@ -87,9 +89,8 @@ function camera51obj(obj){
 
   // Listen for response messages from the frames.
   window.addEventListener('message', function (e) {
-
-     if ( (e.origin === (window.location.protocol + "//" + window.location.host)
-            && e.source === unsandboxedFrame.contentWindow)) {
+    if (e.origin !== frameDomain)
+      return;
       var data = e.data;
 
       if(e.data == false){
@@ -109,8 +110,25 @@ function camera51obj(obj){
           camera51.obj.callBackStopLoader(data.loader);
         }
       }
-    }
+
   });
 
 
+}
+
+function camera51HelperextractDomain(url) {
+    var domain;
+    //find & remove protocol (http, ftp, etc.) and get domain
+    if (url.indexOf("://") > -1) {
+        domain = url.split('/')[0];
+        domain2 = url.split('/')[2];
+        domain = domain + "//" + domain2;
+    }
+    else {
+        domain = url.split('/')[0];
+    }
+
+    //find & remove port number
+    //domain = domain.split(':')[0];
+    return domain;
 }
