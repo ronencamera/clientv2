@@ -806,6 +806,7 @@ export class EditImagesWindow implements ICustomModalComponent {
         return false;
       }
 
+
       this.setFgButtonActive(false);
       this.setBgButtonActive(false);
 

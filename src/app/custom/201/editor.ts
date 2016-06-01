@@ -39,8 +39,8 @@ var transparentImage = require("url?mimetype=image/png!../../../assets/tools/tra
     styles: [ require('./customModal/editor.css'),
     `
     .cursorRed{
-      cursor: url(` + greenloaderCur+ ` ), auto;
-      cursor: url(` + redloaderCur+ ` ) 0 0, auto;
+      cursor: url(` + greenloaderCur+ `), auto;
+      cursor: url(` + redloaderCur+ `) 0 0, auto;
     }
     .cursorGreen {
       cursor: url(` + redloader+ `), auto;
@@ -48,7 +48,12 @@ var transparentImage = require("url?mimetype=image/png!../../../assets/tools/tra
     }
     .transparentBg {
         background-image: url(` + transparentImage+ `);
-    }`
+    }
+    .imagewrapperBox {
+      -webkit-box-shadow: 0 5px 15px rgba(0,0,0,.5);
+      box-shadow: 0 5px 15px rgba(0,0,0,.5);
+    }
+    `
   ],
     template: require('./customModal/editor.html')
 })
@@ -64,6 +69,7 @@ export class Editoraa {
     @ViewChild('colorBG') colorBGElement;
 
 	lastDataUrl:string = '';
+    showWrapperShadow = true;
     imagewrapperOverflow = 'hidden';
     showProccessError = 'none';
     maskHidden = false;
@@ -80,6 +86,7 @@ export class Editoraa {
     setTextAlignDirection = "left";
     imageSizeWidth;
     totalZoom = 0;
+    decreaseInnerHeight:number = 1;
     totalZoomInitial;
     public ctx;
     public ctxTemp;
@@ -103,6 +110,7 @@ export class Editoraa {
     pendingRequest = null; // for edit
     preversioResponseObj;
     public apiUrl;
+    wrapperBGColor = "#fff";
     flagFirstTime:Number = 0;
     showResultImage = 'none';
     displayLoader = 'none';
@@ -136,7 +144,8 @@ export class Editoraa {
        private _ngZone: NgZone
       ) {
 
-
+        this.showWrapperShadow = true;
+        this.decreaseInnerHeight = 2;
         this.apiUrl = showimageService.apiUrl + "processImage";
         this.apiTrackId = showimageService.apiUrl + "retrieveSession";
 
@@ -170,7 +179,7 @@ export class Editoraa {
              showResult: () => this.showResult(),
              saveImage: () => this.saveImage(),
              undo: () => this.undoEdit(),
-             setTrackId: (value,track) => this.setTrackId(value,track),
+             setTrackId: (value) => this.setTrackId(value),
              component: this
            };
 
@@ -202,8 +211,14 @@ export class Editoraa {
      return encodedString;
    }
 
-    setTrackId(customerId, trackId){
+    setTrackId(obj){
 
+      var newObj = JSON.parse(obj);
+      var customerId:number = newObj.customerId;
+      var trackId = newObj.trackId;
+      this.showWrapperShadow = newObj.showWrapperShadow;
+      this.decreaseInnerHeight = newObj.decreaseInnerHeight;
+      this.wrapperBGColor = newObj.backgroundColor;
       this.showResultImage =  "none";
       this.maskHidden = false;
       this.flagShowResult = false;
@@ -373,7 +388,7 @@ export class Editoraa {
       this.obj.origHeight = this.canvasHeight;
 
       var windowWidth = window.innerWidth ;
-      var windowHeight = window.innerHeight -10;//(window.innerHeight -240) * 0.9; // 80 + 50+60+50
+      var windowHeight = window.innerHeight - this.decreaseInnerHeight;//(window.innerHeight -240) * 0.9; // 80 + 50+60+50
       this.imageWrapperMaxHeight = windowHeight;
       //windowWidth = windowWidth.toPrecision(2);
   //    console.log(windowWidth, windowHeight);

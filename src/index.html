@@ -1,25 +1,19 @@
 <!DOCTYPE html>
 <html lang="">
 <head>
-
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
   <!-- end favicon -->
 
   <!-- base url -->
-  <base href="<%= webpackConfig.metadata.baseUrl %>">
-
-  <style>
-
+<style>
   body, html {
-  height: 100%;
-  margin: 0px;
-  background-color: white;
-
-}
-
-  </style>
+    height: 100%;
+    margin: 0px;
+    background-color: white;
+  }
+</style>
 </head>
 
 <body >
@@ -29,10 +23,6 @@
   <app-malabi lang="en" customerID="201" shadow="true" >
      </app-malabi>
 </div>
-
-
-
-
 
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -53,16 +43,22 @@
     var mainWindow ;
     var eventPost;
      window.addEventListener('message', function (e) {
+       
        mainWindow = e.source;
        eventPost = e;
        if(e.data == '') return;
        var result = '';
        try {
          result = e.data;
-
          if(e.data.trackId != '' && e.data.trackId !== null && e.data.customerId !== undefined){
-           window.camera51App.zone.run(function () { window.camera51Edit.setTrackId(e.data.customerId, e.data.trackId)});
+           window.camera51App.zone.run(function () {
+             window.camera51Edit.setTrackId(e.data.objInJsonString);
+            });
            return;
+         }
+
+         if(e.data.backgroundColor){
+           document.body.style.backgroundColor = e.data.backgroundColor;
          }
       //   console.log(result);
          if(result == "openEdit"){
@@ -124,7 +120,7 @@
 
 
      function callbackEdit (mes){
-       
+
         mainWindow.postMessage(mes, eventPost.origin);
         return true;
      }

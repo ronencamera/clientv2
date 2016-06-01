@@ -30,7 +30,7 @@ import {ShowimageService} from './custom/showimage.service';
 
 export class App {
 
-  
+
   constructor(private elementRef: ElementRef, private showimageService: ShowimageService, private _ngZone: NgZone) {
       var native = this.elementRef.nativeElement;
       showimageService.native = native;
@@ -39,15 +39,16 @@ export class App {
       showimageService.resultImageUrl = native.getAttribute("resultImageUrl");
       showimageService.imageSizeWidth = native.getAttribute("imageSizeWidth");
       showimageService.imageSizeHeight = native.getAttribute("imageSizeHeight");
-      var shadow = native.getAttribute("shadow");  
+      var shadow = native.getAttribute("shadow");
       if(shadow !== null){
         showimageService.applyShadow = shadow;
       }
-      var transparent = native.getAttribute("transparent");  
+      var transparent = native.getAttribute("transparent");
       if(transparent !== null){
         showimageService.applyTransparent= transparent;
-
       }
+      
+
       showimageService.apiUrl = _settings.apiUrl ;
       showimageService.customerId = native.getAttribute("customerId");
       window.camera51App = {

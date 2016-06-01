@@ -19,4 +19,6 @@ export class ShowimageService{
   editedStuff;
   resultEditMaskImageUrl:string;
   resultUrl:string;
+  showimageService:boolean;
+  
 }

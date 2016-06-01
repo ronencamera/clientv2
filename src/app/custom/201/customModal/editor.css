@@ -37,8 +37,7 @@ html {
 
 .imagewrapper{
   width: 100%;
-  -webkit-box-shadow: 0 5px 15px rgba(0,0,0,.5);
-  box-shadow: 0 5px 15px rgba(0,0,0,.5);
+
   position: relative; left: 0; top: 0;
   display: inline-block;
   user-select: none;

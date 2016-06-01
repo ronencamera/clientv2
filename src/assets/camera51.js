@@ -5,9 +5,12 @@ function initCamera51(obj) {
 }
 
 function camera51obj(obj){
-  var iframeSrc = "http://crazylister.s3-website-us-east-1.amazonaws.com/index.html"
+
   if(obj.hasOwnProperty('iframeSrc') && obj.iframeSrc.length > 1){
     iframeSrc = obj.iframeSrc;
+  } else {
+    console.log("please place iframeSrc in your initCamera51 function");
+    return;
   }
   this.camera51HelperextractDomain = function(url) {
       var domain;
@@ -28,10 +31,7 @@ function camera51obj(obj){
 
 	var iframe = document.createElement('iframe');
   this.obj = obj;
-  this.setData = function(code){
-    unsandboxedFrame.contentWindow.postMessage({'height': 2,'customerId':obj.customerId,  'trackId': obj.trackId}, '*');
-    return true;
-  }
+
   var element =  document.getElementById('camera51Frame');
   if (typeof(element) != 'undefined' && element != null)
   {
@@ -52,6 +52,9 @@ function camera51obj(obj){
     unsandboxedFrame = document.getElementById('camera51Frame');
     _this.obj.callBackStopLoader();
     if(obj.trackId !== ''){
+      if(_this.obj.hasOwnProperty('backgroundColor') ){
+        unsandboxedFrame.contentWindow.postMessage({'backgroundColor':_this.obj.backgroundColor},frameDomain);
+      }
       _this.setData(obj);
       return true;
     }
@@ -59,49 +62,58 @@ function camera51obj(obj){
   });
 
   this.setData = function(obj){
-    unsandboxedFrame.contentWindow.postMessage({'height': 2,'customerId':obj.customerId,  'trackId': obj.trackId}, '*');
+    if(this.obj.hasOwnProperty('showWrapperShadow')){
+      obj.showWrapperShadow = this.obj.showWrapperShadow;
+    }
+    if(this.obj.hasOwnProperty('decreaseInnerHeight')){
+      obj.decreaseInnerHeight = this.obj.decreaseInnerHeight;
+    }
+    if(this.obj.hasOwnProperty('backgroundColor')){
+      obj.decreaseInnerHeight = this.obj.decreaseInnerHeight;
+    }
+    unsandboxedFrame.contentWindow.postMessage({'customerId':obj.customerId,  'trackId': obj.trackId,'objInJsonString':JSON.stringify(obj)}, frameDomain);
     return true;
   }
 
   this.setColor = function(code){
-    unsandboxedFrame.contentWindow.postMessage('setColor_'+code, '*');
+    unsandboxedFrame.contentWindow.postMessage('setColor_'+code, frameDomain);
     return 1;
   }
   this.showResult = function(code){
-    unsandboxedFrame.contentWindow.postMessage('showResult', '*');
+    unsandboxedFrame.contentWindow.postMessage('showResult', frameDomain);
     return 1;
   }
   this.saveImage = function(code){
 
-    unsandboxedFrame.contentWindow.postMessage('saveImage', '*');
+    unsandboxedFrame.contentWindow.postMessage('saveImage', frameDomain);
     return 1;
   }
   this.zoomIn = function(code){
-    unsandboxedFrame.contentWindow.postMessage('zoomIn', '*');
+    unsandboxedFrame.contentWindow.postMessage('zoomIn', frameDomain);
     return 1;
   }
   this.zoomOut = function(code){
-    unsandboxedFrame.contentWindow.postMessage('zoomOut', '*');
+    unsandboxedFrame.contentWindow.postMessage('zoomOut', frameDomain);
     return 1;
   }
   this.onclickLongZoomIn = function(code){
-    unsandboxedFrame.contentWindow.postMessage('onclickLongZoomIn', '*');
+    unsandboxedFrame.contentWindow.postMessage('onclickLongZoomIn', frameDomain);
     return 1;
   }
   this.onmouseupLongZoomIn = function(code){
-    unsandboxedFrame.contentWindow.postMessage('onmouseupLongZoomIn', '*');
+    unsandboxedFrame.contentWindow.postMessage('onmouseupLongZoomIn', frameDomain);
     return 1;
   }
   this.onclickLongZoomOut = function(code){
-    unsandboxedFrame.contentWindow.postMessage('onclickLongZoomOut', '*');
+    unsandboxedFrame.contentWindow.postMessage('onclickLongZoomOut', frameDomain);
     return 1;
   }
   this.onmouseupLongZoomOut = function(code){
-    unsandboxedFrame.contentWindow.postMessage('onmouseupLongZoomOut', '*');
+    unsandboxedFrame.contentWindow.postMessage('onmouseupLongZoomOut', frameDomain);
     return 1;
   }
   this.undo = function(code){
-    unsandboxedFrame.contentWindow.postMessage('undo', '*');
+    unsandboxedFrame.contentWindow.postMessage('undo', frameDomain);
     return 1;
   }
 
@@ -132,8 +144,5 @@ function camera51obj(obj){
       if(e.data.hasOwnProperty('error') ){
           camera51.obj.callBackError(data);
       }
-
   });
-
-
 }
