@@ -806,8 +806,6 @@ export class EditImagesWindow implements ICustomModalComponent {
         return false;
       }
 
-      var dataURL = this.canvasElement.nativeElement.toDataURL();
-
       this.setFgButtonActive(false);
       this.setBgButtonActive(false);
 

@@ -69,7 +69,7 @@ export class Editoraa {
     maskHidden = false;
     imageWrapperMaxHeight;
     greenloader = greenloader ;//= require("url?mimetype=image/png!../../../assets/tools/green_pointer_6.png");
-
+    sessionId:string;
     imagewrapperSizeWidth;
     isGreen = false;
     flagShowResult = false;
@@ -129,14 +129,14 @@ export class Editoraa {
     progressPercent = 0;
     showEditorView = "none";
     transparentImageSrc="";
+    defaultSrcImageResult = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
 
     constructor(private elementRef: ElementRef,private cdr: ChangeDetectorRef, private showimageService: ShowimageService,
       private requestEditImage: RequestEditImage, private _dom: BrowserDomAdapter,private http:Http,
        private _ngZone: NgZone
       ) {
 
-        this.greenloaderImage = greenloader;
-        this.srcImageResult = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
+
         this.apiUrl = showimageService.apiUrl + "processImage";
         this.apiTrackId = showimageService.apiUrl + "retrieveSession";
 
@@ -203,14 +203,21 @@ export class Editoraa {
    }
 
     setTrackId(customerId, trackId){
+
+      this.showResultImage =  "none";
+      this.maskHidden = false;
+      this.flagShowResult = false;
+
+      this.showEditorView = 'none';
+      this.startLoader();
       this.initDrawArrays(null);
+
       if(customerId == '' || customerId == null){
         return;
       }
       this.showimageService.customerId = customerId;
 
       c = {};
-
       var creds = {
         "trackId" : trackId,
         "customerId": customerId
@@ -235,7 +242,7 @@ export class Editoraa {
         img.onload = function(){
           var height = img.height;
           var width = img.width;
-          console.log("hw" , height, width);
+      //    console.log("hw" , height, width);
           // code here to use the dimensions
           _this.obj.imageSize = {};
           _this.obj.imageSize.height = height;//this.image1Element.nativeElement.naturalHeight;
@@ -248,7 +255,7 @@ export class Editoraa {
           _this.undoEditResponse.push(_this.obj);
           TimerWrapper.setTimeout(function(){
             _this.ctx.scale(_this.totalScale,_this.totalScale);
-            console.log("scale", _this.totalScale);
+          //  console.log("scale", _this.totalScale);
 
           }, 200);
           _this.showEditorView = 'block';
@@ -268,19 +275,30 @@ export class Editoraa {
       } else {
         console.log("foundTrackId", foundTrackId.response);
         console.log('track id not found');
+        this.stopLoader();
         return;
       }
       if(response.hasOwnProperty('errors')){
         console.log('track id not found response: ', response.errors[0]);
         window.callbackEdit({'error':"trackerIdNotFound","message":response.errors[0]});
+        this.stopLoader();
         return;
       }
-      this.showimageService.originalImageUrl = response.originalImageUrl;
-      this.maskUrl = response.resultEditMaskImageUrl;
-      this.showimageService.resultImageUrl = response.resultImageUrl;
-      this.sessionId = response.sessionId;
 
-      this.initViewOnData(this.sessionId);
+      var imageObj = new Image();
+      var that = this;
+      imageObj.onload = function() {
+        that.showimageService.originalImageUrl = response.originalImageUrl;
+        that.maskUrl = response.resultEditMaskImageUrl;
+        that.showimageService.resultImageUrl = response.resultImageUrl;
+        that.sessionId = response.sessionId;
+        that.stopLoader();
+        that.initViewOnData(that.sessionId);
+
+      };
+      imageObj.src = response.originalImageUrl;
+
+
 
     }
 
@@ -298,7 +316,7 @@ export class Editoraa {
           "imageId":"1",
           "customerId":this.showimageService.customerId
         }
-
+      this.srcImageResult = this.defaultSrcImageResult;
       this.applyShadow = this.showimageService.applyShadow;
       this.applyTransparent = this.showimageService.applyTransparent;
 
@@ -899,15 +917,7 @@ export class Editoraa {
       }
 
       if(this.flagShowResult){
-        this.showResultImage =  "none";
-        this.maskHidden = false;
-        this.View_Result = 'EDIT_PAGE_VIEW_BUTTON';
-        if(this.undoButton != null){
-          this.undoButton.nativeElement.classList.remove("undoDisabled");
-          this.undoButton.nativeElement.removeAttribute("disabled", "disabled");
-        }
-        //this.colorBGElement.nativeElement.classList.add("bgUnChosen");
-        this.flagShowResult = false;
+        t
 
       }
 
@@ -924,7 +934,7 @@ export class Editoraa {
 
     // do matting
     showResult(){
-      console.log("showResult");
+      //console.log("showResult");
       if(this.flagShowResult){
 
         this.backToEdit();
@@ -946,7 +956,7 @@ export class Editoraa {
 
 
     runMatting(isSaveRequest){
-      console.log(this.showimageService);
+    //  console.log(this.showimageService);
       var dataURL = this.canvasElement.nativeElement.toDataURL();
       this.displayLoader = 'block';
       this.loaderImage = this.assetsUrl+ "/assets/tools/malabiloader.gif";
@@ -1023,7 +1033,7 @@ export class Editoraa {
     }
 
     openResultWindow(){
-      console.log("openResultWindow",this.resultImageUrl);
+  //    console.log("openResultWindow",this.resultImageUrl);
       this.showimageService.resultUrl = this.resultImageUrl;
 
       if(this.undoEditResponse.length <= 1){
