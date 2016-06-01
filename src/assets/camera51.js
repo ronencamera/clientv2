@@ -9,7 +9,22 @@ function camera51obj(obj){
   if(obj.hasOwnProperty('iframeSrc') && obj.iframeSrc.length > 1){
     iframeSrc = obj.iframeSrc;
   }
-  var frameDomain = camera51HelperextractDomain(iframeSrc);
+  this.camera51HelperextractDomain = function(url) {
+      var domain;
+      if (url.indexOf("://") > -1) {
+          var domain1 = url.split('/')[0];
+          var domain2 = url.split('/')[2];
+          domain = domain1 + "//" + domain2;
+      }
+      else {
+          var url = window.location.href
+          var arr = url.split("/");
+          domain = arr[0] + "//" + arr[2]
+      }
+      return domain;
+  }
+
+  var frameDomain = this.camera51HelperextractDomain(iframeSrc);
 
 	var iframe = document.createElement('iframe');
   this.obj = obj;
@@ -90,6 +105,7 @@ function camera51obj(obj){
     return 1;
   }
 
+
   // Listen for response messages from the frames.
   window.addEventListener('message', function (e) {
     if (e.origin !== frameDomain)
@@ -120,26 +136,4 @@ function camera51obj(obj){
   });
 
 
-}
-
-function camera51HelperextractDomain(url) {
-    var domain;
-
-    //find & remove protocol (http, ftp, etc.) and get domain
-    if (url.indexOf("://") > -1) {
-        domain = url.split('/')[0];
-        domain2 = url.split('/')[2];
-        domain = domain + "//" + domain2;
-    }
-    else {
-        domain = url.split('/')[0];
-        var url = window.location.href
-        var arr = url.split("/");
-      domain = arr[0] + "//" + arr[2]
-
-    }
-
-    //find & remove port number
-    //domain = domain.split(':')[0];
-    return domain;
 }

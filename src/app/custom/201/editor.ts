@@ -27,6 +27,8 @@ var greenloaderCur = require("url?mimetype=image/png!../../../assets/tools/green
 var redloader = require("url?mimetype=image/png!../../../assets/tools/red_pointer_6.png");
 var redloaderCur = require("url?mimetype=image/png!../../../assets/tools/red_pointer_6_lastone.cur");
 
+var transparentImage = require("url?mimetype=image/png!../../../assets/tools/transparent_bg.png");
+
 @Component({
     selector: 'editor',
     directives: [CORE_DIRECTIVES,NgClass , Angulartics2On],
@@ -35,15 +37,17 @@ var redloaderCur = require("url?mimetype=image/png!../../../assets/tools/red_poi
     encapsulation: ViewEncapsulation.Emulated,
 
     styles: [ require('./customModal/editor.css'),
-
     `
     .cursorRed{
       cursor: url(` + greenloaderCur+ ` ), auto;
-      cursor: url(` + redloaderCur+ ` ) 0 0, auto
+      cursor: url(` + redloaderCur+ ` ) 0 0, auto;
     }
     .cursorGreen {
       cursor: url(` + redloader+ `), auto;
       cursor: url(` + greenloader+ `) 0 0, auto;
+    }
+    .transparentBg {
+        background-image: url(` + transparentImage+ `);
     }`
   ],
     template: require('./customModal/editor.html')
@@ -123,7 +127,8 @@ export class Editoraa {
     loaderImage ;
     apiTrackId:string;
     progressPercent = 0;
-    showEditorView = "hidden";
+    showEditorView = "none";
+    transparentImageSrc="";
 
     constructor(private elementRef: ElementRef,private cdr: ChangeDetectorRef, private showimageService: ShowimageService,
       private requestEditImage: RequestEditImage, private _dom: BrowserDomAdapter,private http:Http,
@@ -134,6 +139,8 @@ export class Editoraa {
         this.srcImageResult = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
         this.apiUrl = showimageService.apiUrl + "processImage";
         this.apiTrackId = showimageService.apiUrl + "retrieveSession";
+
+        this.transparentImageSrc =  transparentImage;
 
       //  this.showimageService.resultEditMaskImageUrl = showimageService.resultImageUrl;
       	this.obj = {
@@ -166,6 +173,7 @@ export class Editoraa {
              setTrackId: (value,track) => this.setTrackId(value,track),
              component: this
            };
+
 
         this.initViewOnData();
        // this.calculateImageSize();
@@ -209,7 +217,7 @@ export class Editoraa {
       };
 
       var  credsa = this.param(creds);
-      console.log(credsa);
+
       var c = {};
       c.url = this.apiTrackId;
       c.b = credsa;
@@ -243,7 +251,7 @@ export class Editoraa {
             console.log("scale", _this.totalScale);
 
           }, 200);
-          _this.showEditorView = 'visible';
+          _this.showEditorView = 'block';
           //_this.doZoom('out');
 
           //_this.resetSize('up');_this.resetSize('down');
@@ -260,6 +268,11 @@ export class Editoraa {
       } else {
         console.log("foundTrackId", foundTrackId.response);
         console.log('track id not found');
+        return;
+      }
+      if(response.hasOwnProperty('errors')){
+        console.log('track id not found response: ', response.errors[0]);
+        window.callbackEdit({'error':"trackerIdNotFound","message":response.errors[0]});
         return;
       }
       this.showimageService.originalImageUrl = response.originalImageUrl;

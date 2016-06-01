@@ -41,6 +41,7 @@
 </div>
 <br><br><br><br><br><br>
 <script>
+"use strict";
 
 function submitData(){
 	var customerId = document.getElementById('customerId').value;
@@ -49,6 +50,8 @@ function submitData(){
 }
 
 function runCamera(customerId,trackId){
+	document.getElementById('resultUrl').value = "";
+	document.getElementById('responseError').value = "";
 	camera51.setData({customerId: customerId,
 		trackId: trackId});
 }
