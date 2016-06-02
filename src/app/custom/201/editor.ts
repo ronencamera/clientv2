@@ -932,8 +932,15 @@ export class Editoraa {
       }
 
       if(this.flagShowResult){
-        t
+        this.showResultImage =  "none";
+         this.maskHidden = false;
 
+         if(this.undoButton != null){
+           this.undoButton.nativeElement.classList.remove("undoDisabled");
+           this.undoButton.nativeElement.removeAttribute("disabled", "disabled");
+         }
+         //this.colorBGElement.nativeElement.classList.add("bgUnChosen");
+         this.flagShowResult = false;
       }
 
       this.isGreen = (chossen == 'colorFG') ? true: false;
@@ -951,7 +958,6 @@ export class Editoraa {
     showResult(){
       //console.log("showResult");
       if(this.flagShowResult){
-
         this.backToEdit();
         return false;
       }
@@ -1135,7 +1141,7 @@ export class Editoraa {
     * Call back function after edit response;
     */
     showEditResponse(a){
-      console.log(a);
+      //console.log(a);
       this.undoDataUrl.push(this.dataURL);
       this.undoEditResponse.push(a);
       this.undoImageStack.push(this.dataURL);
