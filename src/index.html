@@ -3,10 +3,6 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-  <!-- end favicon -->
-
-  <!-- base url -->
 <style>
   body, html {
     height: 100%;
@@ -15,12 +11,10 @@
   }
 </style>
 </head>
-
 <body >
 
-
 <div style="text-align:center">
-  <app-malabi lang="en" customerID="201" shadow="true" >
+  <app-malabi lang="en" shadow="true" >
      </app-malabi>
 </div>
 
@@ -43,14 +37,14 @@
     var mainWindow ;
     var eventPost;
      window.addEventListener('message', function (e) {
-
        mainWindow = e.source;
        eventPost = e;
        if(e.data == '') return;
        var result = '';
+
        try {
          result = e.data;
-         if(e.data.trackId != '' && e.data.trackId !== null && e.data.customerId !== undefined){
+         if(e.data.customerId != '' && e.data.customerId !== undefined){
           if(e.data.hasOwnProperty('objInJsonString')){
             window.camera51App.zone.run(function () {
               window.camera51Edit.setTrackId(e.data.objInJsonString);
@@ -63,11 +57,13 @@
                window.camera51Edit.setTrackId(JSON.stringify(ob));
               });
           }
-
-
            return;
          }
-
+         if(e.data.initCamera51){
+            window.camera51App.zone.run(function () {
+             window.camera51Edit.initApp(e.data.initCamera51);
+            });
+         }
          if(e.data.backgroundColor){
            document.body.style.backgroundColor = e.data.backgroundColor;
          }

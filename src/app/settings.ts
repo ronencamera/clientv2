@@ -14,7 +14,7 @@ export var _settings = {
   lang: 'en',
 	customer : '201',
 
-	apiUrl: "http://54.208.187.238/Camera51Server/",
+	apiUrl: "http://54.208.187.238/",
 	applyShadow: true,
 	customerCss:''
 };

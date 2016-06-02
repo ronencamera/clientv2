@@ -5,13 +5,20 @@ function initCamera51(obj) {
 }
 
 function camera51obj(obj){
-
+  var apiUrl = "";
+  var iframeSrc = "";
+  if(obj.hasOwnProperty('apiUrl') && obj.apiUrl.length > 1){
+    apiUrl = obj.apiUrl;
+  } else {
+    apiUrl = "//sandbox.malabi.co";
+  }
   if(obj.hasOwnProperty('iframeSrc') && obj.iframeSrc.length > 1){
     iframeSrc = obj.iframeSrc;
   } else {
     console.log("please place iframeSrc in your initCamera51 function");
     return;
   }
+
   this.camera51HelperextractDomain = function(url) {
       var domain;
       if (url.indexOf("://") > -1) {
@@ -51,10 +58,14 @@ function camera51obj(obj){
   iframe.addEventListener("load", function() {
     unsandboxedFrame = document.getElementById('camera51Frame');
     _this.obj.callBackStopLoader();
-    if(obj.trackId !== ''){
-      if(_this.obj.hasOwnProperty('backgroundColor') ){
-        unsandboxedFrame.contentWindow.postMessage({'backgroundColor':_this.obj.backgroundColor},frameDomain);
-      }
+    if(_this.obj.hasOwnProperty('apiUrl') ){
+      unsandboxedFrame.contentWindow.postMessage({'initCamera51':JSON.stringify(obj)},frameDomain);
+    }
+    if(_this.obj.hasOwnProperty('backgroundColor') ){
+      unsandboxedFrame.contentWindow.postMessage({'backgroundColor':_this.obj.backgroundColor},frameDomain);
+    }
+
+    if(obj.customerId !== ''){
       _this.setData(obj);
       return true;
     }
