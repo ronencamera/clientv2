@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="">
 <head>
+<link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <style>
@@ -44,7 +45,8 @@
 
        try {
          result = e.data;
-         if(e.data.customerId != '' && e.data.customerId !== undefined){
+         if(e.data.customerId != '' && e.data.customerId !== undefined && e.data.trackId){
+
           if(e.data.hasOwnProperty('objInJsonString')){
             window.camera51App.zone.run(function () {
               window.camera51Edit.setTrackId(e.data.objInJsonString);
@@ -62,6 +64,14 @@
          if(e.data.initCamera51){
             window.camera51App.zone.run(function () {
              window.camera51Edit.initApp(e.data.initCamera51);
+            });
+            return;
+         }
+         if(e.data.customerId && e.data.originalImageUrl){
+                  
+
+            window.camera51App.zone.run(function () {
+             window.camera51Edit.setDataOriginalUrl(e.data.objInJsonString);
             });
          }
          if(e.data.backgroundColor){

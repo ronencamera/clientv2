@@ -12,7 +12,7 @@ export class ShowimageService{
   resultImageUrl:string;
   imageSizeWidth;
   imageSizeHeight;
-  customerId;
+  customerId:number;
   apiUrl:string;
   applyShadow:boolean = true;
   applyTransparent:boolean = false;
@@ -20,5 +20,6 @@ export class ShowimageService{
   resultEditMaskImageUrl:string;
   resultUrl:string;
   showimageService:boolean;
+  trackId:string;
   
 }

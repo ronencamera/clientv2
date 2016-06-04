@@ -155,8 +155,11 @@ export class Editoraa {
       //  this.showimageService.resultEditMaskImageUrl = showimageService.resultImageUrl;
       	this.obj = {
       		"originalImageUrl": "data:image/gif;bas-e64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-            "resultEditMaskImageUrl": "data:image/gif;bas-e64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "resultEditMaskImageUrl": "data:image/gif;bas-e64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+
       	};
+      this.srcImageResult = this.defaultSrcImageResult;
+
 
     //    sessionId = 1;
       //  var url = url.substring(0, url.lastIndexOf("/") + 1);
@@ -182,11 +185,12 @@ export class Editoraa {
              undo: () => this.undoEdit(),
              initApp: (value) => this.initApp(value),
              setTrackId: (value) => this.setTrackId(value),
+             setDataOriginalUrl: (value) => this.setDataOriginalUrl(value),
              component: this
            };
 
         this.setApiUrl(showimageService.apiUrl);
-        this.initViewOnData();
+      //  this.initViewOnData();
        // this.calculateImageSize();
     }
 
@@ -200,8 +204,33 @@ export class Editoraa {
     }
 
     initApp(obj){
+      this.showimageService.customerId = 0;
+      this.showimageService.trackId = '';
       var newObj = JSON.parse(obj);
       this.setOutsideConfig(newObj);
+    //  console.log(newObj, this.showimageService);
+      if (this.showimageService.originalImageUrl != null &&
+        this.showimageService.originalImageUrl.length > 0) {
+
+        var sessionId = this.getSession(this.showimageService.originalImageUrl);
+        //   console.log(sessionId);
+
+        this.showimageService.resultImageUrl = this.resultImageUrl;
+        this.sessionId = sessionId;
+        //that.stopLoader();
+//console.log(sessionId);
+
+        this.initViewOnData(sessionId);
+        return;
+      } 
+      if (this.showimageService.trackId  != null &&
+        this.showimageService.trackId.length > 0) {
+
+        this.runGetTracker(this.showimageService.customerId, this.showimageService.trackId);
+        
+      }
+
+
     }
 
     getSession(path){
@@ -234,12 +263,26 @@ export class Editoraa {
      if(obj.apiUrl && obj.apiUrl.length > 1){
        this.setApiUrl(obj.apiUrl);
      }
+     this.showimageService.customerId = obj.customerId;
+     if (obj.customerId && typeof obj.customerId === 'number') {
+       this.showimageService.customerId = obj.customerId;
+     }
 
-     this.showWrapperShadow = obj.showWrapperShadow;
-     if(obj.decreaseInnerHeight && typeof ob.decreaseInnerHeight === 'number' ){
+     if(obj.showWrapperShadow && typeof obj.showWrapperShadow === 'boolean' ){
+       this.showWrapperShadow = obj.showWrapperShadow;
+     }
+     if(obj.decreaseInnerHeight && typeof obj.decreaseInnerHeight === 'number' ){
        this.decreaseInnerHeight = obj.decreaseInnerHeight;
      }
-     this.wrapperBGColor = obj.backgroundColor;
+     if(obj.trackId && typeof obj.trackId === 'string' && obj.trackId.length > 0){
+       this.showimageService.trackId = obj.trackId;
+     }
+     if (obj.originalImageUrl && typeof obj.originalImageUrl === 'string' && obj.originalImageUrl.length > 0) {
+       this.showimageService.originalImageUrl = obj.originalImageUrl;
+     } 
+     if (obj.wrapperBGColor && typeof obj.wrapperBGColor === 'string' && obj.wrapperBGColor.length > 0) {
+       this.wrapperBGColor = obj.backgroundColor;
+     } 
 
 
    }
@@ -251,6 +294,7 @@ export class Editoraa {
 
      this.showEditorView = 'none';
      this.startLoader();
+
      this.initDrawArrays(null);
 
      if(customerId == '' || customerId == null){
@@ -276,18 +320,16 @@ export class Editoraa {
      return true;
    }
 
-    setTrackId(obj){
+   setDataOriginalUrl(obj) {
+     this.startLoader();
 
-      var newObj = JSON.parse(obj);
-      var customerId:number = newObj.customerId;
-      var trackId = newObj.trackId;
-      var originalImageUrl = newObj.originalImageUrl;
-      this.setOutsideConfig(newObj);
-      this.showimageService.customerId = customerId;
-
+     var newObj = JSON.parse(obj);
+     var customerId = newObj.customerId;
+     var originalImageUrl = newObj.originalImageUrl;
+     this.setOutsideConfig(newObj);
       if(originalImageUrl.length > 0){
         var sessionId = this.getSession(originalImageUrl);
-        console.log(sessionId);
+       // console.log(sessionId);
         this.showimageService.originalImageUrl = originalImageUrl;
 
         this.showimageService.resultImageUrl = this.resultImageUrl;
@@ -296,7 +338,20 @@ export class Editoraa {
         this.initViewOnData(sessionId);
         return;
       }
-      this.runGetTracker(customerId, trackId);
+
+   }
+
+   setTrackId(obj) {
+
+      var newObj = JSON.parse(obj);
+      var customerId = newObj.customerId;
+      var trackId = newObj.trackId;
+      this.setOutsideConfig(newObj);
+
+
+      this.showimageService.customerId = customerId;
+      this.showimageService.trackId = trackId;
+      this.runGetTracker(this.showimageService.customerId, this.showimageService.trackId);
     }
 
 
@@ -365,7 +420,13 @@ export class Editoraa {
 
     initViewOnData(sessionId){
 		  this.preversioResponseObj = {};
-    	//var sessionId = this.getSession(this.showimageService.originalImageUrl);
+
+      if(sessionId == '' && this.showimageService.originalImageUrl.length > 1) {
+        sessionId = this.getSession(this.showimageService.originalImageUrl);
+      } 
+      if (sessionId == '' ){
+        return;
+      }
 
       this.showimageService.resultEditMaskImageUrl = this.maskUrl;
       this.preversioResponseObj.resultEditMaskImageUrl = this.maskUrl;
@@ -384,11 +445,9 @@ export class Editoraa {
       this.showimageService = this.showimageService;
       this.showimageService.obj = this.obj;
 
-        // console.log("Aaaaaaaaaaaaaaa", this.showimageService.resultImageUrl);
 
-       this.getImageDimensions(this.showimageService.originalImageUrl);
-
-
+      this.getImageDimensions(this.showimageService.originalImageUrl);
+      this.stopLoader();
 
     }
 
@@ -585,15 +644,16 @@ export class Editoraa {
         this.preversioResponseObj.resultEditMaskImageUrl = this.showimageService.editedStuff.undoEditResponse[this.showimageService.editedStuff.undoEditResponse.length-1].resultEditMaskImageUrl;
         this.showimageService.lastDataUrl = this.showimageService.editedStuff.undoDataUrl[this.showimageService.editedStuff.undoDataUrl.length-1];
       } else {
-
         this.clickColor= [];
         this.clickX_simple = [];
         this.clickY_simple = [];
         this.clickDrag_simple = [];
         this.clickLineWidth = [];
-        this.preversioResponseObj.resultEditMaskImageUrl = this.obj.resultEditMaskImageUrl;
+        if (this.obj.hasOwnProperty('resultEditMaskImageUrl')){
+          this.preversioResponseObj = {}
+          this.preversioResponseObj.resultEditMaskImageUrl = this.obj.resultEditMaskImageUrl;
+        }
       }
-
     }
 
     clickInContainer(){
