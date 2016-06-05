@@ -34,6 +34,9 @@ html {
     margin-top: -15px;
 
 }
+.imageTransition {
+  transition: all 0.1s linear;
+}
 
 .imagewrapper{
   width: 100%;

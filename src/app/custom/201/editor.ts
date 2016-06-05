@@ -50,8 +50,8 @@ var transparentImage = require("url?mimetype=image/png!../../../assets/tools/tra
         background-image: url(` + transparentImage+ `);
     }
     .imagewrapperBox {
-      -webkit-box-shadow: 0 5px 15px rgba(0,0,0,.5);
-      box-shadow: 0 5px 15px rgba(0,0,0,.5);
+      -webkit-box-shadow: rgba(0, 0, 0, 0.156863) 0px 3px 10px, rgba(0, 0, 0, 0.227451) 0px 3px 10px;;
+      box-shadow:  rgba(0, 0, 0, 0.156863) 0px 3px 10px, rgba(0, 0, 0, 0.227451) 0px 3px 10px;;
     }
     `
   ],
@@ -70,7 +70,9 @@ export class Editoraa {
 
 	lastDataUrl:string = '';
     showWrapperShadow = true;
+    wrapperShadow = "0 5px 15px rgba(0,0,0,.5)";
     imagewrapperOverflow = 'hidden';
+    wrappermarginTop = "20";
     showProccessError = 'none';
     maskHidden = false;
     imageWrapperMaxHeight;
@@ -222,12 +224,12 @@ export class Editoraa {
 
         this.initViewOnData(sessionId);
         return;
-      } 
+      }
       if (this.showimageService.trackId  != null &&
         this.showimageService.trackId.length > 0) {
 
         this.runGetTracker(this.showimageService.customerId, this.showimageService.trackId);
-        
+
       }
 
 
@@ -271,6 +273,15 @@ export class Editoraa {
      if(obj.showWrapperShadow && typeof obj.showWrapperShadow === 'boolean' ){
        this.showWrapperShadow = obj.showWrapperShadow;
      }
+
+     if(obj.wrappermarginTop && typeof obj.wrappermarginTop === 'number' ){
+
+       this.wrappermarginTop = obj.wrappermarginTop;
+       this.showimageService.wrappermarginTop = obj.wrappermarginTop;
+
+     }
+
+
      if(obj.decreaseInnerHeight && typeof obj.decreaseInnerHeight === 'number' ){
        this.decreaseInnerHeight = obj.decreaseInnerHeight;
      }
@@ -279,10 +290,10 @@ export class Editoraa {
      }
      if (obj.originalImageUrl && typeof obj.originalImageUrl === 'string' && obj.originalImageUrl.length > 0) {
        this.showimageService.originalImageUrl = obj.originalImageUrl;
-     } 
+     }
      if (obj.wrapperBGColor && typeof obj.wrapperBGColor === 'string' && obj.wrapperBGColor.length > 0) {
        this.wrapperBGColor = obj.backgroundColor;
-     } 
+     }
 
 
    }
@@ -423,7 +434,7 @@ export class Editoraa {
 
       if(sessionId == '' && this.showimageService.originalImageUrl.length > 1) {
         sessionId = this.getSession(this.showimageService.originalImageUrl);
-      } 
+      }
       if (sessionId == '' ){
         return;
       }
@@ -493,7 +504,8 @@ export class Editoraa {
       this.obj.origHeight = this.canvasHeight;
 
       var windowWidth = window.innerWidth ;
-      var windowHeight = window.innerHeight - this.decreaseInnerHeight;//(window.innerHeight -240) * 0.9; // 80 + 50+60+50
+      var windowHeight = window.innerHeight - this.decreaseInnerHeight;
+      //(window.innerHeight -240) * 0.9; // 80 + 50+60+50
       this.imageWrapperMaxHeight = windowHeight;
       //windowWidth = windowWidth.toPrecision(2);
   //    console.log(windowWidth, windowHeight);
@@ -782,7 +794,25 @@ export class Editoraa {
       this.redrawSimple();
 
       this.totalScale = 1+(this.AMOUNT_ZOOM * this.totalZoom);
-      window.scrollBy(xMove/2,  yMove/2);
+
+      if(this.wrappermarginTop > 0 ){
+        if(this.wrappermarginTop < (yMove/2) ){
+          this.wrappermarginTop = 0;
+        } else {
+          this.wrappermarginTop = this.wrappermarginTop - ( yMove /2);
+        }
+      }
+      if(yMove < 0 && window.innerHeight > this.imagewrapperSizeheight){
+        var x = (window.innerHeight - this.imagewrapperSizeheight);
+        //console.log("x",x);
+        if(x > this.showimageService.wrappermarginTop  ){
+          this.wrappermarginTop = this.showimageService.wrappermarginTop;
+        }
+      }
+      //console.log(yMove);
+  //    window.scrollBy(xMove/2,  yMove/2);
+
+
 //      console.log(this.image1Element.nativeElement);
     }
 
@@ -1040,7 +1070,7 @@ export class Editoraa {
       if(this.flagShowResult){
         this.showResultImage =  "none";
          this.maskHidden = false;
-
+         window.callbackEdit({'returnFromShowResult':true});
          if(this.undoButton != null){
            this.undoButton.nativeElement.classList.remove("undoDisabled");
            this.undoButton.nativeElement.removeAttribute("disabled", "disabled");
@@ -1056,7 +1086,7 @@ export class Editoraa {
     }
 
     backToEdit(){
-
+      window.callbackEdit({'returnFromShowResult':true});
       this.setColor('colorBG');
     }
 

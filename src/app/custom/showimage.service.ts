@@ -21,5 +21,7 @@ export class ShowimageService{
   resultUrl:string;
   showimageService:boolean;
   trackId:string;
-  
+  wrapperShadow:string;
+  wrappermarginTop:number;
+
 }
