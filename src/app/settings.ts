@@ -14,7 +14,7 @@ export var _settings = {
   lang: 'en',
 	customer : '201',
 
-	apiUrl: "http://54.208.187.238/",
+	apiUrl: "//sandbox.malabi.co/",
 	applyShadow: true,
 	customerCss:''
 };
