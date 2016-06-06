@@ -358,7 +358,7 @@ export class Editoraa {
       var customerId = newObj.customerId;
       var trackId = newObj.trackId;
       this.setOutsideConfig(newObj);
-
+      this.clearCanvas_simple();
 
       this.showimageService.customerId = customerId;
       this.showimageService.trackId = trackId;
@@ -368,30 +368,30 @@ export class Editoraa {
 
     getImageDimensions(url) {
         var img = new Image();
-        var _this = this;
+        var that = this;
         img.onload = function(){
           var height = img.height;
           var width = img.width;
       //    console.log("hw" , height, width);
           // code here to use the dimensions
-          _this.obj.imageSize = {};
-          _this.obj.imageSize.height = height;//this.image1Element.nativeElement.naturalHeight;
-          _this.obj.imageSize.width = width;//this.image1Element.nativeElement.naturalWidth;
+          that.obj.imageSize = {};
+          that.obj.imageSize.height = height;//this.image1Element.nativeElement.naturalHeight;
+          that.obj.imageSize.width = width;//this.image1Element.nativeElement.naturalWidth;
 
-          _this.calculateImageSize();
+          that.calculateImageSize();
 
-           var dataURL = _this.canvasElement.nativeElement.toDataURL();
-          _this.undoDataUrl.push(dataURL);
-          _this.undoEditResponse.push(_this.obj);
+           var dataURL = that.canvasElement.nativeElement.toDataURL();
+          that.undoDataUrl.push(dataURL);
+          that.undoEditResponse.push(that.obj);
           TimerWrapper.setTimeout(function(){
-            _this.ctx.scale(_this.totalScale,_this.totalScale);
-          //  console.log("scale", _this.totalScale);
+            that.ctx.scale(that.totalScale,that.totalScale);
+          //  console.log("scale", that.totalScale);
 
           }, 200);
-          _this.showEditorView = 'block';
-          //_this.doZoom('out');
+          that.showEditorView = 'block';
+          //that.doZoom('out');
 
-          //_this.resetSize('up');_this.resetSize('down');
+          //that.resetSize('up');that.resetSize('down');
         }
         img.src = url;
       }
@@ -626,12 +626,12 @@ export class Editoraa {
 
     setImageToCanvas(image){
       var context = this.ctx;
-      var _this = this;
+      var that = this;
       var imageObj = new Image();
       imageObj.onload = function() {
         context.drawImage(this, 0, 0);
         //console.log("done setImageToCanvas");
-        //console.log(_this.canvasElement.nativeElement.toDataURL());
+        //console.log(that.canvasElement.nativeElement.toDataURL());
       };
       imageObj.src = image;
       this.ctx = context;
@@ -676,11 +676,11 @@ export class Editoraa {
 
     doLongZoomPressDown(type){
       this.longPress = false;
-      var _this = this;
+      var that = this;
 
       var repeat = function(){
-        _this.doZoom(type);
-        _this.pressTimer =  TimerWrapper.setTimeout(repeat, 100);
+        that.doZoom(type);
+        that.pressTimer =  TimerWrapper.setTimeout(repeat, 100);
       }
 
       repeat();
@@ -1138,14 +1138,14 @@ export class Editoraa {
       this.progressPercent = 30;
 
       this.timeProgress = TimerWrapper.setInterval(frame, 1);
-      var _this = this;
+      var that = this;
       function frame() {
         //console.log("A");
-        if (_this.progressPercent >= 100) {
-          //  TimerWrapper.clearInterval(_this.timeProgress);
-          _this.progressPercent = 0;
+        if (that.progressPercent >= 100) {
+          //  TimerWrapper.clearInterval(that.timeProgress);
+          that.progressPercent = 0;
           } else {
-            _this.progressPercent +20;
+            that.progressPercent +20;
         }
       }
     }
@@ -1162,27 +1162,27 @@ export class Editoraa {
     // after matting
     showResultResponse(ob,isSaveRequest){
     //  console.log(ob);
-      var _this = this;
+      var that = this;
       var image = new Image();
       image.onload = function(){
-        _this.displayLoader = 'none';
-        _this.loaderImage = this.assetsUrl+ "/assets/tools/smallloader.gif";
-        _this.stopLoader();
+        that.displayLoader = 'none';
+        that.loaderImage = this.assetsUrl+ "/assets/tools/smallloader.gif";
+        that.stopLoader();
 
 
-        _this.srcImageResult = this.src;
-        _this.resultImageUrl = this.src;
+        that.srcImageResult = this.src;
+        that.resultImageUrl = this.src;
     //    console.log(ob.resultImageUrl);
         //this.showimageService.resultEditMaskImageUrl = resImage;
-        _this.showResultImage = 'block';
-        _this.maskHidden = true;
+        that.showResultImage = 'block';
+        that.maskHidden = true;
     //    this.image1Element.style.visibility = 'hidden';
     //    this.canvasElement.style.visibility = 'hidden';
-        _this.flagShowResult = true;
-        _this.View_Result= "EDIT_PAGE_BACK_TO_EDIT_BUTTON";
+        that.flagShowResult = true;
+        that.View_Result= "EDIT_PAGE_BACK_TO_EDIT_BUTTON";
 
         if(isSaveRequest){
-          _this.openResultWindow();
+          that.openResultWindow();
 
         }
       }
@@ -1330,13 +1330,13 @@ export class Editoraa {
      // we need to detach the change detector initially, to prevent a
      // "changed after checked" error.
 
-     var _this = this;
+     var that = this;
      window.onresize = function() {
-        _this.cdr.detectChanges();
-          //_this.cdr.detach();
-          _this.calculateImageSize();
+        that.cdr.detectChanges();
+          //that.cdr.detach();
+          that.calculateImageSize();
         //  console.log("resize");
-          _this.redrawSimple();
+          that.redrawSimple();
         //  console.log((window.outerWidth - 8) / window.innerWidth);
 
        };

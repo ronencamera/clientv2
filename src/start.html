@@ -1,7 +1,18 @@
 
 <!DOCTYPE html>
 <html lang="">
-<head></head>
+<head>
+	<!-- Compiled and minified CSS -->
+	<!--Import Google Icon Font-->
+		 <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+
+<!-- Compiled and minified JavaScript -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+</head>
 <body>
 <style type="text/css">
 	body{
@@ -10,42 +21,44 @@
 	}
 </style>
 <div style="margin-left:20px">
-<h2>buttons</h2>
-
-<button  onclick="camera51.setColor('colorFG');">Mark Object</button>
-<button  onclick="camera51.setColor('colorBG');">Mark Background</button>
-<button  onclick="camera51.undo()">UNDO</button>
-<br>
-<button  onclick="camera51.zoomIn()">Zoom in</button>
-<button  onclick="camera51.zoomOut()">Zoom out</button>
-
-<button  onmousedown="camera51.onclickLongZoomIn()" onmouseup="camera51.onmouseupLongZoomIn()" >Long Zoom in</button>
-<button  onmousedown="camera51.onclickLongZoomOut()" onmouseup="camera51.onmouseupLongZoomOut()" >Long Zoom out</button>
-
-<br>
-<button  onclick="camera51.showResult()">Show Result</button>
-<button  onclick="camera51.saveImage()">Save Image</button>
 
 <p>
-<h2>I/O</h2>
+<h5>Input</h5>
+
 <label> Customer Id</label>  <input type="text" id="customerId" style="width:40px" value="32"><br>
-<label> Track Id</label>  <input type="text" id="trackId" style="width:250px" value="https://s3.amazonaws.com/devimg.crazylister.com/1/images/.cleared-versionId-J1lkqwDIw5BYOv0btBqjDsNWNWMkpn1Q---malabi_36194e12106b42ceacd10fa15b0ac2a7%284%29.jpg"> <button onclick="runCameraTrackId()" style="	background-color: papayawhip;    font-size: 13px;">Submit TrackId</button><br>
+<label> Track Id</label>  <input type="text" id="trackId" style="width:250px" value="http://s3.amazonaws.com/cam51-img-proc/05062016/1231234/SID_13ebc33e9517407aa7478b83b49bacbc/6c345d48ad9846428352830ecdd560c8.jpg"> <button onclick="runCameraTrackId()" style="	background-color: papayawhip;    font-size: 13px;">Submit TrackId</button><br>
 
 <label> originalImageUrl</label>  <input type="text" id="originalImageUrl" style="width:250px" value="http://s3.amazonaws.com/cam51-img-proc/02062016/1231234/SID_0e138bbe2dcd4b9a849b5edb9167c837/a8cdc54a45a34b029a705eca4b8f05bb.jpg"> <button onclick="submitOriginalImageUrl()" style="	background-color: deepskyblue;    font-size: 13px;">Submit Original URL</button>
-
-<br>
-<label> Result url</label>  <input type="text" name="resultUrl" style="width:250px" disabled="disabled" id="resultUrl">
-<label> Loader (see callback)</label>  <input type="text"  disabled="disabled" id="loader">
-<div id="imgLoader"></div>
-
-<br><br>
-<label style="vertical-align: top;"> Error found (see callback)</label>  <textarea   disabled="disabled" id="responseError" rows="3" cols="40"></textarea>
 </p>
 </div>
-<h2>Iframe</h2>
+<div style="margin-left:20px">
+<h5>Buttons</h5>
+
+<button class="btn waves-effect waves-light " style="background-color: #9cd147 !important;" onclick="camera51.setColor('colorFG');">Mark Object</button>
+<button class="btn waves-effect waves-light " style="background-color: #f42a2a !important;" onclick="camera51.setColor('colorBG');">Mark Background</button>
+<button  class="btn waves-effect waves-light grey" onclick="camera51.undo()">UNDO</button>
+<br><br>
+<button  class="btn waves-effect waves-light green darken-1" onclick="camera51.zoomIn()"><i class="material-icons left">zoom_in</i>Zoom in</button>
+<button  class="btn waves-effect waves-light green darken-1" onclick="camera51.zoomOut()"><i class="material-icons left">zoom_out</i>Zoom out</button>
+
+<button  class="btn waves-effect waves-light light-blue darken-2" onmousedown="camera51.onclickLongZoomIn()" onmouseup="camera51.onmouseupLongZoomIn()" ><i class="material-icons left">zoom_in</i>Long Zoom in</button>
+<button  class="btn waves-effect waves-light light-blue darken-2" onmousedown="camera51.onclickLongZoomOut()" onmouseup="camera51.onmouseupLongZoomOut()" ><i class="material-icons left">zoom_in</i>Long Zoom out</button>
+
+<br><br>
+<button  class="btn waves-effect waves-light grey lighten-5 btn-large" style="color:black" onclick="camera51.showResult()">Show Result</button>
+<button  class="btn waves-effect waves-light light-blue darken-4 btn-large" onclick="camera51.saveImage()">Save Image</button>
+</div>
+
+<h5>Iframe<div id="imgLoader"></div></h5>
+
 <div style="width:870px;height:500px;border:0px;margin: 0 auto;" id="ad54">
 
 </div>
+<div class="row">
+
+      <div class="col s6"><label> Result url</label>  <input type="text" name="resultUrl" style="width:250px" disabled="disabled" id="resultUrl"></div>
+      <div class="col s6"><label style="vertical-align: top;"> Error found (see callback)</label>  <textarea   disabled="disabled" id="responseError" rows="3" cols="40"></textarea></div>
+    </div>
 <br>
 <h3>Variables</h3>
 	elementId: "ad54",
@@ -54,6 +67,7 @@
 	decreaseInnerHeight: 10,
 	backgroundColor: "white"
 	<br><br><br><br><br>
+
 <script>
 "use strict";
 
@@ -81,10 +95,19 @@ function runCameraTrackId(customerId,trackId){
 
 }
 
+function enableButtons(){
+	$( "button" ).removeClass( "disabled" );
+}
+
+function disableButtons(){
+	$( "button" ).addClass( "disabled" );
+
+}
+
 window.onload = function(){
 	initCamera51({
 		elementId: "ad54", // Div to insert the iframe.
-		apiUrl: "//sandbox.malabi.co", // Production url provided upon request !
+		apiUrl: "//api.malabi.co", // Production url provided upon request !
 		iframeSrc: "index.html", // where are you placing index.html Add domain if necessary
 		showWrapperShadow: true, // shadow for around the image
 		decreaseInnerHeight: 30, // should the wrapper be a little smaller to show the shadow.
@@ -95,18 +118,19 @@ window.onload = function(){
 		//originalImageUrl: "http://s3.amazonaws.com/cam51-img-proc/02062016/1231234/SID_0e138bbe2dcd4b9a849b5edb9167c837/a8cdc54a45a34b029a705eca4b8f05bb.jpg",
 		callBackStartLoader: function(){
 			// then user return a url
-			document.getElementById('loader').value = "START";
-			document.getElementById('loader').style.backgroundColor = "red";
+			// document.getElementById('loader').value = "START";
+			// document.getElementById('loader').style.backgroundColor = "red";
 			document.getElementById('imgLoader').style.visibility = "";
+			disableButtons();
 		},
 		callBackStopLoader: function(returnVar){
 			if(returnVar == camera51.obj.RETURN_IFRAME){
 				console.log( "callBackStopLoader RETURN_IFRAME" );
 			}
+			enableButtons();
 
-
-			document.getElementById('loader').style.backgroundColor = "";
-			document.getElementById('loader').value = "STOP";
+			// document.getElementById('loader').style.backgroundColor = "";
+			// document.getElementById('loader').value = "STOP";
 			document.getElementById('imgLoader').style.visibility = "hidden";
 		},
 		callBackFuncSave: function(response){
@@ -115,13 +139,10 @@ window.onload = function(){
 		callBackError: function(response){
 			// response.error = (types:  trackerIdNotFound)
 			// response.message
+			Materialize.toast(JSON.stringify(response),4000,"bgRed", 4000);
 			document.getElementById('responseError').value = JSON.stringify(response);
 		},
-		callBackError: function(response){
-			// response.error = (types:  trackerIdNotFound)
-			// response.message
-			document.getElementById('responseError').value = JSON.stringify(response);
-		},
+
 		returnFromShowResult: function(){
 			console.log("returnFromShowResult ");
 		}
@@ -140,7 +161,11 @@ window.onload = function(){
     right: 1px;
     width: 70px;
 		height: 70px;
+		float: right;
 		display: -webkit-inline-box;
+	}
+	.bgRed {
+		background-color: red;
 	}
 </body>
 </html>
