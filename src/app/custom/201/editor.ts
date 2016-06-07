@@ -39,11 +39,11 @@ var transparentImage = require("url?mimetype=image/png!../../../assets/tools/tra
     styles: [ require('./customModal/editor.css'),
     `
     .cursorRed{
-      cursor: url(` + greenloaderCur+ `), auto;
-      cursor: url(` + redloaderCur+ `) 0 0, auto;
+      cursor: url('https://assets-malabi.s3.amazonaws.com/apiexample/assets/tools/red_pointer_6_lastone.cur'), auto;
+      cursor: url(` + redloader+ `) 0 0, auto;
     }
     .cursorGreen {
-      cursor: url(` + redloader+ `), auto;
+      cursor: url('https://assets-malabi.s3.amazonaws.com/apiexample/assets/tools/green_pointer_6_lastone.cur'), auto;
       cursor: url(` + greenloader+ `) 0 0, auto;
     }
     .transparentBg {
