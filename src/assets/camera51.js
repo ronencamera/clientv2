@@ -22,20 +22,17 @@ function camera51obj(obj){
   }
 
   this.camera51HelperextractDomain = function(url) {
-      var domain;
-      if (url.indexOf("://") > -1) {
-          var domain1 = url.split('/')[0];
-          var domain2 = url.split('/')[2];
-          domain = domain1 + "//" + domain2;
-      }
-      else {
-          var url = window.location.href
-          var arr = url.split("/");
-          domain = arr[0] + "//" + arr[2]
-      }
-      return domain;
+    var r = /\/\/(.[^/]+)/;
+    var n = url.match(r);
+    if(n == undefined){
+      var url = window.location.href
+      var arr = url.split("/");
+      n = arr[0] + "//" + arr[2]
+      return n;
+    } else {
+      return window.location.protocol +"//" +n[1];
+    }
   }
-
   var frameDomain = this.camera51HelperextractDomain(iframeSrc);
 
 	var iframe = document.createElement('iframe');

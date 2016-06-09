@@ -383,7 +383,7 @@ export class Editoraa {
       TimerWrapper.setTimeout(function () {
         that.ctx.setTransform(1, 0, 0, 1, 0, 0);
         that.ctx.scale(that.totalScale, that.totalScale);
-        console.log("scale", that.totalScale);
+        //console.log("scale", that.totalScale);
 
       }, 200);
 
@@ -494,7 +494,7 @@ export class Editoraa {
     this.totalZoomInitial = -2;
     this.canvasWidth = this.obj.imageSize.width;
     this.canvasHeight = this.obj.imageSize.height;
-    console.log(this.canvasHeight, this.canvasWidth);
+    //console.log(this.canvasHeight, this.canvasWidth);
     this.obj.origWidth = this.canvasWidth;
     this.obj.origHeight = this.canvasHeight;
 
@@ -510,13 +510,7 @@ export class Editoraa {
     var divideHeight = this.obj.imageSize.height / windowHeight;
     var divideWidth = this.obj.origWidth / windowWidth;
 
-    //  console.log(this.obj.imageSize.height, this.obj.origHeight);
-    //  console.log('height',windowHeight - this.obj.imageSize.height, divideHeight, this.obj.origHeight / divideHeight);
-    //  console.log('width',windowWidth - this.obj.origWidth, divideWidth);
-
     if ((windowHeight - this.obj.imageSize.height   ) < 0 || (windowWidth - this.obj.origWidth) < 0) {
-
-
       if (divideHeight > divideWidth) {
         //  console.log('to heigh');
         //console.log('height is longer',);
@@ -525,7 +519,6 @@ export class Editoraa {
         divide = divideWidth;//this.obj.origWidth / windowWidth;
         //      console.log('to wide');
       }
-
     } else {
     }
 
@@ -582,11 +575,6 @@ export class Editoraa {
       return;
     }
 
-    // console.log(this.undoDataUrl);
-    // console.log(this.undoEditResponse);
-    //
-    // console.log("undo", this.undoDataUrl.length);
-
     var undoDataUrl = this.undoDataUrl;
     if (undoDataUrl.length <= 1) {
       console.log("undoDataUrl is empty");
@@ -602,14 +590,9 @@ export class Editoraa {
 
     this.undoDataUrl.pop();
     this.undoEditResponse.pop();
-
     this.showimageService.lastDataUrl = image;
-
     this.clearCanvas_simple();
-    //    this.ctx.canvas.putImageData(image,0,0);
-
     this.showimageService.resultEditMaskImageUrl = imageMask.resultEditMaskImageUrl;
-
     this.preversioResponseObj = imageMask;
 
     this.initDrawArrays();
@@ -677,13 +660,10 @@ export class Editoraa {
       that.doZoom(type);
       that.pressTimer = TimerWrapper.setTimeout(repeat, 100);
     }
-
     repeat();
-
   }
 
   doLongZoomPressUp(type) {
-
     TimerWrapper.clearTimeout(this.pressTimer);
   }
 
@@ -785,9 +765,7 @@ export class Editoraa {
 
     this.imageSizeWidth = zoomW;
     this.imageSizeHeight = zoomH;
-
     this.redrawSimple();
-
     this.totalScale = 1 + (this.AMOUNT_ZOOM * this.totalZoom);
 
     if (this.wrappermarginTop > 0) {
@@ -804,11 +782,6 @@ export class Editoraa {
         this.wrappermarginTop = this.showimageService.wrappermarginTop;
       }
     }
-    //console.log(yMove);
-    //    window.scrollBy(xMove/2,  yMove/2);
-
-
-//      console.log(this.image1Element.nativeElement);
   }
 
 
@@ -844,13 +817,9 @@ export class Editoraa {
 
         this.imagewrapperSizeWidth = zoomW;
         this.imagewrapperSizeheight = zoomH;
-
         this.ctx.scale(scale, scale);
       }
-
     }
-
-
     //  console.log('reset',direction,zoomW,zoomH);
     this.imageSizeWidth = zoomW;
     this.imageSizeHeight = zoomH;
@@ -978,7 +947,6 @@ export class Editoraa {
       this.ctx.closePath();
       this.ctx.stroke();
     }
-
     //    this.ctxTemp.drawImage(this.canvasElement.nativeElement, 0, 0);
   }
 
@@ -999,14 +967,6 @@ export class Editoraa {
 
   onMouseDown(e) {
 
-    //console.log('mouse down');
-    //  var element = this.canvasElement.nativeElement;
-    // let offset = element.offset();
-    // Mouse down location
-    //this.canvas.offset().left
-    //	var mouseX = e.pageX - e.layerX;
-    //		var mouseY = e.pageY - e.layerY;
-    //  console.log("mdown",e.layerX, e.layerY);
     var mousePos = this.getMousePos(this.canvasElement.nativeElement, e);
     //  console.log(mousePos);
     this.paint_simple = true;
@@ -1022,7 +982,6 @@ export class Editoraa {
       var mouseY = e.pageY - e.layerY;
       var mousePos = this.getMousePos(this.canvasElement.nativeElement, e);
       this.addClickSimple(mousePos.x, mousePos.y, true);
-
       //			this.addClickSimple(e.layerX, e.layerY, true);
       this.redrawSimple();
     }
@@ -1032,19 +991,14 @@ export class Editoraa {
   onMouseUp(e) {
     this.paint_simple = false;
     //  this.redrawSimple();
-
     this.preformEditRequest();
-
   }
 
   onMouseLeave(e) {
-
     if (this.paint_simple == true) {
       this.preformEditRequest();
     }
-
     this.paint_simple = false;
-
   }
 
   setColor(chossen) {
@@ -1160,22 +1114,14 @@ export class Editoraa {
       that.displayLoader = 'none';
       that.loaderImage = this.assetsUrl + "/assets/tools/smallloader.gif";
       that.stopLoader();
-
-
       that.srcImageResult = this.src;
       that.resultImageUrl = this.src;
-      //    console.log(ob.resultImageUrl);
-      //this.showimageService.resultEditMaskImageUrl = resImage;
       that.showResultImage = 'block';
       that.maskHidden = true;
-      //    this.image1Element.style.visibility = 'hidden';
-      //    this.canvasElement.style.visibility = 'hidden';
       that.flagShowResult = true;
       that.View_Result = "EDIT_PAGE_BACK_TO_EDIT_BUTTON";
-
       if (isSaveRequest) {
         that.openResultWindow();
-
       }
     }
     image.src = ob.resultImageUrl;
@@ -1205,12 +1151,7 @@ export class Editoraa {
 
 
   preformEditRequest() {
-    //console.log(this.ctx.canvas.width, this.ctx.canvas.height);
-    //apply the old canvas to the new one
-    //  context.drawImage(this.ctx.canvas, 0, 0);
-    //  console.log("preformEditRequest");
     var dataURL = this.canvasElement.nativeElement.toDataURL();
-    //  console.log(dataURL);
     if (this.totalZoom != 0) {
       this.resetSize('down');
       dataURL = this.canvasElement.nativeElement.toDataURL();
@@ -1227,7 +1168,6 @@ export class Editoraa {
     } else {
       this.disableColorFG = true;
     }
-    //  console.log(dataURL);
     this.displayLoader = 'block';
     this.loaderImage = this.assetsUrl + "/assets/tools/malabiloader.gif";
     this.startLoader();
@@ -1298,21 +1238,16 @@ export class Editoraa {
   }
 
   showInstructions() {
-
     this.displayShowInstructions = 'block';
-
-
   }
 
   ngAfterViewInit() {
-
     this.ctx = this.canvasElement.nativeElement.getContext("2d");
     this.ctx.scale(this.totalScale, this.totalScale);
     if (this.flagShouldInitizlize == true) {
       var dataURL = this.canvasElement.nativeElement.toDataURL();
       this.undoDataUrl.push(dataURL);
       this.undoEditResponse.push(this.obj);
-
     }
   }
 
@@ -1323,7 +1258,6 @@ export class Editoraa {
   ngOnInit() {
     // we need to detach the change detector initially, to prevent a
     // "changed after checked" error.
-
     var that = this;
     window.onresize = function () {
       that.cdr.detectChanges();
@@ -1331,8 +1265,6 @@ export class Editoraa {
       that.calculateImageSize();
       //  console.log("resize");
       that.redrawSimple();
-      //  console.log((window.outerWidth - 8) / window.innerWidth);
-
     };
   }
 
@@ -1341,8 +1273,6 @@ export class Editoraa {
   }
 
   closeWindow(type) {
-
-
     if (this.countEdits > 0) {
       var i;
       for (i = 0; i < this.countEdits; i++) {
@@ -1350,7 +1280,6 @@ export class Editoraa {
         //console.log('undo ' + this.countEdits);
       }
       this.lastDataUrl = '';
-
     }
 
     this.countEdits = 0;
@@ -1360,13 +1289,11 @@ export class Editoraa {
       this.showimageService.editedStuff.undoDataUrl = this.initDataUrl;
       this.showimageService.editedStuff.undoEditResponse = this.initEditResponse.slice();
       this.showimageService.resultEditMaskImageUrl = this.showimageService.editedStuff.undoEditResponse[this.showimageService.editedStuff.undoEditResponse.length - 1].resultEditMaskImageUrl;
-
     }
     //    this.dialog.close(false);
   }
 
   saveImage() {
-
     if (this.flagShowResult == false) {
       this.runMatting(true);
       return false;
@@ -1394,6 +1321,5 @@ export class Editoraa {
     }
     return encodedString;
   }
-
 
 }
