@@ -289,7 +289,8 @@ export class Editoraa {
     if (obj.originalImageUrl && typeof obj.originalImageUrl === 'string' && obj.originalImageUrl.length > 0) {
       this.showimageService.originalImageUrl = obj.originalImageUrl;
     }
-    if (obj.wrapperBGColor && typeof obj.wrapperBGColor === 'string' && obj.wrapperBGColor.length > 0) {
+
+    if (obj.backgroundColor && typeof obj.backgroundColor === 'string' && obj.backgroundColor.length > 0) {
       this.wrapperBGColor = obj.backgroundColor;
     }
   }

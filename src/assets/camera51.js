@@ -4,6 +4,8 @@ function initCamera51(obj) {
  camera51 = new camera51obj(obj);
 }
 
+
+
 function camera51obj(obj){
    obj.RETURN_IFRAME =1;
    obj.RETURN_EDITOR =2;
@@ -131,35 +133,38 @@ function camera51obj(obj){
     return 1;
   }
 
+  this.selectedImage = function(url){
+    console.log(url, _this );
+  }
 
   // Listen for response messages from the frames.
   window.addEventListener('message', function (e) {
     if (e.origin !== frameDomain)
       return;
-      var data = e.data;
+    var data = e.data;
 
-      if(e.data == false){
-         camera51.obj.callBackFuncClose(e.data);
+    if(e.data == false && camera51.obj.hasOwnProperty('callBackFuncClose') ){
+       camera51.obj.callBackFuncClose(e.data);
+    }
+    if(e.data == 'back' && camera51.obj.hasOwnProperty('callBackFuncBack') ){
+       camera51.obj.callBackFuncBack(e.data);
+    }
+    if(e.data.hasOwnProperty('url') && data.url.length > 5 && camera51.obj.hasOwnProperty('callBackFuncSave') ){
+      camera51.obj.callBackFuncSave(data.url);
+    }
+    if(e.data.hasOwnProperty('loader') && camera51.obj.hasOwnProperty('callBackStartLoader') ){
+      if(data.loader == true){
+        camera51.obj.callBackStartLoader();
       }
-      if(e.data == 'back'){
-         camera51.obj.callBackFuncBack(e.data);
+      if(data.loader == false){
+        camera51.obj.callBackStopLoader(this.RETURN_EDITOR);
       }
-      if(e.data.hasOwnProperty('url') && data.url.length > 5){
-        camera51.obj.callBackFuncSave(data.url);
-      }
-      if(e.data.hasOwnProperty('loader') ){
-        if(data.loader == true){
-          camera51.obj.callBackStartLoader();
-        }
-        if(data.loader == false){
-          camera51.obj.callBackStopLoader(this.RETURN_EDITOR);
-        }
-      }
-      if(e.data.hasOwnProperty('error') && camera51.obj.hasOwnProperty('callBackError') ){
-          camera51.obj.callBackError(data);
-      }
-      if(e.data.hasOwnProperty('returnFromShowResult') && camera51.obj.hasOwnProperty('returnFromShowResult') ){
-          camera51.obj.returnFromShowResult();
-      }
+    }
+    if(e.data.hasOwnProperty('error') && camera51.obj.hasOwnProperty('callBackError') ){
+        camera51.obj.callBackError(data);
+    }
+    if(e.data.hasOwnProperty('returnFromShowResult') && camera51.obj.hasOwnProperty('returnFromShowResult') ){
+        camera51.obj.returnFromShowResult();
+    }
   });
 }
