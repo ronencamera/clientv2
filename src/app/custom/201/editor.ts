@@ -1294,11 +1294,11 @@ export class Editoraa {
   }
 
   saveImage() {
-    if (this.flagShowResult == false) {
+  //  if (this.flagShowResult == false) {
       this.runMatting(true);
-      return false;
-    }
-    this.openResultWindow();
+  //    return false;
+   // }
+   // this.openResultWindow();
 
     /*
      var link = document.createElement("a");
