@@ -65,29 +65,31 @@ function camera51obj(obj){
     if(_this.obj.hasOwnProperty('backgroundColor') ){
       unsandboxedFrame.contentWindow.postMessage({'backgroundColor':_this.obj.backgroundColor},frameDomain);
     }
-
   });
   this.setDataOriginalUrl = function(obj){
-
     unsandboxedFrame.contentWindow.postMessage({'customerId':obj.customerId,  'originalImageUrl': obj.originalImageUrl,'objInJsonString':JSON.stringify(obj)}, frameDomain);
     return true;
   }
   this.setDataTrackId = function(obj){
-
     unsandboxedFrame.contentWindow.postMessage({'customerId':obj.customerId,  'trackId': obj.trackId,'objInJsonString':JSON.stringify(obj)}, frameDomain);
     return true;
   }
   this.setData = function(obj){ // old function renamed, for CL
+
     if(this.obj.hasOwnProperty('showWrapperShadow')){
       obj.showWrapperShadow = this.obj.showWrapperShadow;
     }
     if(this.obj.hasOwnProperty('decreaseInnerHeight')){
       obj.decreaseInnerHeight = this.obj.decreaseInnerHeight;
     }
+    if(this.obj.hasOwnProperty('wrappermarginTop')){
+      obj.wrappermarginTop = this.obj.wrappermarginTop;
+    }
     if(this.obj.hasOwnProperty('backgroundColor')){
       obj.backgroundColor = this.obj.backgroundColor;
     }
-    unsandboxedFrame.contentWindow.postMessage({'customerId':obj.customerId,  'trackId': obj.trackId,'objInJsonString':JSON.stringify(obj)}, frameDomain);
+    obj.customerId = this.obj.customerId;
+    unsandboxedFrame.contentWindow.postMessage({'setData':1,'objInJsonString':JSON.stringify(obj)}, frameDomain);
     return true;
   }
 

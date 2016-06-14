@@ -271,7 +271,7 @@ export class Editoraa {
       this.showimageService.customerId = obj.customerId;
     }
 
-    if (obj.showWrapperShadow && typeof obj.showWrapperShadow === 'boolean') {
+    if (typeof obj.showWrapperShadow === 'boolean') {
       this.showWrapperShadow = obj.showWrapperShadow;
     }
 
