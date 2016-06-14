@@ -100,14 +100,14 @@
   You can decrease the image height. Default image height is the height of the iframe.
   <div class="row">
     <div class="input-field col s6">
-      <input id="decreaseInnerHeight" type="text" class="validate" value="10" style="width:60px" >
+      <input id="decreaseInnerHeight" type="text" class="validate" value="20" style="width:60px" >
       <label >decreaseInnerHeight </label>
     </div>
   </div>
   How much margin top from the top of the image to the top of the iframe.
   <div class="row">
     <div class="input-field col s6">
-      <input id="wrappermarginTop" type="text" class="validate" value="30" style="width:60px" >
+      <input id="wrappermarginTop" type="text" class="validate" value="10" style="width:60px" >
       <label >wrappermarginTop </label>
     </div>
   </div>
@@ -136,6 +136,7 @@ function initObject(){
   } else {
     showWrapperShadow = false;
   }
+
   return {"showWrapperShadow":showWrapperShadow,"decreaseInnerHeight":parseInt(decreaseInnerHeight),
     "wrappermarginTop":parseInt(wrappermarginTop),"backgroundColor":backgroundColor };
 }
@@ -146,10 +147,10 @@ function submitOriginalImageUrl(){
 
 	var customerId = document.getElementById('customerId').value;
 	var originalImageUrl = document.getElementById('originalImageUrl').value;
-  console.log(nObj);
 
   $.extend( nObj, {customerId: customerId,
     originalImageUrl: originalImageUrl} );
+
 	camera51.setDataOriginalUrl(nObj);
 
 	document.getElementById('resultUrl').value = "";
@@ -159,11 +160,15 @@ function submitOriginalImageUrl(){
 }
 
 function runCameraTrackId(customerId,trackId){
-  initObject();
+  var nObj = initObject();
 	var customerId = document.getElementById('customerId').value;
 	var trackId = document.getElementById('trackId').value;
-	camera51.setDataTrackId({customerId: customerId,
-		trackId: trackId });
+
+
+  $.extend( nObj, {customerId: customerId,
+    trackId: trackId} );
+
+	camera51.setDataTrackId(nObj);
 
 	document.getElementById('resultUrl').value = "";
 	document.getElementById('responseError').value = "";
@@ -182,11 +187,11 @@ function disableButtons(){
 window.onload = function(){
 	initCamera51({
 		elementId: "ad54", // Div to insert the iframe.
-		apiUrl: "//sandbox.malabi.co", // Production url provided upon request !
+		apiUrl: "//api.malabi.co", // Production url provided upon request !
 		iframeSrc: "index.html", // where are you placing index.html Add domain if necessary
 		showWrapperShadow: true, // shadow for around the image
-		decreaseInnerHeight: 30, // should the wrapper be a little smaller to show the shadow.
-		wrappermarginTop:20,
+		decreaseInnerHeight: 20, // should the wrapper be a little smaller to show the shadow.
+		wrappermarginTop:10,
 		backgroundColor: "#fff", // background color in the edit window
 		customerId: 32, //
 		//trackId: "http://s3.amazonaws.com/cam-dev-server/19052016/1231234/SID_ed69efad9948419b90e6a7500c42bda4/5588751fc6d340fc9ed2982f9a77ef80.jpg",

@@ -275,12 +275,13 @@ export class Editoraa {
       this.showWrapperShadow = obj.showWrapperShadow;
     }
 
-    if (obj.wrappermarginTop && typeof obj.wrappermarginTop === 'number') {
+    if (obj.wrappermarginTop == 0 || (obj.wrappermarginTop && typeof obj.wrappermarginTop === 'number')) {
       this.wrappermarginTop = obj.wrappermarginTop;
       this.showimageService.wrappermarginTop = obj.wrappermarginTop;
     }
 
     if (obj.decreaseInnerHeight && typeof obj.decreaseInnerHeight === 'number') {
+
       this.decreaseInnerHeight = obj.decreaseInnerHeight;
     }
     if (obj.trackId && typeof obj.trackId === 'string' && obj.trackId.length > 0) {
