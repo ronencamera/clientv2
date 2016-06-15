@@ -187,7 +187,7 @@ function disableButtons(){
 window.onload = function(){
 	initCamera51({
 		elementId: "ad54", // Div to insert the iframe.
-		apiUrl: "//api.malabi.co", // Production url provided upon request !
+		apiUrl: "//sandbox.malabi.co", // Production url provided upon request !
 		iframeSrc: "index.html", // where are you placing index.html Add domain if necessary
 		showWrapperShadow: true, // shadow for around the image
 		decreaseInnerHeight: 20, // should the wrapper be a little smaller to show the shadow.
@@ -195,7 +195,7 @@ window.onload = function(){
 		backgroundColor: "#fff", // background color in the edit window
 		customerId: 32, //
 		//trackId: "http://s3.amazonaws.com/cam-dev-server/19052016/1231234/SID_ed69efad9948419b90e6a7500c42bda4/5588751fc6d340fc9ed2982f9a77ef80.jpg",
-		//originalImageUrl: "http://s3.amazonaws.com/cam51-img-proc/02062016/1231234/SID_0e138bbe2dcd4b9a849b5edb9167c837/a8cdc54a45a34b029a705eca4b8f05bb.jpg",
+		originalImageUrl: "http://s3.amazonaws.com/cam51-img-proc/02062016/1231234/SID_0e138bbe2dcd4b9a849b5edb9167c837/a8cdc54a45a34b029a705eca4b8f05bb.jpg",
 		callBackStartLoader: function(){
 			document.getElementById('imgLoader').style.visibility = "";
 			disableButtons();

@@ -17,7 +17,7 @@
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-    ga('create', 'UA-75726540-1', 'auto');
+    ga('create', 'UA-75726540-1', 'none');
     ga('send', 'startPage');
 
   </script>
@@ -32,7 +32,8 @@
 
 
   <script>
-
+    var customerId = 0 ;
+    var sessionId = 0;
     var parentDocHeight = document.documentElement.clientHeight;
     var parentDocWidth = document.documentElement.clientWidth;
 
@@ -43,11 +44,15 @@
        eventPost = e;
        if(e.data == '') return;
        var result = '';
+       if(e.data.customerId > 0){
+         customerId = e.data.customerId;
+       }
 
        try {
          result = e.data;
          if(e.data.customerId != '' && e.data.customerId !== undefined && e.data.trackId){
-
+           sessionId = getSession(e.data.trackId);
+           ga('send', 'event', 'CLIENT', 'setTrackId',"customerId="+customerId +",sessionId="+sessionId);
           if(e.data.hasOwnProperty('objInJsonString')){
             window.camera51App.zone.run(function () {
               window.camera51Edit.setTrackId(e.data.objInJsonString);
@@ -56,6 +61,7 @@
              var ob = {};
              ob.trackId = e.data.trackId;
              ob.customerId = e.data.customerId;
+
              window.camera51App.zone.run(function () {
                window.camera51Edit.setTrackId(JSON.stringify(ob));
               });
@@ -63,15 +69,26 @@
            return;
          }
          if(e.data.initCamera51){
+           var a = JSON.parse(e.data.initCamera51);
+           if(a.trackId){
+             sessionId = getSession(a.trackId);
+           }
+           if(a.originalImageUrl){
+             sessionId = getSession(a.originalImageUrl);
+           }
+           if(a.customerId){
+             customerId = a.customerId;
+           }
+
             window.camera51App.zone.run(function () {
              window.camera51Edit.initApp(e.data.initCamera51);
             });
             return;
          }
          if(e.data.customerId && e.data.originalImageUrl){
-
-
-            window.camera51App.zone.run(function () {
+           sessionId = getSession(e.data.originalImageUrl);
+           ga('send', 'event', 'CLIENT', 'setDataOriginalUrl',"customerId="+customerId +",sessionId="+sessionId);
+           window.camera51App.zone.run(function () {
              window.camera51Edit.setDataOriginalUrl(e.data.objInJsonString);
             });
          }
@@ -80,34 +97,38 @@
          }
       //   console.log(result);
          if(result == "openEdit"){
+           ga('send', 'event', 'CLIENT', 'openEdit',"customerId="+customerId +",sessionId="+sessionId);
           window.camera51App.zone.run(function () { window.camera51Edit.openEdit()});
           return;
          }
          if(result == 'setColor_colorBG'){
-           console.log("SSS");
+
+           ga('send', 'event', 'CLIENT', 'drawFG',"customerId="+customerId +",sessionId="+sessionId);
             window.camera51App.zone.run(function () { window.camera51Edit.setColor('colorBG')});
-            ga('send', 'event', 'Videos', 'play', 'Fall Campaign');
             return;
          }
          if(result == 'setColor_colorFG'){
-            window.camera51App.zone.run(function () { window.camera51Edit.setColor('colorFG')})
-            ga('send', 'event', 'Videos', 'play', 'Fall Campaign');
+           ga('send', 'event', 'CLIENT', 'drawBG',"customerId="+customerId +",sessionId="+sessionId);
+           window.camera51App.zone.run(function () { window.camera51Edit.setColor('colorFG')})
             return;
          }
          if(result == 'saveImage'){
-            window.camera51App.zone.run(function () { window.camera51Edit.saveImage()});
+
+           window.camera51App.zone.run(function () { window.camera51Edit.saveImage()});
             return;
          }
          if(result == 'showResult'){
-            window.camera51App.zone.run(function () { window.camera51Edit.showResult()});
+           window.camera51App.zone.run(function () { window.camera51Edit.showResult()});
             return;
          }
          if(result == 'zoomIn'){
-            window.camera51App.zone.run(function () { window.camera51Edit.doZoom('in')});
+
+           window.camera51App.zone.run(function () { window.camera51Edit.doZoom('in')});
             return;
          }
          if(result == 'zoomOut'){
-            window.camera51App.zone.run(function () { window.camera51Edit.doZoom('out')});
+
+           window.camera51App.zone.run(function () { window.camera51Edit.doZoom('out')});
             return;
          }
 
@@ -140,6 +161,15 @@
      });
 
 
+    function getSession(url){
+      var re = /(SID_.*)\//;
+      var n = url.match(re);
+      if(n == undefined){
+        return null;
+      } else {
+        return n[1];
+      }
+    }
      function callbackEdit (mes){
 
         mainWindow.postMessage(mes, eventPost.origin);

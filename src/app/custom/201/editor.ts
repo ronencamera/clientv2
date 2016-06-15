@@ -576,6 +576,7 @@ export class Editoraa {
     if (this.flagShowResult) {
       return;
     }
+    window.ga('send', 'event', 'CLIENT', 'undo',"customerId="+this.showimageService.customerId +",sessionId="+this.sessionId);
 
     var undoDataUrl = this.undoDataUrl;
     if (undoDataUrl.length <= 1) {
@@ -657,6 +658,7 @@ export class Editoraa {
   doLongZoomPressDown(type) {
     this.longPress = false;
     var that = this;
+    window.ga('send', 'event', 'CLIENT', 'LongZoom'+type ,"customerId="+this.showimageService.customerId +",sessionId="+this.sessionId);
 
     var repeat = function () {
       that.doZoom(type);
@@ -1045,6 +1047,7 @@ export class Editoraa {
       this.backToEdit();
       return false;
     }
+    window.ga('send', 'event', 'CLIENT', 'showResult',"customerId="+this.showimageService.customerId +",sessionId="+this.sessionId);
 
     var dataURL = this.canvasElement.nativeElement.toDataURL();
 
@@ -1296,7 +1299,9 @@ export class Editoraa {
   }
 
   saveImage() {
-  //  if (this.flagShowResult == false) {
+    window.ga('send', 'event', 'CLIENT', 'saveImage',"customerId="+this.showimageService.customerId +",sessionId="+this.sessionId);
+
+    //  if (this.flagShowResult == false) {
       this.runMatting(true);
   //    return false;
    // }
