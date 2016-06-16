@@ -218,7 +218,10 @@ window.onload = function(){
 		},
 		returnFromShowResult: function(){
 			console.log("returnFromShowResult ");
-		}
+		},
+    callbackInShowResult: function(){ // called when you are in ShowResult mode.
+      console.log("callbackInShowResult ");
+    }
 	});
 }
 </script>
@@ -239,5 +242,6 @@ window.onload = function(){
 	.bgRed {
 		background-color: red;
 	}
+  </style>
 </body>
 </html>

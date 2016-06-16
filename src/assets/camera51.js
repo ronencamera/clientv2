@@ -168,5 +168,10 @@ function camera51obj(obj){
     if(e.data.hasOwnProperty('returnFromShowResult') && camera51.obj.hasOwnProperty('returnFromShowResult') ){
         camera51.obj.returnFromShowResult();
     }
+    if(e.data.hasOwnProperty('callbackInShowResult') && camera51.obj.hasOwnProperty('callbackInShowResult') ){
+      camera51.obj.callbackInShowResult();
+    }
+
+
   });
 }

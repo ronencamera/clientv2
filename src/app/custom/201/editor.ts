@@ -97,13 +97,12 @@ export class Editoraa {
   decreaseInnerHeight:number = 10;
   totalZoomInitial;
   public ctx;
-  public ctxTemp;
   public paint_simple;
-  public clickX_simple = new Array();
-  public clickY_simple = new Array();
-  public clickDrag_simple = new Array();
-  public clickColor = new Array();
-  public clickLineWidth = new Array();
+  public clickX_simple = [];
+  public clickY_simple = [];
+  public clickDrag_simple = [];
+  public clickColor = [];
+  public clickLineWidth = [];
   public canvas_simple;
   public context_simple;
   applyShadow = true;
@@ -124,7 +123,7 @@ export class Editoraa {
   showResultImage = 'none';
   displayLoader = 'none';
   displayShowInstructions = 'none';
-  undoDataUrl = new Array();
+  undoDataUrl = [];
   undoImageStack = [];
   undoImageMaskStack = [];
   initDataUrl = [];
@@ -1048,6 +1047,7 @@ export class Editoraa {
       return false;
     }
     window.ga('send', 'event', 'CLIENT', 'showResult',"customerId="+this.showimageService.customerId +",sessionId="+this.sessionId);
+    window.callbackEdit({'callbackInShowResult': true});
 
     var dataURL = this.canvasElement.nativeElement.toDataURL();
 
