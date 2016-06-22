@@ -67,19 +67,19 @@ function openedit(){
     customerId: 32, //
     //trackId: "http://s3.amazonaws.com/cam-dev-server/19052016/1231234/SID_ed69efad9948419b90e6a7500c42bda4/5588751fc6d340fc9ed2982f9a77ef80.jpg",
     originalImageUrl: "http://s3.amazonaws.com/cam51-img-proc/04062016/32/SID_4f72b938ee5a444ca6fb4371995ba3d8/5b928fc0950d4e51ad2d9d17662055b5.jpg",
-    callBackStartLoader: function(){
+    callbackStartLoader: function(){
       // then user return a url
 
       document.getElementById('imgLoader').style.visibility = "";
     },
-    callBackStopLoader: function(){
+    callbackStopLoader: function(){
       document.getElementById('imgLoader').style.visibility = "hidden";
     },
-    callBackFuncSave: function(response){
+    callbackFuncSave: function(response){
       //document.getElementById('resultUrl').value = response;
       console.log("save " + response);
     },
-    callBackError: function(response){
+    callbackError: function(response){
       // response.error = (types:  trackerIdNotFound)
       // response.message
      // document.getElementById('responseError').value = JSON.stringify(response);

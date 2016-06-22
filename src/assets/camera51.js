@@ -100,7 +100,7 @@ function camera51obj(obj) {
 
   var element =  document.getElementById('camera51Frame');
   if (element == null || typeof(element) == 'undefined') {   // If iframe doesn't exist, create it.
-    this.obj.callBackStartLoader();
+    this.obj.callbackStartLoader();
     iframe.frameBorder=0;
     iframe.width="100%";
     iframe.height="100%";
@@ -115,7 +115,7 @@ function camera51obj(obj) {
 
   iframe.addEventListener("load", function() {
     unsandboxedFrame = document.getElementById('camera51Frame');
-    _this.obj.callBackStopLoader(_this.obj.RETURN_IFRAME);
+    _this.obj.callbackStopLoader(_this.obj.RETURN_IFRAME);
     if(_this.obj.hasOwnProperty('apiUrl')) {
       unsandboxedFrame.contentWindow.postMessage({'initCamera51':JSON.stringify(obj)},frameDomain);
     }
@@ -214,39 +214,39 @@ function camera51obj(obj) {
       return;
     var data = e.data;
 
-    if(e.data == false && camera51.obj.hasOwnProperty('callBackFuncClose')) {
-       camera51.obj.callBackFuncClose(e.data);
+    if(e.data == false && camera51.obj.hasOwnProperty('callbackFuncClose')) {
+       camera51.obj.callbackFuncClose(e.data);
     }
-    if(e.data == 'back' && camera51.obj.hasOwnProperty('callBackFuncBack')) {
-       camera51.obj.callBackFuncBack(e.data);
+    if(e.data == 'back' && camera51.obj.hasOwnProperty('callbackFuncBack')) {
+       camera51.obj.callbackFuncBack(e.data);
     }
-    if(e.data.hasOwnProperty('url') && data.url.length > 5 && camera51.obj.hasOwnProperty('callBackFuncSave')) {
-      camera51.obj.callBackFuncSave(data.url);
+    if(e.data.hasOwnProperty('url') && data.url.length > 5 && camera51.obj.hasOwnProperty('callbackFuncSave')) {
+      camera51.obj.callbackFuncSave(data.url);
     }
-    if(e.data.hasOwnProperty('loader') && camera51.obj.hasOwnProperty('callBackStartLoader')) {
+    if(e.data.hasOwnProperty('loader') && camera51.obj.hasOwnProperty('callbackStartLoader')) {
       if(data.loader == true){
-        camera51.obj.callBackStartLoader();
+        camera51.obj.callbackStartLoader();
       }
       if(data.loader == false){
-        camera51.obj.callBackStopLoader(this.RETURN_EDITOR);
+        camera51.obj.callbackStopLoader(this.RETURN_EDITOR);
       }
     }
-    if(e.data.hasOwnProperty('error') && camera51.obj.hasOwnProperty('callBackError')) {
-        camera51.obj.callBackError(data);
-        camera51.obj.callBackStopLoader();
+    if(e.data.hasOwnProperty('error') && camera51.obj.hasOwnProperty('callbackError')) {
+        camera51.obj.callbackError(data);
+        camera51.obj.callbackStopLoader();
     }
     if(e.data.hasOwnProperty('returnFromShowResult') && camera51.obj.hasOwnProperty('returnFromShowResult')) {
         camera51.obj.returnFromShowResult();
         camera51.obj.callbackEnableUndo();
     }
     if(e.data.hasOwnProperty('inEditMode') && camera51.obj.hasOwnProperty('callbackInEditMode')) {
-      camera51.obj.callBackStopLoader();
+      camera51.obj.callbackStopLoader();
       camera51.obj.callbackEnableButtons();
       camera51.obj.callbackInEditMode();
     }
     if(e.data.hasOwnProperty('callbackInShowResult') && camera51.obj.hasOwnProperty('callbackInShowResult')) {
         camera51.obj.callbackInShowResult();
-        camera51.obj.callBackStopLoader();
+        camera51.obj.callbackStopLoader();
         camera51.obj.callbackEnableButtons();
         camera51.obj.callbackDisableUndo();
     }

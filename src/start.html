@@ -195,22 +195,22 @@ window.onload = function(){
 		customerId: 32, //
 		//trackId: "http://s3.amazonaws.com/cam-dev-server/19052016/1231234/SID_ed69efad9948419b90e6a7500c42bda4/5588751fc6d340fc9ed2982f9a77ef80.jpg",
 		//originalImageUrl: "http://s3.amazonaws.com/cam51-img-proc/02062016/1231234/SID_0e138bbe2dcd4b9a849b5edb9167c837/a8cdc54a45a34b029a705eca4b8f05bb.jpg",
-		callBackStartLoader: function(){
+		callbackStartLoader: function(){
 			document.getElementById('imgLoader').style.visibility = "";
 			disableButtons();
 		},
-		callBackStopLoader: function(returnVar){
+		callbackStopLoader: function(returnVar){
 			if(returnVar == camera51.obj.RETURN_IFRAME){
-				console.log( "callBackStopLoader RETURN_IFRAME" );
+				console.log( "callbackStopLoader RETURN_IFRAME" );
         enableButtons();
 			}
 
 			document.getElementById('imgLoader').style.visibility = "hidden";
 		},
-		callBackFuncSave: function(response){
+		callbackFuncSave: function(response){
 			document.getElementById('resultUrl').value = response;
 		},
-		callBackError: function(response){
+		callbackError: function(response){
 			// response.error = (types:  trackerIdNotFound)
 			// response.message
 			Materialize.toast(JSON.stringify(response),4000,"bgRed", 4000);
