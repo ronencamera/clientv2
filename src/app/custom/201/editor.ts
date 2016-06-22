@@ -423,9 +423,11 @@ export class Editoraa {
       that.sessionId = response.sessionId;
       that.stopLoader();
       that.initViewOnData(that.sessionId);
+      window.callbackEdit({'inEditMode': true});
 
     };
     imageObj.src = response.originalImageUrl;
+
   }
 
   initViewOnData(sessionId) {
@@ -457,7 +459,8 @@ export class Editoraa {
 
 
     this.getImageDimensions(this.showimageService.originalImageUrl);
-    this.stopLoader();
+    //this.stopLoader();
+    window.callbackEdit({'inEditMode': true});
 
   }
 
@@ -1047,7 +1050,6 @@ export class Editoraa {
       return false;
     }
     window.ga('send', 'event', 'CLIENT', 'showResult',"customerId="+this.showimageService.customerId +",sessionId="+this.sessionId);
-    window.callbackEdit({'callbackInShowResult': true});
 
     var dataURL = this.canvasElement.nativeElement.toDataURL();
 
@@ -1127,6 +1129,9 @@ export class Editoraa {
       that.View_Result = "EDIT_PAGE_BACK_TO_EDIT_BUTTON";
       if (isSaveRequest) {
         that.openResultWindow();
+      } else {
+        window.callbackEdit({'callbackInShowResult': true});
+
       }
     }
     image.src = ob.resultImageUrl;
@@ -1223,7 +1228,9 @@ export class Editoraa {
     this.countEdits++;
     this.displayLoader = 'none';
     this.loaderImage = this.assetsUrl + "/assets/tools/smallloader.gif";
-    this.stopLoader();
+    //this.stopLoader();
+    // was stop loader
+    window.callbackEdit({'inEditMode': true});
     this.disableShowResult = false;
     this.disableSaveImage = false;
     this.disableUndoButton = false;

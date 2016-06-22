@@ -27,18 +27,18 @@
         </div>
         <div class="modal-body">
 
-<button  type="button" class="btn btn-default" onclick="camera51.setColor('colorFG');">Mark Object</button>
-<button  type="button" class="btn btn-default" onclick="camera51.setColor('colorBG');">Mark Background</button>
-<button   type="button" class="btn btn-default" onclick="camera51.undo()">UNDO</button>
-<br>
+        <button  type="button" class="btn btn-default" onclick="camera51.setColor('colorFG');">Mark Object</button>
+        <button  type="button" class="btn btn-default" onclick="camera51.setColor('colorBG');">Mark Background</button>
+        <button   type="button" class="btn btn-default" onclick="camera51.undo()">UNDO</button>
+        <br>
 
 
-<button   type="button" class="btn btn-default" style="position: absolute;
-    top: 117px;" onmousedown="camera51.onclickLongZoomIn()" onmouseup="camera51.onmouseupLongZoomIn()" >Long Zoom in</button>
-<button  type="button" class="btn btn-default" style="position: absolute;
-    top: 157px;" onmousedown="camera51.onclickLongZoomOut()" onmouseup="camera51.onmouseupLongZoomOut()" >Long Zoom out</button>
+        <button   type="button" class="btn btn-default" style="position: absolute;
+            top: 117px;" onmousedown="camera51.onclickLongZoomIn()" onmouseup="camera51.onmouseupLongZoomIn()" >Zoom In</button>
+        <button  type="button" class="btn btn-default" style="position: absolute;
+            top: 157px;" onmousedown="camera51.onclickLongZoomOut()" onmouseup="camera51.onmouseupLongZoomOut()" >Zoom Out</button>
 
-<br>
+        <br>
 
          <div id="ad54" style="height:500px;width:100%">
          </div>
@@ -69,7 +69,7 @@ function openedit(){
     originalImageUrl: "http://s3.amazonaws.com/cam51-img-proc/04062016/32/SID_4f72b938ee5a444ca6fb4371995ba3d8/5b928fc0950d4e51ad2d9d17662055b5.jpg",
     callBackStartLoader: function(){
       // then user return a url
-     
+
       document.getElementById('imgLoader').style.visibility = "";
     },
     callBackStopLoader: function(){
