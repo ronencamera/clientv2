@@ -3,25 +3,6 @@
 var camera51; // Object for Interacting with the editor.
 var camera51UserFunctions = new Camera51UserFunctions(); // Object, functions for registering analytics events.
 
-// TODO: This func should be removed.
-function camera51Selected(imgUrl, customerId) {
-  var sess = function getSession(url){
-    var re = /(SID_.*)\//;
-    var n = url.match(re);
-    if(n == undefined){
-      return null;
-    } else {
-      return n[1];
-    }
-  }
-
-  var session = sess(imgUrl);
-  var xhttp = new XMLHttpRequest();
-  xhttp.open("POST", "https://www.google-analytics.com/collect?", true);
-  xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-  xhttp.send("v=1&tid=UA-75726540-1&cid="+customerId+"&t=event&ec=CLIENT&ea=SelectedImageFromCustomer&el=customerId="+customerId+",sesssionId="+session);
-}
-
 function Camera51UserFunctions(){};
 
 Camera51UserFunctions.prototype.sendEventTrackId = function(trackId, customerId,type) {
@@ -131,26 +112,6 @@ function camera51obj(obj) {
 
   this.setDataTrackId = function(obj) {
     unsandboxedFrame.contentWindow.postMessage({'customerId':obj.customerId,  'trackId': obj.trackId,'objInJsonString':JSON.stringify(obj)}, frameDomain);
-    return true;
-  };
-
-  // TODO: This func should be removed.
-  this.setData = function(obj){ // old function renamed, for CL
-
-    if(this.obj.hasOwnProperty('showWrapperShadow')){
-      obj.showWrapperShadow = this.obj.showWrapperShadow;
-    }
-    if(this.obj.hasOwnProperty('decreaseInnerHeight')){
-      obj.decreaseInnerHeight = this.obj.decreaseInnerHeight;
-    }
-    if(this.obj.hasOwnProperty('wrappermarginTop')){
-      obj.wrappermarginTop = this.obj.wrappermarginTop;
-    }
-    if(this.obj.hasOwnProperty('backgroundColor')){
-      obj.backgroundColor = this.obj.backgroundColor;
-    }
-    obj.customerId = this.obj.customerId;
-    unsandboxedFrame.contentWindow.postMessage({'setData':1,'objInJsonString':JSON.stringify(obj)}, frameDomain);
     return true;
   };
 
