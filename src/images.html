@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Compiled and minified CSS -->
+  <!--Import Google Icon Font-->
+  <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+
+  <!-- Compiled and minified JavaScript -->
+
+</head>
+<body>
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+
+<script src="/assets/dragdropfile/filereader.js"></script>
+<script src="/assets/dragdropfile/script.js"></script>
+<link href="/assets/dragdropfile/style.css" rel="stylesheet">
+<style type="text/css">
+  body{
+    background-color: whitesmoke;
+
+  }
+  .resultImg {
+    background-color: white;
+    max-height: 200px;max-width: 200px;
+  }
+</style>
+
+<div id="dropbox">
+  <div class="text">
+    Drop Images Here
+  </div>
+</div>
+<span class="upload-progress"></span>
+
+
+<h1>Images</h1>
+
+<div style="height: 100px;">
+  <div id="img1">
+    <div class="originalImageWrapper">
+      <img style="max-height: 200px;max-width: 200px;" src="https://assets-malabi.s3.amazonaws.com/testingimages/batman.jpg">
+    </div>
+    <div class="resultImg" >
+      result
+    </div>
+  </div>
+
+
+</div>
+
+
+
+<script>
+
+  var camera51ShowImage = new Camera51ShowImage(); // Object, functions for registering analytics events.
+  camera51ShowImage.sendAsync( "3",
+    "a059e275-52e0-4524-8050-3872fdd8d9af",
+    "http://images.yad2.co.il/Pic/201604/05/3_0/o/o3_0_1_36997_20160405150449.jpg",
+    "token2ss"
+   );
+  camera51ShowImage.checkUpdatesSQS();
+  function Camera51ShowImage(){
+    var apiUrl = "http://sandbox.malabi.co/Camera51Server/processImageAsync";
+    var sqsUrl = "https://sqs.us-east-1.amazonaws.com/039264183653/DEVexample?Action=ReceiveMessage&MaxNumberOfMessages=10&VisibilityTimeout=0";
+
+    this.sendAsync = function(customerId,token,origImgUrl,  trackId ){
+      var settings = {
+        "url": this.apiUrl,
+        "method": "POST",
+        "headers": {
+          "content-type": "application/x-www-form-urlencoded"
+        },
+        "data": {
+          "origImgUrl": origImgUrl,
+          "token": token,
+          "customerId": customerId,
+          "callbackURL": this.sqsUrl,
+          "trackId": trackId
+        }
+      }
+    };
+
+    this.checkUpdatesSQS = function (trackId) {
+      var _this = this;
+      console.log(sqsUrl);
+      var xhr = new XMLHttpRequest();
+      xhr.timeout = 10000;
+      xhr.open('GET', sqsUrl);
+      xhr.onload = function() {
+
+        if (this.status == 200) {
+          var xmlDoc = xhr.responseXML;
+          x = xmlDoc.getElementsByTagName("ReceiveMessageResponse")[0];
+
+          x = x.getElementsByTagName("ReceiveMessageResult")[0];
+          console.log(x.getElementsByTagName("Message").length);
+          var res = _this.readMessages(x,trackId);
+         /* x = x.getElementsByTagName("Message")[0];
+          x = x.getElementsByTagName("Body")[0].textContent;
+          try{
+            messageBody = JSON.parse(x);
+            parseResponse(messageBody);
+            //console.log(messageBody);
+          }catch(e){
+            console.log(x);
+          }*/
+         // _this.checkUpdatesSQS();
+        }
+      };
+      xhr.send();
+    };
+    this.readMessages = function(messages, trackId){
+
+      var message = null;
+      var messageBody = null;
+      var lengthMessages = messages.getElementsByTagName("Message").length
+      for(i=0; i < lengthMessages; i++){
+        message = messages.getElementsByTagName("Message")[i];
+        messageBody = message.getElementsByTagName("Body")[0].textContent;
+        console.log(messageBody);
+    //    if(messageBody.
+
+      }
+    };
+    this.parseResponse = function(messageBody){
+
+    }
+
+
+  };
+
+
+
+
+  function getMeta(url){
+    var r = $.Deferred();
+
+    $('<img/>').attr('src', url).load(function(){
+      var s = {w:this.width, h:this.height};
+      r.resolve(s)
+    });
+    return r;
+  }
+
+  getMeta($('#img1 .originalImageWrapper').find('img').attr('src')).done(function(test){
+    //alert(test.w + ' ' + test.h);
+    var x ;
+    var height = (200/test.h);// * test.h;
+    var width = (200/test.w);// * test.w;
+    if(height < width){
+      x = height;
+    } else {
+      x = width;
+    }
+    $('#img1 .resultImg').css('height',test.h*x).css('width', test.w*x);
+  });
+
+  var settings = {
+  //  "async": true,
+  //  "crossDomain": true,
+    "url": "http://ebay-sandbox-1580323891.us-east-1.elb.amazonaws.com/Camera51Server/processImageAsync",
+    "method": "POST",
+    "headers": {
+      "content-type": "application/x-www-form-urlencoded"
+    },
+    "data": {
+      "origImgUrl": "http://images.yad2.co.il/Pic/201604/05/3_0/o/o3_0_1_36997_20160405150449.jpg",
+      "token": "a059e275-52e0-4524-8050-3872fdd8d9af",
+      "customerId": "3",
+      "callbackURL": "https://sqs.us-east-1.amazonaws.com/039264183653/DEVexample",
+      "trackId": "http://images.yad2.co.il/Pic/201604/05/3_0/o/o3_0_1_36997_20160405150449.jpg"
+    }
+  }
+
+  $.ajax(settings).done(function (response) {
+  //  console.log(response);
+  });
+
+  function checkUpdates(url) {
+    var xhr = new XMLHttpRequest();
+    xhr.timeout = 10000;
+    xhr.open('GET', url);
+    xhr.onload = function() {
+      var _this = this;
+      if (this.status == 200) {
+        var xmlDoc = xhr.responseXML;
+        x = xmlDoc.getElementsByTagName("ReceiveMessageResponse")[0];
+        x = x.getElementsByTagName("ReceiveMessageResult")[0];
+        var messages = x.getElementsByTagName("Message");
+        for(i=0; i < messages.length; i++){
+
+        }
+        x = x.getElementsByTagName("Message")[0];
+        x = x.getElementsByTagName("Body")[0].textContent;
+        try{
+          messageBody = JSON.parse(x);
+          console.log(messageBody);
+          showResponse(messageBody);
+
+        }catch(e){
+          console.log(x);
+        }
+        checkUpdates(url);
+      }
+    };
+    xhr.send();
+  }
+
+
+
+
+ /* var sqsURL = "https://sqs.us-east-1.amazonaws.com/039264183653/DEVexample?Action=ReceiveMessage&MaxNumberOfMessages=10&VisibilityTimeout=0";
+  checkUpdates(sqsURL);
+  setInterval(function() { checkUpdates(sqsURL) }, 10000);
+*/
+  function showResponse(messageBody){
+    var resultImg = messageBody.ResultImage;
+    $('.resultImg').prepend('<img id="theImg" src="'+ resultImg +'" />');
+  }
+</script>
+
+
+</body>
+</html>
+
