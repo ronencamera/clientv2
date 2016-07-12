@@ -14,6 +14,9 @@
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
 
+<script src="/assets/camera51.js"></script>
+
+
 <script src="/assets/dragdropfile/filereader.js"></script>
 <script src="/assets/dragdropfile/script.js"></script>
 <link href="/assets/dragdropfile/style.css" rel="stylesheet">
@@ -33,8 +36,8 @@
     Drop Images Here
   </div>
 </div>
-<span class="upload-progress"></span>
-
+<div id="imageList">
+</div>
 
 <script>
   var apiUrl = "http://sandbox.malabi.co/Camera51Server/processImageAsync";
@@ -42,129 +45,10 @@
 
   var camera51ShowImage = new Camera51ShowImage(); // Object, functions for registering analytics events.
   camera51ShowImage.checkUpdatesSQS();
-//  setInterval(function(){
-//    camera51ShowImage.checkUpdatesSQS();
-//  }, 10000);
-
-  function Camera51ShowImage(){
-    //var apiUrl = "http://sandbox.malabi.co/Camera51Server/processImageAsync";
-    var callbackURL = sqsUrl+"?Action=ReceiveMessage&MaxNumberOfMessages=10&VisibilityTimeout=10";
-    var searchFor = "imageCopyURL";
-    var searchArray = [];
-    var arrayElements = [];
 
 
-    this.addSearchArray = function(ele, str){
-        searchArray.push(str);
-        arrayElements.push(ele);
-    };
-
-    this.getSearchArray = function(){
-      return searchArray;
-    };
-
-    this.checkUpdatesSQS = function () {
-      var callbackURL = sqsUrl+"?Action=ReceiveMessage&VisibilityTimeout=10";
-
-      var _this = this;
-
-      var xhr = new XMLHttpRequest();
-      xhr.timeout = 10000;
-      xhr.open('GET', callbackURL);
-      xhr.onload = function() {
-        if (xhr.status === 0) {
-          if (xhr.statusText === 'abort') {
-            console.log("aaaa");
-            // Has been aborted
-          } else {
-            // Offline mode
-          }
-        }
-        if(this.readyState ===4) {
-        if (this.status == 200) {
-          var xmlDoc = xhr.responseXML;
-          x = xmlDoc.getElementsByTagName("ReceiveMessageResponse")[0];
-
-          x = x.getElementsByTagName("ReceiveMessageResult")[0];
-       //   console.log(x.getElementsByTagName("Message").length,  _this.getSearchArray());
-          var res = _this.readMessages(x,searchFor );
-          if(res != null){
-            console.log(res);
-            _this.showResponse(res);
-          }
-          _this.checkUpdatesSQS();
-        } else {
-          _this.checkUpdatesSQS();
-        }
-      }
-      };
-      xhr.send();
-    };
-
-    this.showResponse = function(response_element){
-      var res = JSON.parse(response_element.messageBody);
-      var elem = response_element.arrayElement;
-      var img = res.resultImageURL;
-      $(elem).prepend('<img id="theImg" src="'+img +'" style="width: 100%;height: auto;" />');
-
-    };
-
-
-    this.readMessages = function(messages, searchKey){
-
-      var message = null;
-      var messageBody = null;
-      var lengthMessages = messages.getElementsByTagName("Message").length
-      for(i=0; i < lengthMessages; i++){
-        message = messages.getElementsByTagName("Message")[i];
-        messageBody = message.getElementsByTagName("Body")[0].textContent;
-     //  console.log(messageBody);
-        var obj = JSON.parse(messageBody);
-
-        var searchValue;
-        for(searchValue in searchArray){
-     //     console.log(obj[searchKey], searchArray[searchValue]);
-          if(obj[searchKey] == searchArray[searchValue]){
-            searchArray.splice(searchValue, 1);
-            var arrayElement = arrayElements[searchValue]
-            arrayElements.splice(searchValue, 1);
-            this.deleteMessage(message);
-            return {'messageBody': messageBody, 'arrayElement': arrayElement};
-          }
-        }
-
-
-      }
-      return null;
-    };
-    this.parseResponse = function(messageBody){
-
-
-    }
-
-    this.deleteMessage = function(message){
-      var receiptHandle = message.getElementsByTagName("ReceiptHandle")[0].textContent;
-      console.log(encodeURIComponent(receiptHandle));
-      var xhttp = new XMLHttpRequest();
-      xhttp.onreadystatechange = function() {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
-
-        }
-      };
-      xhttp.open("GET", sqsUrl+"?Action=DeleteMessage&ReceiptHandle="+encodeURIComponent(receiptHandle), true);
-      xhttp.send();
-    };
-
-  };
-
-
-
-
-
-
-  function uploadDone(imageId, origImgUrl){
-
-    console.log(origImgUrl);
+  function sqsListner(imageId, origImgUrl) {
+//    console.log(origImgUrl);
     var settings = {
       //  "async": true,
       //  "crossDomain": true,
@@ -179,27 +63,30 @@
         "customerId": "3",
         "callbackURL": sqsUrl
       }
-    }
+    };
 
     $.ajax(settings).done(function (response) {
-        var imageCopyURL = response.response["imageCopyURL"];
+      var imageCopyURL = response.response["imageCopyURL"];
+      var element = document.getElementById("resultPreview-" + imageId);
 
-        var element = document.getElementById("resultPreview-"+imageId);
-
-        camera51ShowImage.addSearchArray(element, imageCopyURL);
+      camera51ShowImage.addSearchArray(element, imageCopyURL);
     });
+  };
 
-  }
+    function malabiShowImageCallback(elem, img, processingResultCode){
 
+      if(processingResultCode == 0){
+        $(elem).prepend('<img id="theImg" src="'+img +'" style="width: 100%;height: auto;" />');
+      }
+      if(processingResultCode > 0) {
+        $(elem).prepend('error ' + processingResultCode);
+      }
 
-
-
+    };
 
 
 
 </script>
-
-
 </body>
 </html>
 

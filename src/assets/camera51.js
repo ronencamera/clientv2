@@ -213,3 +213,125 @@ function camera51obj(obj) {
     }
   });
 }
+
+
+function Camera51ShowImage(){
+  //var apiUrl = "http://sandbox.malabi.co/Camera51Server/processImageAsync";
+  var callbackURL = sqsUrl+"?Action=ReceiveMessage&MaxNumberOfMessages=10&VisibilityTimeout=10";
+  var searchFor = "imageCopyURL";
+  var searchArray = [];
+  var arrayElements = [];
+
+
+  this.addSearchArray = function(ele, str){
+    searchArray.push(str);
+    arrayElements.push(ele);
+  };
+
+  this.getSearchArray = function(){
+    return searchArray;
+  };
+
+  this.checkUpdatesSQS = function () {
+    var callbackURL = sqsUrl+"?Action=ReceiveMessage&VisibilityTimeout=10";
+
+    var _this = this;
+
+    var xhr = new XMLHttpRequest();
+    xhr.timeout = 90000;
+    xhr.open('GET', callbackURL);
+    xhr.onreadystatechange = function(){
+     // console.log("bbb", xhr.status );
+    };
+    xhr.onload = function() {
+      console.log("aaaa", xhr.status );
+      if (xhr.status === 0) {
+        if (xhr.statusText === 'abort') {
+          console.log("aaaa");
+          // Has been aborted
+        } else {
+          // Offline mode
+        }
+      //  console.log("aaaa", exception );
+      }
+      if(this.readyState ===4) {
+        if (this.status == 200) {
+          var xmlDoc = xhr.responseXML;
+          x = xmlDoc.getElementsByTagName("ReceiveMessageResponse")[0];
+
+          x = x.getElementsByTagName("ReceiveMessageResult")[0];
+          var res = _this.readMessages(x,searchFor );
+          if(res != null){
+            console.log(res);
+            _this.showResponse(res);
+          }
+          _this.checkUpdatesSQS();
+        } else {
+          console.log("Error", xmlhttp.statusText);
+          _this.checkUpdatesSQS();
+        }
+      }
+    };
+    xhr.onerror = function () {
+    //  console.log("aaaa");
+      //  error(xhr, xhr.status);
+    };
+    xhr.send();
+  };
+
+  this.showResponse = function(response_element){
+    var img = null;
+    var processingResultCode = null;
+    var res = JSON.parse(response_element.messageBody);
+    var elem = response_element.arrayElement;
+    if( typeof res.resultImageURL === 'string'){
+      img = res.resultImageURL;
+    }
+    if( typeof res.processingResultCode === 'number'){
+      processingResultCode = res.processingResultCode;
+    }
+    if ( typeof window['malabiShowImageCallback'] === 'function' ) { window['malabiShowImageCallback'](elem, img , processingResultCode); }
+
+  };
+
+
+  this.readMessages = function(messages, searchKey){
+
+    var message = null;
+    var messageBody = null;
+    var lengthMessages = messages.getElementsByTagName("Message").length
+    for(i=0; i < lengthMessages; i++){
+      message = messages.getElementsByTagName("Message")[i];
+      messageBody = message.getElementsByTagName("Body")[0].textContent;
+      //  console.log(messageBody);
+      var obj = JSON.parse(messageBody);
+
+      var searchValue;
+      for(searchValue in searchArray){
+        //     console.log(obj[searchKey], searchArray[searchValue]);
+        if(obj[searchKey] == searchArray[searchValue]){
+          searchArray.splice(searchValue, 1);
+          var arrayElement = arrayElements[searchValue]
+          arrayElements.splice(searchValue, 1);
+          this.deleteMessage(message);
+          return {'messageBody': messageBody, 'arrayElement': arrayElement};
+        }
+      }
+    }
+    return null;
+  };
+  this.parseResponse = function(messageBody){
+  }
+
+  this.deleteMessage = function(message){
+    var receiptHandle = message.getElementsByTagName("ReceiptHandle")[0].textContent;
+    //console.log(encodeURIComponent(receiptHandle));
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == 4 && xhttp.status == 200) {
+      }
+    };
+    xhttp.open("GET", sqsUrl+"?Action=DeleteMessage&ReceiptHandle="+encodeURIComponent(receiptHandle), true);
+    xhttp.send();
+  };
+};

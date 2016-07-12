@@ -21,7 +21,7 @@ $(document).ready(function () {
         var img = new Image();
 
         img.onload = function () {
-          console.log("Width:" + this.width + "   Height: " + this.height);//this will give you image width and height and you can easily validate here....
+  //        console.log("Width:" + this.width + "   Height: " + this.height);//this will give you image width and height and you can easily validate here....
           var s = {w: this.width, h: this.height};
           create_box(e, file, s);
         };
@@ -54,12 +54,12 @@ create_box = function (e, file, size) {
   }
   size.hPro = size.h *x;
   size.wPro = size.w *x;
-  template += '<div class="resultPreview" id="resultPreview-' + rand + '" style="position:fixed;width:' + size.wPro+ 'px;height:' +  size.hPro+ 'px;background-color: #fff;" id="' + rand + '"></div>';
+  template += '<div class="resultPreview" id="resultPreview-' + rand + '" style="width:' + size.wPro+ 'px;height:' +  size.hPro+ 'px;background-color: #fff;" id="' + rand + '"></div>';
 
-  if ($("#dropbox .eachImage").html() == null)
-    $("#dropbox").html(template);
+  if ($("#imageList .eachImage").html() == null)
+    $("#imageList").html(template);
   else
-    $("#dropbox").append(template);
+    $("#imageList").append(template);
 
   // upload image
   upload(file, rand);
@@ -93,9 +93,9 @@ upload = function (file, rand) {
         $(".progress[id='" + rand + "'] span").css("width", "100%");
         $(".preview[id='" + rand + "']").find(".updone").html("100%");
         $(".preview[id='" + rand + "'] .overlay").css("display", "none");
-        console.log("done", xhr[rand].response);
+      //  console.log("done", xhr[rand].response);
         data = JSON.parse(xhr[rand].responseText);
-        uploadDone(rand, data.uploadUrl);
+        sqsListner(rand, data.uploadUrl);
       } else {
         alert("Error : Unexpected error while uploading file");
       }
