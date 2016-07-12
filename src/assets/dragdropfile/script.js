@@ -103,7 +103,7 @@ upload = function (file, rand) {
         $(".preview[id='" + rand + "'] .overlay").css("display", "none");
       //  console.log("done", xhr[rand].response);
         data = JSON.parse(xhr[rand].responseText);
-        sqsListner(rand, data.uploadUrl);
+        sqsListener(rand, data.uploadUrl);
       } else {
         alert("Error : Unexpected error while uploading file");
       }

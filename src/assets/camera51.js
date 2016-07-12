@@ -219,10 +219,9 @@ function camera51obj(obj) {
 function Camera51ShowImage(){
   //var apiUrl = "http://sandbox.malabi.co/Camera51Server/processImageAsync";
   var callbackURL = sqsUrl+"?Action=ReceiveMessage&MaxNumberOfMessages=10&VisibilityTimeout=10";
-  var searchFor = "imageCopyURL";
+  var searchFor = "trackId";
   var searchArray = [];
   var arrayElements = [];
-
 
   this.addSearchArray = function(ele, str){
     searchArray.push(str);
@@ -282,6 +281,7 @@ function Camera51ShowImage(){
 
   this.showResponse = function(response_element){
     var img = null;
+    var trackId = null;
     var processingResultCode = null;
     var res = JSON.parse(response_element.messageBody);
     var elem = response_element.arrayElement;
@@ -291,8 +291,10 @@ function Camera51ShowImage(){
     if( typeof res.processingResultCode === 'number'){
       processingResultCode = res.processingResultCode;
     }
-    var imageCopyURL =  res.imageCopyURL;
-    if ( typeof window['malabiShowImageCallback'] === 'function' ) { window['malabiShowImageCallback'](elem, img , processingResultCode, imageCopyURL); }
+    if( typeof res.trackId === 'string'){
+      trackId = res.trackId;
+    }
+    if ( typeof window['malabiShowImageCallback'] === 'function' ) { window['malabiShowImageCallback'](elem, img , processingResultCode, trackId); }
 
   };
 

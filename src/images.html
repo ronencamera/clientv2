@@ -58,10 +58,10 @@
     <br>
 
 
-    <button   type="button" class="btn btn-default" style="position: absolute;
-            top: 117px;" onmousedown="camera51.onclickLongZoomIn()" onmouseup="camera51.onmouseupLongZoomIn()" >Zoom In</button>
-    <button  type="button" class="btn btn-default" style="position: absolute;
-            top: 157px;" onmousedown="camera51.onclickLongZoomOut()" onmouseup="camera51.onmouseupLongZoomOut()" >Zoom Out</button>
+    <button   type="button" class="waves-effect waves-circle transparent" style="position: absolute;
+            top: 127px;" onmousedown="camera51.onclickLongZoomIn()" onmouseup="camera51.onmouseupLongZoomIn()" ><i class="material-icons right">zoom_in</i></button>
+    <button  type="button" class="waves-effect waves-circle transparent" style="position: absolute;
+            top: 167px;" onmousedown="camera51.onclickLongZoomOut()" onmouseup="camera51.onmouseupLongZoomOut()" ><i class="material-icons right">zoom_out</i></button>
 
     <br>
 
@@ -69,12 +69,12 @@
     </div>
   </div>
   <div class="modal-footer">
+    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Close</a>
     <button   type="button" class="btn btn-default" onclick="camera51.showResult()">Show Result</button>
     <button   type="button" class="btn btn-default" onclick="camera51.saveImage()">Save Image</button>
-
   </div>
   <div class="modal-footer">
-    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+
 
   </div>
 </div>
@@ -88,6 +88,7 @@
       iframeSrc: "//assets-malabi.s3.amazonaws.com/apiexample/index.html", // where are you placing index.html Add domain if necessary
       showWrapperShadow: true, // shadow for around the image
       decreaseInnerHeight: 10, // should the wrapper be a little smaller to show the shadow.
+      wrappermarginTop:1,
       backgroundColor: "#0832d", // background color in the edit window
       customerId: customerId, //
       //trackId: "http://s3.amazonaws.com/cam-dev-server/19052016/1231234/SID_ed69efad9948419b90e6a7500c42bda4/5588751fc6d340fc9ed2982f9a77ef80.jpg",
@@ -119,7 +120,7 @@
   camera51ShowImage.checkUpdatesSQS();
 
 
-  function sqsListner(imageId, origImgUrl) {
+  function sqsListener(imageId, origImgUrl) {
 //    console.log(origImgUrl);
     var settings = {
       //  "async": true,
@@ -133,22 +134,23 @@
         "origImgUrl": origImgUrl,
         "token": "a059e275-52e0-4524-8050-3872fdd8d9af",
         "customerId": customerId,
-        "callbackURL": sqsUrl
+        "callbackURL": sqsUrl,
+        "trackId" : origImgUrl
       }
     };
 
     $.ajax(settings).done(function (response) {
-      var imageCopyURL = response.response["imageCopyURL"];
+      var trackId = response.response["trackId"];
       var element = document.getElementById("resultPreview-" + imageId);
 
-      camera51ShowImage.addSearchArray(element, imageCopyURL);
+      camera51ShowImage.addSearchArray(element, trackId);
     });
   };
 
-    function malabiShowImageCallback(elem, img, processingResultCode, imageCopyURL){
-      imageCopyURL = "http:"+ imageCopyURL;
+    function malabiShowImageCallback(elem, img, processingResultCode, trackId){
+
       if(processingResultCode == 0){
-        $(elem).html('<img id="theImg" src="'+img +'" style="width: 100%;height: auto;" onclick="submitOriginalImageUrl(\''+imageCopyURL+'\');" />');
+        $(elem).html('<img id="theImg" src="'+img +'" style="width: 100%;height: auto;" onclick="runCameraTrackId(\''+trackId+'\');" />');
       }
       if(processingResultCode > 0) {
         $(elem).html('error ' + processingResultCode);
@@ -168,18 +170,18 @@
 
   }
 
-  function submitOriginalImageUrl(imageCopyURL){
+  function runCameraTrackId(trackId){
     var nObj = {};
 
     var customerIda = customerId;
-    var originalImageUrl = imageCopyURL;
+    var originalImageUrl = trackId;
 
     $.extend( nObj, {'customerId': customerIda,
-      'originalImageUrl': originalImageUrl} );
+      'trackId': trackId} );
     $('#modal1').openModal();
     console.log(nObj);
-    console.log(camera51);
-    camera51.setDataOriginalUrl(nObj);
+
+    camera51.setDataTrackId(nObj);
 
 
   }
