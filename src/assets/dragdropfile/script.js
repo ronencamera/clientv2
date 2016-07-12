@@ -35,7 +35,15 @@ $(document).ready(function () {
 });
 
 create_box = function (e, file, size) {
-
+  var loader = '<div class="preloader-wrapper active">'
+    +'<div class="spinner-layer spinner-red-only">'
+    +'<div class="circle-clipper left">'
+    +'<div class="circle"></div>'
+    +'</div><div class="gap-patch">'
+    +'<div class="circle"></div>'
+    +'</div><div class="circle-clipper right">'
+    +'<div class="circle"></div>'
+    +'</div></div></div>';
   var rand = Math.floor((Math.random() * 100000) + 3);
   var imgName = file.name; // not used, Irand just in case if user wanrand to print it.
   var src = e.target.result;
@@ -54,7 +62,7 @@ create_box = function (e, file, size) {
   }
   size.hPro = size.h *x;
   size.wPro = size.w *x;
-  template += '<div class="resultPreview" id="resultPreview-' + rand + '" style="width:' + size.wPro+ 'px;height:' +  size.hPro+ 'px;background-color: #fff;" id="' + rand + '"></div>';
+  template += '<div class="resultPreview" id="resultPreview-' + rand + '" style="width:' + size.wPro+ 'px;height:' +  size.hPro+ 'px;background-color: #fff;" id="' + rand + '">' + loader + '</div>';
 
   if ($("#imageList .eachImage").html() == null)
     $("#imageList").html(template);

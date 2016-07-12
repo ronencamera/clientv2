@@ -106,6 +106,7 @@ function camera51obj(obj) {
   });
 
   this.setDataOriginalUrl = function(obj) {
+
     unsandboxedFrame.contentWindow.postMessage({'customerId':obj.customerId,  'originalImageUrl': obj.originalImageUrl,'objInJsonString':JSON.stringify(obj)}, frameDomain);
     return true;
   };
@@ -244,7 +245,7 @@ function Camera51ShowImage(){
      // console.log("bbb", xhr.status );
     };
     xhr.onload = function() {
-      console.log("aaaa", xhr.status );
+
       if (xhr.status === 0) {
         if (xhr.statusText === 'abort') {
           console.log("aaaa");
@@ -290,7 +291,8 @@ function Camera51ShowImage(){
     if( typeof res.processingResultCode === 'number'){
       processingResultCode = res.processingResultCode;
     }
-    if ( typeof window['malabiShowImageCallback'] === 'function' ) { window['malabiShowImageCallback'](elem, img , processingResultCode); }
+    var imageCopyURL =  res.imageCopyURL;
+    if ( typeof window['malabiShowImageCallback'] === 'function' ) { window['malabiShowImageCallback'](elem, img , processingResultCode, imageCopyURL); }
 
   };
 

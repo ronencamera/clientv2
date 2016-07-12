@@ -28,9 +28,7 @@ body{
 	color: #8F8F8F;
 	margin-top: 7%;
 }
-.active{
-	box-shadow: 0 0px 20px #818378 inset !important;
-}
+
 .eachImage {
     float: left;
     margin: 10px;
