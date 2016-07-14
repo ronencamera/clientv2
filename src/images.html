@@ -88,7 +88,9 @@
     initCamera51({
       elementId: "ad54", // Div to insert the iframe.
       customerId: customerId, //
-
+      callbackFuncSave: function(response){
+        Materialize.toast("Image saved, new URL: " + JSON.stringify(response),4000,"", 4000);
+      },
     });
   };
 

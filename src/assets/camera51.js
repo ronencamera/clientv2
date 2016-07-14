@@ -244,14 +244,16 @@ function camera51obj(obj) {
       return;
     var data = e.data;
 
-    if(e.data == false && camera51.obj.hasOwnProperty('callbackFuncClose')) {
-       camera51.obj.callbackFuncClose(e.data);
+    if(e.data == false ) {
+      console.log("callbackFuncClose");
+    //   camera51.obj.callbackFuncClose(e.data);
     }
-    if(e.data == 'back' && camera51.obj.hasOwnProperty('callbackFuncBack')) {
-       camera51.obj.callbackFuncBack(e.data);
-    }
-    if(e.data.hasOwnProperty('url') && data.url.length > 5 && camera51.obj.hasOwnProperty('callbackFuncSave')) {
-      camera51.obj.callbackFuncSave(data.url);
+    if(e.data.hasOwnProperty('url') && data.url.length > 5 ){
+      _this.enableButtons();
+      console.log(data);
+      if(camera51.obj.hasOwnProperty('callbackFuncSave')){
+        camera51.obj.callbackFuncSave(data.url);
+      }
     }
     if(e.data.hasOwnProperty('loader') ) {
       if(data.loader == true){
