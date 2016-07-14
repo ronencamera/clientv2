@@ -73,7 +73,7 @@ export class Editoraa {
   showWrapperShadow = true;
   wrapperShadow = "0 5px 15px rgba(0,0,0,.5)";
   imagewrapperOverflow = 'hidden';
-  wrappermarginTop = "20";
+  wrappermarginTop = "0";
   showProccessError = 'none';
   maskHidden = false;
   imageWrapperMaxHeight;
@@ -413,6 +413,12 @@ export class Editoraa {
       this.stopLoader();
       return;
     }
+    var imageObjMask = new Image();
+    imageObjMask.onload = function () {
+
+    };
+    imageObjMask.src = response.resultEditMaskImageUrl;
+
 
     var imageObj = new Image();
     var that = this;
@@ -424,7 +430,6 @@ export class Editoraa {
       that.stopLoader();
       that.initViewOnData(that.sessionId);
       window.callbackEdit({'inEditMode': true});
-
     };
     imageObj.src = response.originalImageUrl;
 
