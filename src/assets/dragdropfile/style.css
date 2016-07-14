@@ -30,13 +30,14 @@ body{
 }
 
 .eachImage {
-    float: left;
-    margin: 10px;
-    position: relative;
-    /*width: 205px;*/
-    text-align: center;
+  float: left;
+  margin: 10px;
+  position: relative;
+  /*width: 205px;*/
+  text-align: center;
 	z-index: 10;
   min-height: 400px;
+  height: 416px;
   width: 210px;
   border-style: dotted;
   border-width: 3px;
@@ -44,6 +45,7 @@ body{
 .preview{
     display: inline-block;
     position: relative;
+    height: 200px;
 }
 .preview img{
     border: 3px solid #FFFFFF;

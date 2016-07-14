@@ -32,7 +32,7 @@ function camera51obj(obj) {
   if (obj.hasOwnProperty('apiUrl') && obj.apiUrl.length > 1) {
     apiUrl = obj.apiUrl;
   } else {
-    apiUrl = "//sandbox.malabi.co";
+    apiUrl = "//api.malabi.co";
   }
 
   if (obj.hasOwnProperty('iframeSrc') && obj.iframeSrc.length > 1) {
@@ -61,6 +61,13 @@ function camera51obj(obj) {
     }
   }
 
+  this.uclass = {
+    exists: function(elem,className){var p = new RegExp('(^| )'+className+'( |$)');return (elem.className && elem.className.match(p));},
+    add: function(elem,className){
+      if(this.exists(elem,className)){return true;}elem.className += ' '+className;},
+    remove: function(elem,className){var c = elem.className;var p = new RegExp('(^| )'+className+'( |$)');c = c.replace(p,' ').replace(/  /g,' ');elem.className = c;}
+  };
+
   this.camera51HelperExtractDomain = function(url) {
     var regExp = /\/\/(.[^/]+)/;
     var domain = url.match(regExp);
@@ -75,13 +82,73 @@ function camera51obj(obj) {
   };
 
   var frameDomain = this.camera51HelperExtractDomain(iframeSrc);
-
 	var iframe = document.createElement('iframe');
   this.obj = obj;
 
+  this.startLoader = function(){
+    this.disableButtons();
+    if(this.obj.hasOwnProperty('callbackStartLoader')){
+      this.obj.callbackStartLoader();
+    } else {
+      if(document.getElementById("camera51-loader")){
+        document.getElementById('camera51-loader').style.visibility = "";
+      } else {
+        console.error("Error Camera51 Init: Loader element not found, looking for #camera51-loader element. Or add your override with your own callbackStartLoader function.");
+      }
+    }
+  };
+
+  this.stopLoader = function(type){
+    if(this.obj.hasOwnProperty('callbackStopLoader')){
+      this.obj.callbackStopLoader(type);
+    } else {
+      if(document.getElementById("camera51-loader")){
+        document.getElementById('camera51-loader').style.visibility = "hidden";
+      } else {
+        console.error("Error Camera51 Init: Loader element not found, looking for #camera51-loader element. Or add your override with your own callbackStopLoader function.");
+      }
+    }
+  };
+
+  this.enableButtons = function(){
+    if(this.obj.hasOwnProperty('callbackEnableButtons')){
+      this.obj.callbackEnableButtons();
+    } else {
+      var elms = document.querySelectorAll('*[id^="camera51-btn"]');
+      for (i=0;i<elms.length;i++) {
+        this.uclass.remove(elms[i],'disabled');
+      }
+    }
+  };
+
+  this.disableButtons = function(){
+    if(this.obj.hasOwnProperty('callbackEnableButtons')){
+      this.obj.callbackEnableButtons();
+    } else {
+      var elms = document.querySelectorAll('*[id^="camera51-btn"]');
+      for (i=0;i<elms.length;i++) {
+        this.uclass.add(elms[i],'disabled');
+      }
+    }
+  };
+
+  this.disableUndo = function(){
+    if(this.obj.hasOwnProperty('callbackDisableUndo')){
+      this.obj.callbackDisableUndo();
+    } else {
+      if(document.getElementById("camera51-btn-undo")){
+        var elm= document.getElementById("camera51-btn-undo");
+        this.uclass.add(elm,'disabled');
+      } else {
+        console.error("Error Camera51 Init: camera51-btn-undo element not found, looking for #camera51-btn-undo element. Or add your override with your own callbackStopLoader function.");
+      }
+    }
+  };
+
   var element =  document.getElementById('camera51Frame');
   if (element == null || typeof(element) == 'undefined') {   // If iframe doesn't exist, create it.
-    this.obj.callbackStartLoader();
+    this.startLoader();
+
     iframe.frameBorder=0;
     iframe.width="100%";
     iframe.height="100%";
@@ -96,7 +163,7 @@ function camera51obj(obj) {
 
   iframe.addEventListener("load", function() {
     unsandboxedFrame = document.getElementById('camera51Frame');
-    _this.obj.callbackStopLoader(_this.obj.RETURN_IFRAME);
+    _this.stopLoader(_this.obj.RETURN_IFRAME);
     if(_this.obj.hasOwnProperty('apiUrl')) {
       unsandboxedFrame.contentWindow.postMessage({'initCamera51':JSON.stringify(obj)},frameDomain);
     }
@@ -170,6 +237,7 @@ function camera51obj(obj) {
     console.log(url, _this);
   };
 
+  var _this = this;
   // Listen for response messages from the frames.
   window.addEventListener('message', function (e) {
     if (e.origin !== frameDomain)
@@ -185,34 +253,42 @@ function camera51obj(obj) {
     if(e.data.hasOwnProperty('url') && data.url.length > 5 && camera51.obj.hasOwnProperty('callbackFuncSave')) {
       camera51.obj.callbackFuncSave(data.url);
     }
-    if(e.data.hasOwnProperty('loader') && camera51.obj.hasOwnProperty('callbackStartLoader')) {
+    if(e.data.hasOwnProperty('loader') ) {
       if(data.loader == true){
-        camera51.obj.callbackStartLoader();
+        _this.startLoader();
       }
       if(data.loader == false){
-        camera51.obj.callbackStopLoader(this.RETURN_EDITOR);
+        _this.stopLoader(this.RETURN_EDITOR);
       }
     }
-    if(e.data.hasOwnProperty('error') && camera51.obj.hasOwnProperty('callbackError')) {
-        camera51.obj.callbackError(data);
-        camera51.obj.callbackStopLoader();
+    if(e.data.hasOwnProperty('error')) {
+      console.error(data);
+      _this.stopLoader();
     }
-    if(e.data.hasOwnProperty('returnFromShowResult') && camera51.obj.hasOwnProperty('returnFromShowResult')) {
+    if(e.data.hasOwnProperty('returnFromShowResult')) {
+      if(camera51.obj.hasOwnProperty('returnFromShowResult')){
         camera51.obj.returnFromShowResult();
-        camera51.obj.callbackEnableUndo();
+      }
+      _this.enableButtons();
     }
-    if(e.data.hasOwnProperty('inEditMode') && camera51.obj.hasOwnProperty('callbackInEditMode')) {
-      camera51.obj.callbackStopLoader();
-      camera51.obj.callbackEnableButtons();
-      camera51.obj.callbackInEditMode();
+    if(e.data.hasOwnProperty('inEditMode') ) {
+      _this.stopLoader();
+      _this.enableButtons();
+      if(camera51.obj.hasOwnProperty('callbackInEditMode')){
+        camera51.obj.callbackInEditMode();
+      }
     }
-    if(e.data.hasOwnProperty('callbackInShowResult') && camera51.obj.hasOwnProperty('callbackInShowResult')) {
+    if(e.data.hasOwnProperty('callbackInShowResult')) {
+      if(camera51.obj.hasOwnProperty('callbackInShowResult')){
         camera51.obj.callbackInShowResult();
-        camera51.obj.callbackStopLoader();
-        camera51.obj.callbackEnableButtons();
-        camera51.obj.callbackDisableUndo();
+      }
+      _this.stopLoader();
+      _this.enableButtons();
+      _this.disableUndo();
     }
   });
+
+
 }
 
 
@@ -285,11 +361,11 @@ function Camera51ShowImage(){
     var processingResultCode = null;
     var res = JSON.parse(response_element.messageBody);
     var elem = response_element.arrayElement;
-    if( typeof res.resultImageURL === 'string'){
-      img = res.resultImageURL;
+    if( typeof res.ResultImage === 'string'){
+      img = res.ResultImage;
     }
-    if( typeof res.processingResultCode === 'number'){
-      processingResultCode = res.processingResultCode;
+    if( typeof res.ProcessingResult === 'number'){
+      processingResultCode = res.ProcessingResult;
     }
     if( typeof res.trackId === 'string'){
       trackId = res.trackId;
