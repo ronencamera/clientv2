@@ -1193,7 +1193,7 @@ export class Editoraa {
 
       "customerId": this.obj.customerId,
       "doMatting": false,
-      "previousMaskUrl": this.preversioResponseObj.resultEditMaskImageUrl,
+      "previousMaskURL": this.preversioResponseObj.resultEditMaskImageUrl,
       "shadow": this.applyShadow,
       "transparent": this.showimageService.applyTransparent,
       "userInputImageData": dataURL

@@ -36,6 +36,13 @@
     width: 80%;
 
   }
+  .roboto {
+    font-family: Roboto, sans-serif;
+    font-size: initial
+  }
+  a {
+    cursor: pointer !important;
+  }
 </style>
 
 <div id="dropbox">
@@ -47,56 +54,78 @@
 </div>
 
 <!-- Modal Structure -->
-<div id="modal1" class="modal">
-
-  <div class="modal-content">
-    <a style="position: absolute; right: 0px; top: 16px;"  class=" modal-action modal-close waves-effect waves-light btn-flat"><i style="font-size: 31px;" class="material-icons right">close</i></a>
-    <h4>Background Remover Edit</h4>
-    <a id="camera51-btn-mark-object" class="waves-effect waves-light btn "  style="background-color: rgb(124, 179, 66)" onclick="camera51.setColor('colorFG');"><i class="material-icons left" >add_circle</i>Mark Object</a>
-    <a id="camera51-btn-mark-background" class="waves-effect waves-light btn" style="background-color: rgb(244, 67, 54)"  onclick="camera51.setColor('colorBG');"><i class="material-icons left">remove_circle</i>Mark Background</a>
-    <a id="camera51-btn-undo" class="waves-effect waves-light btn" style="background-color: #E1F5FE;color: #000;" onclick="camera51.undo()">UNDO</a>
+<div id="modal1" class="modal" style="margin-bottom: -8px; ">
+  <div class="modal-content" style="padding-top: 20px;padding-bottom: 5px;background-color: #393b4b;">
+    <a style="position: absolute; right: 0px; top: 16px;"
+       class=" modal-action modal-close waves-effect waves-light btn-flat">
+      <i style="font-size: 31px;color: white" class="material-icons right">close</i>
+    </a>
+    <div style="font-family: Roboto, sans-serif; font-size: 24px; color: white;margin-bottom: 6px;">Background Remover Edit</div>
+    <a id="camera51-btn-mark-object" class="waves-effect waves-light btn-flat roboto"
+       style="color:#7cb342;font-size: initial;padding: 0px;" onclick="camera51.setColor('colorFG');">
+      <i class="material-icons left" style="color:#7cb342;padding-right: 0px;margin-right: 10px;font-size: 24px;">add_circle</i>
+      Mark Object
+    </a>
+    <a id="camera51-btn-mark-background" class="waves-effect waves-light  btn-flat roboto"
+       style="margin-left:10px;color:#f44336;font-size: initial;padding: 0px;" onclick="camera51.setColor('colorBG');">
+      <i class="material-icons left" style="color:#f44336;padding-right: 0px;margin-right: 10px;font-size: 24px;">remove_circle</i>
+      Mark Background
+    </a>
+    <a id="camera51-btn-undo" class="waves-effect waves-light btn-flat roboto" style="color: white;font-size: initial;"
+       onclick="camera51.undo()">UNDO</a>
     <br>
-    <a id="camera51-zoom-in" class="waves-effect waves-circle transparent" style="position: absolute;top: 148px;left: 30px" onmousedown="camera51.onclickLongZoomIn()" onmouseup="camera51.onmouseupLongZoomIn()" >
-      <i class="material-icons right small">zoom_in</i>
+    <a id="camera51-zoom-in" class="waves-effect waves-circle transparent"
+       style="position: absolute;top: 148px;left: 30px" onmousedown="camera51.onclickLongZoomIn()"
+       onmouseup="camera51.onmouseupLongZoomIn()">
+      <i class="material-icons right small" style="color:#393b4b;">zoom_in</i>
     </a>
-    <a id="camera51-zoom-out" class="waves-effect waves-circle transparent" style="position: absolute;top: 182px;left: 30px" onmousedown="camera51.onclickLongZoomOut()" onmouseup="camera51.onmouseupLongZoomOut()">
-      <i class="material-icons right small" >zoom_out</i>
+    <a id="camera51-zoom-out" class="waves-effect waves-circle transparent"
+       style="position: absolute;top: 182px;left: 30px" onmousedown="camera51.onclickLongZoomOut()"
+       onmouseup="camera51.onmouseupLongZoomOut()">
+      <i class="material-icons right small" style="color:#393b4b;">zoom_out</i>
     </a>
-    <div class="progress" style="margin-bottom: 0px;visibility: hidden" id="camera51-loader">
-      <div class="indeterminate"></div>
-    </div>
-    <div id="ad54" style="height:500px;width:100%">
-    </div>
   </div>
-  <div class="modal-footer">
-    <a id="camera51-btn-save-image" class="waves-effect waves-light light-blue btn-large" onclick="camera51.saveImage()" style="margin-right: 20px;">Save Image</a>
-    <a id="camera51-btn-show-result" class="waves-effect waves-light grey lighten-5 btn-large" style="color:black;margin-right: 20px;" onclick="camera51.showResult()">Show Result</a>
+  <div class="progress" style="margin: 0px;visibility: hidden;height: 3px" id="camera51-loader">
+    <div class="indeterminate"></div>
+  </div>
+  <div>
+    <div id="ad54" style="height:500px;width:100%"></div>
+  </div>
+  <div class="modal-footer" style="background-color: white ">
+    <a id="camera51-btn-save-image" class="waves-effect waves-light btn-large btn-flat roboto" onclick="camera51.saveImage()"
+       style="margin-right: 20px; background-color: #393b4b !important;color: white !important;">Save Image</a>
+    <a id="camera51-btn-show-result" class="waves-effect waves-light  btn-large btn-flat roboto"
+       style="color:black !important;margin-right: 20px; background-color: #ffffff !important;" onclick="camera51.showResult()">Show Result</a>
   </div>
 </div>
 
 <script>
 
   var apiUrl = "http://ec2-54-152-227-158.compute-1.amazonaws.com/";
+  //var apiUrl = "http://localhost:8080/";
   var sqsUrl = null;
   var customerId = 3;
   var customerToken = "a059e275-52e0-4524-8050-3872fdd8d9af";
   var sessionToken = null;
   var camera51ShowImage = new Camera51ShowImage(); // Object, functions for registering analytics events.
 
-
   window.onload = function(){
     getSession();
     initCamera51({
       elementId: "ad54", // Div to insert the iframe.
-      apiUrl: "http://ec2-54-152-227-158.compute-1.amazonaws.com",
+      apiUrl: apiUrl,
       customerId: customerId, //
       callbackFuncSave: function(response){
+        console.log(response);
         Materialize.toast("Image saved, new URL: " + JSON.stringify(response),4000,"", 4000);
       },
     });
   };
 
   function getSession(){
+
+   // var x = document.cookie;
+
     var settings = {
       "async": false,
       //  "crossDomain": true,
@@ -113,6 +142,12 @@
 
     $.ajax(settings).done(function (response) {
       sessionToken = response.response["sessionToken"];
+      var date = new Date();
+      date.setTime(date.getTime() + (120 * 60 * 1000));
+      document.cookie =
+        'sessionToken=' + sessionToken +
+        '; expires=' + date.toUTCString() +
+        '; path=/';
       console.log(sessionToken);
       createQueue();
     });
@@ -134,9 +169,15 @@
     };
 
     $.ajax(settings).done(function (response) {
-      sqsUrl = response.response["queueURL"];
-      console.log(sqsUrl);
-      camera51ShowImage.checkUpdatesSQS();
+
+      if(response.hasOwnProperty('response')){
+        sqsUrl = response.response["queueURL"];
+        console.log(sqsUrl);
+        camera51ShowImage.checkUpdatesSQS();
+      }else {
+        console.error(response);
+      }
+
     });
   }
 

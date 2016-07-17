@@ -319,18 +319,18 @@ function Camera51ShowImage(){
     xhr.timeout = 90000;
     xhr.open('GET', callbackURL);
     xhr.onreadystatechange = function(){
-     // console.log("bbb", xhr.status );
+
     };
     xhr.onload = function() {
 
       if (xhr.status === 0) {
         if (xhr.statusText === 'abort') {
-          console.log("aaaa");
+
           // Has been aborted
         } else {
           // Offline mode
         }
-      //  console.log("aaaa", exception );
+
       }
       if(this.readyState ===4) {
         if (this.status == 200) {
@@ -351,8 +351,7 @@ function Camera51ShowImage(){
       }
     };
     xhr.onerror = function () {
-    //  console.log("aaaa");
-      //  error(xhr, xhr.status);
+
     };
     xhr.send();
   };
