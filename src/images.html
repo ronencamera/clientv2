@@ -115,16 +115,21 @@
       elementId: "ad54", // Div to insert the iframe.
       apiUrl: apiUrl,
       customerId: customerId, //
-      callbackFuncSave: function(response){
-        console.log(response);
-        Materialize.toast("Image saved, new URL: " + JSON.stringify(response),4000,"", 4000);
+      callbackFuncSave: function(imageUrl, elementIdToResponse){
+        elementIdToResponse(imageUrl);
+
       },
     });
   };
 
   function getSession(){
-
-   // var x = document.cookie;
+    var cookieForSession = "camera51.sessionToken";
+   if(camera51ShowImage.getCookie(cookieForSession)){
+     sessionToken = camera51ShowImage.getCookie(cookieForSession);
+     console.log("cookie",sessionToken);
+     createQueue();
+     return sessionToken;
+   }
 
     var settings = {
       "async": false,
@@ -143,9 +148,9 @@
     $.ajax(settings).done(function (response) {
       sessionToken = response.response["sessionToken"];
       var date = new Date();
-      date.setTime(date.getTime() + (120 * 60 * 1000));
+      date.setTime(date.getTime() + (60 * 60 * 1000));
       document.cookie =
-        'sessionToken=' + sessionToken +
+        cookieForSession +'=' + sessionToken +
         '; expires=' + date.toUTCString() +
         '; path=/';
       console.log(sessionToken);
@@ -154,21 +159,31 @@
   }
 
   function createQueue(){
-    var settings = {
-      "async": false,
-      //  "crossDomain": true,
-      "url": apiUrl  + "Camera51Server/createQueue",
-      "method": "POST",
-      "headers": {
-        "content-type": "application/x-www-form-urlencoded"
-      },
-      "data": {
-        "token": sessionToken,
-        "customerId": customerId,
+    var queueStringIdentifier = "camera51.sqsUrl";
+    if(camera51ShowImage.getCookie(queueStringIdentifier)){
+      sqsUrl = camera51ShowImage.getCookie(queueStringIdentifier);
+      return sqsUrl;
+    }
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == 4 && xhttp.status == 200) {
+        var res = JSON.parse(xhttp.responseText);
+        sqsUrl = res.response["queueURL"];
+        var date = new Date();
+        var days = 1000 * 60 * 60 * 24 * 10;
+        date.setTime(date.getTime() + days);
+        document.cookie =
+          queueStringIdentifier +'=' + sqsUrl +
+          '; expires=' + date.toUTCString() +
+          '; path=/';
+
       }
     };
+    xhttp.open("POST", apiUrl  + "Camera51Server/createQueue", true);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("token="+sessionToken+"&customerId="+customerId);
 
-    $.ajax(settings).done(function (response) {
+  /*  $.ajax(settings).done(function (response) {
 
       if(response.hasOwnProperty('response')){
         sqsUrl = response.response["queueURL"];
@@ -178,7 +193,7 @@
         console.error(response);
       }
 
-    });
+    });*/
   }
 
 
@@ -211,20 +226,26 @@
     function malabiShowImageCallback(elem, img, processingResultCode, trackId){
 
       if(processingResultCode == 0){
-        $(elem).html('<img id="theImg" src="'+img +'" style="width: 100%;height: auto;" onclick="openEditor(\''+trackId+'\');" />');
+        $(elem).html('<img id="theImg-' + elem.id +  '" src="'+img +'" style="width: 100%;height: auto;" onclick="openEditor(\''+trackId+'\',\''+ elem.id+'\');" />');
       }
       if(processingResultCode > 0) {
         $(elem).html('error ' + processingResultCode);
       }
     };
 
-  function openEditor(trackId){
+  function openEditor(trackId, elementIdToResponse){
 
     var customerIda = customerId;
-    var originalImageUrl = trackId;
+    var trackId = trackId;
+    var todoOnSaveWithResult = function(resultUrl){
+      console.log(resultUrl);
+      $("#theImg-"+elementIdToResponse).attr('src', resultUrl);
+      $('#modal1').closeModal();
+
+    };
     $('#modal1').openModal();
     camera51.setDataTrackId({'customerId': customerIda,
-      'trackId': trackId});
+      'trackId': trackId}, todoOnSaveWithResult);
   }
 
 </script>

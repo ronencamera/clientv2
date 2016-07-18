@@ -28,6 +28,9 @@ function camera51obj(obj) {
   obj.RETURN_EDITOR = 2;
   var apiUrl = "";
   var iframeSrc = "";
+  var trackId = null;
+  var imageElement = null;
+
 
   if (obj.hasOwnProperty('apiUrl') && obj.apiUrl.length > 1) {
     apiUrl = obj.apiUrl;
@@ -178,7 +181,15 @@ function camera51obj(obj) {
     return true;
   };
 
-  this.setDataTrackId = function(obj) {
+  this.setDataTrackId = function(obj, responseOnSave) {
+
+    if(responseOnSave){
+      console.log(responseOnSave);
+      this.responseOnSave = responseOnSave;
+    }
+
+   // Object.assign(obj, this.obj);
+
     unsandboxedFrame.contentWindow.postMessage({'customerId':obj.customerId,  'trackId': obj.trackId,'objInJsonString':JSON.stringify(obj)}, frameDomain);
     return true;
   };
@@ -250,9 +261,12 @@ function camera51obj(obj) {
     }
     if(e.data.hasOwnProperty('url') && data.url.length > 5 ){
       _this.enableButtons();
-      console.log(data);
+      console.log(_this.obj);
       if(camera51.obj.hasOwnProperty('callbackFuncSave')){
-        camera51.obj.callbackFuncSave(data.url);
+        camera51.obj.callbackFuncSave(data.url, _this.responseOnSave);
+      } else {
+        // if function run
+      //  _this.elementIdToResponse(data.url);
       }
     }
     if(e.data.hasOwnProperty('loader') ) {
@@ -414,5 +428,12 @@ function Camera51ShowImage(){
     };
     xhttp.open("GET", sqsUrl+"?Action=DeleteMessage&ReceiptHandle="+encodeURIComponent(receiptHandle), true);
     xhttp.send();
+  };
+
+  this.getCookie=  function (name)
+  {
+    var re = new RegExp(name + "=([^;]+)");
+    var value = re.exec(document.cookie);
+    return (value != null) ? unescape(value[1]) : null;
   };
 };
