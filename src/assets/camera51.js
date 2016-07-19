@@ -2,7 +2,19 @@
 
 var camera51; // Object for Interacting with the editor.
 var camera51UserFunctions = new Camera51UserFunctions(); // Object, functions for registering analytics events.
-var camera51WithQueue = new Camera51InitWithQueue();
+var camera51WithQueue = new Camera51WithQueue();
+
+var camera51Text = {
+  "show-result"     : "show result",
+  "back-to-edit"    : "back to edit",
+  "save-image"      : "save image",
+  "editor-header"   : "Background Remover Edit",
+  "mark-object"     : "mark object",
+  "mark-background" : "mark background",
+  "undo"            : "undo"
+};
+
+
 
 function Camera51UserFunctions(){};
 
@@ -31,12 +43,16 @@ function camera51obj(obj) {
   var iframeSrc = "";
   var trackId = null;
   var imageElement = null;
-
+  this.camera51Text = camera51Text;
 
   if (obj.hasOwnProperty('apiUrl') && obj.apiUrl.length > 1) {
     apiUrl = obj.apiUrl;
   } else {
     apiUrl = "//api.malabi.co";
+  }
+
+  if (obj.hasOwnProperty('camera51Text')) {
+    this.camera51Text = Object.assign(this.camera51Text, obj.camera51Text);
   }
 
   this.apiUrl = apiUrl;
@@ -292,6 +308,11 @@ function camera51obj(obj) {
     if(e.data.hasOwnProperty('returnFromShowResult')) {
       if(camera51.obj.hasOwnProperty('returnFromShowResult')){
         camera51.obj.returnFromShowResult();
+        return;
+      }
+      if(document.getElementById("camera51-btn-show-result")) {
+        var buttonShowresult = document.getElementById("camera51-btn-show-result");
+        buttonShowresult.innerText = text['show-result'];
       }
       _this.enableButtons();
     }
@@ -309,6 +330,10 @@ function camera51obj(obj) {
       _this.stopLoader();
       _this.enableButtons();
       _this.disableUndo();
+      if(document.getElementById("camera51-btn-show-result")) {
+        var buttonShowresult = document.getElementById("camera51-btn-show-result");
+        buttonShowresult.innerText = text['back-to-edit'];
+      }
     }
   });
 
@@ -316,7 +341,7 @@ function camera51obj(obj) {
 }
 
 
-function Camera51InitWithQueue(){
+function Camera51WithQueue(){
   //var apiUrl = "http://sandbox.malabi.co/Camera51Server/processImageAsync";
 
   var searchFor = "sessionId";
@@ -329,9 +354,12 @@ function Camera51InitWithQueue(){
   this.sqsRunning = false;
   this.requestStopSQSrequests = false;
 
-  this.init = function(customerId, sessionToken, elementId){
-    this.customerId = customerId;
-    this.sessionToken = sessionToken;
+  this.init = function(obj){
+    this.customerId = obj.customerId;
+    this.sessionToken = obj.sessionToken;
+    if(obj.hasOwnProperty("textOverride")){
+      this.te
+    }
     initCamera51({
       elementId: elementId, // Div to insert the iframe.
       apiUrl: apiUrl,
@@ -429,15 +457,14 @@ function Camera51InitWithQueue(){
     if( typeof res.trackId === 'string'){
       trackId = res.trackId;
     }
-    if ( typeof window['camera51ShowImageCallback'] === 'function' ) {
-      window['camera51ShowImageCallback'](elem, img , processingResultCode, trackId);
+    if ( typeof this.showImageCallbackOverride === 'function' ) {
+      this.showImageCallbackOverride(elem, img , processingResultCode, trackId);
     } else {
       this.showImageCallback(elem, img , processingResultCode, trackId);
     }
-
   };
 
-
+  // Can be overridden. using camera51.showImageCallbackOverride
   this.showImageCallback = function(elem, imgUrl , processingResultCode, trackId){
     if (processingResultCode == 0) {
       console.log(imgUrl);

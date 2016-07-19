@@ -231,7 +231,9 @@ module.exports = {
         from: 'src/assets',
         to: 'assets'
       },
-       { from: 'src/start.html', to: 'start.html' }, ]),
+       { from: 'src/start.html', to: 'start.html' },
+      { from: 'src/images.html', to: 'images.html' },
+    ]),
 
     /*
      * Plugin: HtmlWebpackPlugin

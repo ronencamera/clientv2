@@ -644,6 +644,9 @@ export class Editoraa {
       this.preversioResponseObj.resultEditMaskImageUrl = this.showimageService.editedStuff.undoEditResponse[this.showimageService.editedStuff.undoEditResponse.length - 1].resultEditMaskImageUrl;
       this.showimageService.lastDataUrl = this.showimageService.editedStuff.undoDataUrl[this.showimageService.editedStuff.undoDataUrl.length - 1];
     } else {
+      this.undoDataUrl = [];
+      this.undoEditResponse = [];
+
       this.clickColor = [];
       this.clickX_simple = [];
       this.clickY_simple = [];

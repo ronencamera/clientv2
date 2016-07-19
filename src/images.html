@@ -114,9 +114,11 @@
   var camera51EditorIframe = "camera51Iframe";
 
   $(document).ready(function () {
-    camera51WithQueue.init(
-      customerId, customerSessionToken, camera51EditorIframe
-    );
+    camera51WithQueue.init({
+      "customerId": customerId,
+      "customerSessionToken": customerSessionToken,
+      "camera51EditorIframe": camera51EditorIframe
+    });
   });
 
 
