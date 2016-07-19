@@ -15,11 +15,7 @@
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
 
-<script src="/assets/camera51.js"></script>
 
-
-<script src="/assets/dragdropfile/filereader.js"></script>
-<script src="/assets/dragdropfile/script.js"></script>
 <link href="/assets/dragdropfile/style.css" rel="stylesheet">
 
 <style type="text/css">
@@ -96,7 +92,7 @@
     <div class="indeterminate"></div>
   </div>
   <div>
-    <div id="ad54" style="height:500px;width:100%"></div>
+    <div id="camera51Iframe" style="height:500px;width:100%"></div>
   </div>
   <div class="modal-footer" style="background-color: white ">
     <a id="camera51-btn-save-image" class="waves-effect waves-light btn-large btn-flat roboto"
@@ -113,17 +109,16 @@
   var apiUrl = "http://ec2-54-152-227-158.compute-1.amazonaws.com/";
   //var apiUrl = "http://localhost:8080/";
 
-  var customerId = 3;
-  var customerToken = "a059e275-52e0-4524-8050-3872fdd8d9af";
+  var customerId = null;
+  var customerSessionToken = null;//"a059e275-52e0-4524-8050-3872fdd8d9af";
+  var camera51EditorIframe = "camera51Iframe";
 
-  var camera51SQSFunctionality = new Camera51SQSFunctionality(
-    customerId, customerToken, "ad54"
-  );
+  $(document).ready(function () {
+    camera51WithQueue.init(
+      customerId, customerSessionToken, camera51EditorIframe
+    );
+  });
 
-  window.onload = function () {
-    getCamera51SessionToken(); // get your session token. Used for request image.
-
-  };
 
   /*
    *  Example call to clear images. Provide camera51 the element. And we will insert the response into this element.
@@ -133,13 +128,13 @@
   function requestImage(imageId, origImgUrl) {
     var imgElement = document.getElementById("resultPreview-" + imageId);
     // We are using origImgUrl as trackId, as this is a unique identifier.
-    camera51SQSFunctionality.requestAsync( origImgUrl, imgElement);
+    camera51WithQueue.requestAsync( origImgUrl, imgElement);
   };
 
   function openEditor(trackId, elementIdToResponse) {
     // we are creating a callback function that will be called once user clicks save.
     // The function recives the result url
-    var todoOnSaveWithResult = function (resultUrl) {
+    var onSaveWithResult = function (resultUrl) {
       $("#theImg-" + elementIdToResponse).attr('src', resultUrl);
       $('#modal1').closeModal();
 
@@ -149,10 +144,15 @@
     camera51.setDataTrackId({
       'customerId': customerId,
       'trackId': trackId
-    }, todoOnSaveWithResult);
+    }, onSaveWithResult);
   }
 
 </script>
+
+<script src="/assets/camera51.js"></script>
+<script src="/assets/dragdropfile/filereader.js"></script>
+<script src="/assets/dragdropfile/script.js"></script>
+
 </body>
 </html>
 

@@ -1,37 +1,47 @@
-function getCamera51SessionToken(){
-  var cookieForSession = "camera51.sessionToken";
-  if(camera51SQSFunctionality.getCookie(cookieForSession)){
-    sessionToken = camera51SQSFunctionality.getCookie(cookieForSession);
-    return sessionToken;
-  }
 
-  var settings = {
-    "async": false,
-    "url": apiUrl  + "Camera51Server/getSessionToken",
-    "method": "POST",
-    "headers": {
-      "content-type": "application/x-www-form-urlencoded"
-    },
-    "data": {
-      "token": customerToken,
-      "customerId": customerId,
-    }
-  };
 
-  $.ajax(settings).done(function (response) {
-    sessionToken = response.response["sessionToken"];
-    var date = new Date();
-    date.setTime(date.getTime() + (60 * 60 * 1000));
-    document.cookie =
-      cookieForSession +'=' + sessionToken +
-      '; expires=' + date.toUTCString() +
-      '; path=/';
+var customerId = null;
+var customerToken = null;
 
-  });
-}
 
 
 $(document).ready(function () {
+
+
+
+  function getCamera51SessionToken(){
+    var cookieForSession = "camera51.sessionToken";
+    if(camera51WithQueue.getCookie(cookieForSession)){
+      sessionToken = camera51WithQueue.getCookie(cookieForSession);
+      sessionTokenReady(sessionToken);
+
+    }
+
+    var settings = {
+      "async": false,
+      "url": apiUrl  + "Camera51Server/getSessionToken",
+      "method": "POST",
+      "headers": {
+        "content-type": "application/x-www-form-urlencoded"
+      },
+      "data": {
+        "token": customerToken,
+        "customerId": customerId,
+      }
+    };
+
+    $.ajax(settings).done(function (response) {
+      sessionToken = response.response["sessionToken"];
+      var date = new Date();
+      date.setTime(date.getTime() + (60 * 60 * 1000));
+      document.cookie =
+        cookieForSession +'=' + sessionToken +
+        '; expires=' + date.toUTCString() +
+        '; path=/';
+      sessionTokenReady(sessionToken);
+    });
+  }
+
   var dropbox;
   var _URL = window.URL;
   var oprand = {
@@ -153,4 +163,36 @@ upload = function (file, rand) {
   // Send the file (doh)
   xhr[rand].send(formData);
 
+}
+
+var get_params = function(search_string) {
+
+  var parse = function(params, pairs) {
+    var pair = pairs[0];
+    var parts = pair.split('=');
+    var key = decodeURIComponent(parts[0]);
+    var value = decodeURIComponent(parts.slice(1).join('='));
+
+    // Handle multiple parameters of the same name
+    if (typeof params[key] === "undefined") {
+      params[key] = value;
+    } else {
+      params[key] = [].concat(params[key], value);
+    }
+
+    return pairs.length == 1 ? params : parse(params, pairs.slice(1))
+  }
+
+  // Get rid of leading ?
+  return search_string.length == 0 ? {} : parse({}, search_string.substr(1).split('&'));
+}
+
+
+var params = get_params(location.search);
+
+if(params.customerId && params.token){
+  customerId = params.customerId;
+  customerSessionToken = params.token;
+} else {
+  alert("Please request token from Mr. Fink");
 }
