@@ -551,6 +551,14 @@ function Camera51InitWithQueue(){
         var res = JSON.parse(xhttp.responseText);
         sqsUrl = res.response["queueURL"];
         if(sqsUrl == undefined || sqsUrl.length < 10){
+          try {
+            var errorM = res.response.errors;
+            console.error("Error", errorM[0]);
+            alert("Camera51 error: "+errorM[0]);
+          } catch (er){
+            console.error(er);
+          }
+
           return;
         }
         var date = new Date();
