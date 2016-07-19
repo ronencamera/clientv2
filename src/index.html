@@ -1,180 +1,213 @@
 <!DOCTYPE html>
 <html lang="">
 <head>
-<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<style>
-  body, html {
-    height: 100%;
-    margin: 0px;
-    background-color: white;
-  }
-</style>
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0px;
+      background-color: white;
+    }
+  </style>
   <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+      a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
     ga('create', 'UA-75726540-1', 'none');
     ga('send', 'startPage');
 
   </script>
 </head>
-<body >
+<body>
 
 <div style="text-align:center">
-  <app-malabi lang="en" shadow="true" >
-     </app-malabi>
+  <app-malabi lang="en" shadow="true">
+  </app-malabi>
 </div>
 
 
+<script>
+  var customerId = 0;
+  var sessionId = 0;
+  var parentDocHeight = document.documentElement.clientHeight;
+  var parentDocWidth = document.documentElement.clientWidth;
 
-  <script>
-    var customerId = 0 ;
-    var sessionId = 0;
-    var parentDocHeight = document.documentElement.clientHeight;
-    var parentDocWidth = document.documentElement.clientWidth;
-
-    var mainWindow ;
-    var eventPost;
-     window.addEventListener('message', function (e) {
-       mainWindow = e.source;
-       eventPost = e;
-       if(e.data == '') return;
-       var result = '';
-       if(e.data.customerId > 0){
-         customerId = e.data.customerId;
-       }
-
-       try {
-         result = e.data;
-         if(e.data.customerId != '' && e.data.customerId !== undefined && e.data.trackId){
-           sessionId = getSession(e.data.trackId);
-           ga('send', 'event', 'CLIENT', 'setTrackId',"customerId="+customerId +",sessionId="+sessionId);
-          if(e.data.hasOwnProperty('objInJsonString')){
-            window.camera51App.zone.run(function () {
-              window.camera51Edit.setTrackId(e.data.objInJsonString);
-             });
-          } else {
-             var ob = {};
-             ob.trackId = e.data.trackId;
-             ob.customerId = e.data.customerId;
-
-             window.camera51App.zone.run(function () {
-               window.camera51Edit.setTrackId(JSON.stringify(ob));
-              });
-          }
-           return;
-         }
-         if(e.data.initCamera51){
-           var a = JSON.parse(e.data.initCamera51);
-           if(a.trackId){
-             sessionId = getSession(a.trackId);
-           }
-           if(a.originalImageUrl){
-             sessionId = getSession(a.originalImageUrl);
-           }
-           if(a.customerId){
-             customerId = a.customerId;
-           }
-
-            window.camera51App.zone.run(function () {
-             window.camera51Edit.initApp(e.data.initCamera51);
-            });
-            return;
-         }
-         if(e.data.customerId && e.data.originalImageUrl){
-           sessionId = getSession(e.data.originalImageUrl);
-           ga('send', 'event', 'CLIENT', 'setDataOriginalUrl',"customerId="+customerId +",sessionId="+sessionId);
-           window.camera51App.zone.run(function () {
-             window.camera51Edit.setDataOriginalUrl(e.data.objInJsonString);
-            });
-         }
-         if(e.data.backgroundColor){
-           document.body.style.backgroundColor = e.data.backgroundColor;
-         }
-      //   console.log(result);
-         if(result == "openEdit"){
-           ga('send', 'event', 'CLIENT', 'openEdit',"customerId="+customerId +",sessionId="+sessionId);
-          window.camera51App.zone.run(function () { window.camera51Edit.openEdit()});
-          return;
-         }
-         if(result == 'setColor_colorBG'){
-
-           ga('send', 'event', 'CLIENT', 'drawFG',"customerId="+customerId +",sessionId="+sessionId);
-            window.camera51App.zone.run(function () { window.camera51Edit.setColor('colorBG')});
-            return;
-         }
-         if(result == 'setColor_colorFG'){
-           ga('send', 'event', 'CLIENT', 'drawBG',"customerId="+customerId +",sessionId="+sessionId);
-           window.camera51App.zone.run(function () { window.camera51Edit.setColor('colorFG')})
-            return;
-         }
-         if(result == 'saveImage'){
-
-           window.camera51App.zone.run(function () { window.camera51Edit.saveImage()});
-            return;
-         }
-         if(result == 'showResult'){
-           window.camera51App.zone.run(function () { window.camera51Edit.showResult()});
-            return;
-         }
-         if(result == 'zoomIn'){
-
-           window.camera51App.zone.run(function () { window.camera51Edit.doZoom('in')});
-            return;
-         }
-         if(result == 'zoomOut'){
-
-           window.camera51App.zone.run(function () { window.camera51Edit.doZoom('out')});
-            return;
-         }
-
-         if(result == 'onclickLongZoomIn'){
-            window.camera51App.zone.run(function () { window.camera51Edit.doLongZoomPressDown('in')});
-            return;
-         }
-         if(result == 'onmouseupLongZoomIn'){
-            window.camera51App.zone.run(function () { window.camera51Edit.doLongZoomPressUp('in')});
-            return;
-         }
-        if(result == 'onclickLongZoomOut'){
-            window.camera51App.zone.run(function () { window.camera51Edit.doLongZoomPressDown('out')});
-            return;
-         }
-         if(result == 'onmouseupLongZoomOut'){
-            window.camera51App.zone.run(function () { window.camera51Edit.doLongZoomPressUp('out')});
-            return;
-         }
-
-         if(result == 'undo'){
-            window.camera51App.zone.run(function () { window.camera51Edit.undo()});
-            return;
-         }
-       } catch (e) {
-         result = 'eval() threw an exception.';
-       }
-       //result = "a";
-       mainWindow.postMessage(result, eventPost.origin);
-     });
-
-
-    function getSession(url){
-      var re = /(SID_.*)\//;
-      var n = url.match(re);
-      if(n == undefined){
-        return null;
-      } else {
-        return n[1];
-      }
+  var mainWindow;
+  var eventPost;
+  window.addEventListener('message', function (e) {
+    mainWindow = e.source;
+    eventPost = e;
+    if (e.data == '') return;
+    var result = '';
+    if (e.data.customerId > 0) {
+      customerId = e.data.customerId;
     }
-     function callbackEdit (mes){
 
-        mainWindow.postMessage(mes, eventPost.origin);
-        return true;
-     }
-   </script>
+    try {
+      result = e.data;
+      if (e.data.customerId != '' && e.data.customerId !== undefined && e.data.trackId) {
+        sessionId = getSession(e.data.trackId);
+
+        ga('send', 'event', 'CLIENT', 'setTrackId', "customerId=" + customerId + ",sessionId=" + sessionId);
+        if (e.data.hasOwnProperty('objInJsonString')) {
+          window.camera51App.zone.run(function () {
+            window.camera51Edit.setTrackId(e.data.objInJsonString);
+          });
+        } else {
+          console.log(e.data);
+          var ob = {};
+          ob.trackId = e.data.trackId;
+          ob.customerId = e.data.customerId;
+
+          window.camera51App.zone.run(function () {
+            window.camera51Edit.setTrackId(JSON.stringify(ob));
+          });
+        }
+        return;
+      }
+      if (e.data.initCamera51) {
+        var a = JSON.parse(e.data.initCamera51);
+        if (a.trackId) {
+          sessionId = getSession(a.trackId);
+        }
+        if (a.originalImageUrl) {
+          sessionId = getSession(a.originalImageUrl);
+        }
+        if (a.customerId) {
+          customerId = a.customerId;
+        }
+
+        window.camera51App.zone.run(function () {
+          window.camera51Edit.initApp(e.data.initCamera51);
+        });
+        return;
+      }
+      if (e.data.customerId && e.data.originalImageUrl) {
+        sessionId = getSession(e.data.originalImageUrl);
+        ga('send', 'event', 'CLIENT', 'setDataOriginalUrl', "customerId=" + customerId + ",sessionId=" + sessionId);
+        window.camera51App.zone.run(function () {
+          window.camera51Edit.setDataOriginalUrl(e.data.objInJsonString);
+        });
+      }
+      if (e.data.backgroundColor) {
+        document.body.style.backgroundColor = e.data.backgroundColor;
+      }
+      //   console.log(result);
+      if (result == "openEdit") {
+        ga('send', 'event', 'CLIENT', 'openEdit', "customerId=" + customerId + ",sessionId=" + sessionId);
+        window.camera51App.zone.run(function () {
+          window.camera51Edit.openEdit()
+        });
+        return;
+      }
+      if (result == 'setColor_colorBG') {
+
+        ga('send', 'event', 'CLIENT', 'drawFG', "customerId=" + customerId + ",sessionId=" + sessionId);
+        window.camera51App.zone.run(function () {
+          window.camera51Edit.setColor('colorBG')
+        });
+        return;
+      }
+      if (result == 'setColor_colorFG') {
+        ga('send', 'event', 'CLIENT', 'drawBG', "customerId=" + customerId + ",sessionId=" + sessionId);
+        window.camera51App.zone.run(function () {
+          window.camera51Edit.setColor('colorFG')
+        })
+        return;
+      }
+      if (result == 'saveImage') {
+
+        window.camera51App.zone.run(function () {
+          window.camera51Edit.saveImage()
+        });
+        return;
+      }
+      if (result == 'showResult') {
+        window.camera51App.zone.run(function () {
+          window.camera51Edit.showResult()
+        });
+        return;
+      }
+      if (result == 'zoomIn') {
+
+        window.camera51App.zone.run(function () {
+          window.camera51Edit.doZoom('in')
+        });
+        return;
+      }
+      if (result == 'zoomOut') {
+
+        window.camera51App.zone.run(function () {
+          window.camera51Edit.doZoom('out')
+        });
+        return;
+      }
+
+      if (result == 'onclickLongZoomIn') {
+        window.camera51App.zone.run(function () {
+          window.camera51Edit.doLongZoomPressDown('in')
+        });
+        return;
+      }
+      if (result == 'onmouseupLongZoomIn') {
+        window.camera51App.zone.run(function () {
+          window.camera51Edit.doLongZoomPressUp('in')
+        });
+        return;
+      }
+      if (result == 'onclickLongZoomOut') {
+        window.camera51App.zone.run(function () {
+          window.camera51Edit.doLongZoomPressDown('out')
+        });
+        return;
+      }
+      if (result == 'onmouseupLongZoomOut') {
+        window.camera51App.zone.run(function () {
+          window.camera51Edit.doLongZoomPressUp('out')
+        });
+        return;
+      }
+
+      if (result == 'undo') {
+        window.camera51App.zone.run(function () {
+          window.camera51Edit.undo()
+        });
+        return;
+      }
+    } catch (e) {
+      result = 'eval() threw an exception.';
+    }
+    //result = "a";
+    console.log(result);
+    mainWindow.postMessage(result, eventPost.origin);
+  });
+
+
+  function getSession(url) {
+    var re = /(SID_.*)\//;
+    var n = url.match(re);
+    if (n == undefined) {
+      return null;
+    } else {
+      return n[1];
+    }
+  }
+  function callbackEdit(mes) {
+
+    mainWindow.postMessage(mes, eventPost.origin);
+    return true;
+  }
+</script>
 </body>
 </html>

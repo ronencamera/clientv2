@@ -64,6 +64,10 @@ function camera51obj(obj) {
     }
   }
 
+  this.getApiUrl = function () {
+    return this.apiUrl;
+  }
+
   this.uclass = {
     exists: function(elem,className){var p = new RegExp('(^| )'+className+'( |$)');return (elem.className && elem.className.match(p));},
     add: function(elem,className){
@@ -184,12 +188,10 @@ function camera51obj(obj) {
   this.setDataTrackId = function(obj, responseOnSave) {
 
     if(responseOnSave){
-      console.log(responseOnSave);
       this.responseOnSave = responseOnSave;
+    } else {
+      this.responseOnSave = null;
     }
-
-   // Object.assign(obj, this.obj);
-
     unsandboxedFrame.contentWindow.postMessage({'customerId':obj.customerId,  'trackId': obj.trackId,'objInJsonString':JSON.stringify(obj)}, frameDomain);
     return true;
   };
@@ -265,8 +267,11 @@ function camera51obj(obj) {
       if(camera51.obj.hasOwnProperty('callbackFuncSave')){
         camera51.obj.callbackFuncSave(data.url, _this.responseOnSave);
       } else {
-        // if function run
-      //  _this.elementIdToResponse(data.url);
+        if(typeof _this.responseOnSave === 'function' ){
+          _this.responseOnSave(data.url);
+        } else {
+          console.error("No function to run on save. Implment 'callbackFuncSave', recieves url.");
+        }
       }
     }
     if(e.data.hasOwnProperty('loader') ) {
@@ -308,26 +313,53 @@ function camera51obj(obj) {
 }
 
 
-function Camera51ShowImage(){
+function Camera51SQSFunctionality(customerId, sessionToken, elementId){
   //var apiUrl = "http://sandbox.malabi.co/Camera51Server/processImageAsync";
-  var callbackURL = sqsUrl+"?Action=ReceiveMessage&MaxNumberOfMessages=10&VisibilityTimeout=10";
-  var searchFor = "trackId";
+
+  var searchFor = "sessionId";
   var searchArray = [];
   var arrayElements = [];
+  var sqsUrl = "";
+  this.customerId = customerId;
+  this.sessionToken = sessionToken;
+  this.sqsRunning = false;
+  this.requestStopSQSrequests = false;
+
+  this.init = function () {
+    initCamera51({
+      elementId: elementId, // Div to insert the iframe.
+      apiUrl: apiUrl,
+      customerId: customerId, //
+    });
+    this.setSQSurl(true);
+  };
 
   this.addSearchArray = function(ele, str){
     searchArray.push(str);
     arrayElements.push(ele);
+
+    //Camera51SQSFunctionality.checkUpdatesSQS();
   };
 
   this.getSearchArray = function(){
     return searchArray;
   };
 
-  this.checkUpdatesSQS = function () {
-    var callbackURL = sqsUrl+"?Action=ReceiveMessage&VisibilityTimeout=10";
+  this.startSQS = function(){
+    if(this.sqsRunning == false){
+      this.checkUpdatesSQS();
+    }
+  }
 
+  this.checkUpdatesSQS = function(){
+    var callbackURL = this.sqsUrl+"?Action=ReceiveMessage&VisibilityTimeout=10";
     var _this = this;
+
+    if(arrayElements.length == 0){
+      this.sqsRunning = false;
+      return;
+    }
+    this.sqsRunning = true;
 
     var xhr = new XMLHttpRequest();
     xhr.timeout = 90000;
@@ -354,7 +386,7 @@ function Camera51ShowImage(){
           x = x.getElementsByTagName("ReceiveMessageResult")[0];
           var res = _this.readMessages(x,searchFor );
           if(res != null){
-            console.log(res);
+           // console.log(res);
             _this.showResponse(res);
           }
           _this.checkUpdatesSQS();
@@ -385,10 +417,46 @@ function Camera51ShowImage(){
     if( typeof res.trackId === 'string'){
       trackId = res.trackId;
     }
-    if ( typeof window['malabiShowImageCallback'] === 'function' ) { window['malabiShowImageCallback'](elem, img , processingResultCode, trackId); }
+    if ( typeof window['camera51ShowImageCallback'] === 'function' ) {
+      window['camera51ShowImageCallback'](elem, img , processingResultCode, trackId);
+    } else {
+      this.showImageCallback(elem, img , processingResultCode, trackId);
+    }
 
   };
 
+
+  this.showImageCallback = function(elem, imgUrl , processingResultCode, trackId){
+    if (processingResultCode == 0) {
+      console.log(imgUrl);
+      var img = document.createElement('img');
+      img.src = imgUrl;
+      img.id = "theImg-" + elem.id;
+      img.style.width = "100%";
+      img.style.height = "auto";
+      img.onclick =  function () {
+        openEditor(trackId,elem.id);
+      };
+      //'openEditor("' + trackId + '","' + elem.id + '")';
+      elem.innerHTML = null;
+      elem.appendChild(img);
+
+      var btn = document.createElement('a');
+      btn.innerHTML = "edit";
+      btn.onclick =  function () {
+        openEditor(trackId,elem.id);
+      };
+      btn.className = "btn";
+      var para = document.createElement("P");                       // Create a <p> element
+      para.appendChild(btn);                                          // Append the text to <p>
+      // Append the text to <button>
+      elem.appendChild(para);
+    }
+    if (processingResultCode > 0) {
+    //  $(elem).html('error ' + processingResultCode);
+      elem.innerHTML = 'error ' + processingResultCode;
+    }
+  }
 
   this.readMessages = function(messages, searchKey){
 
@@ -408,6 +476,7 @@ function Camera51ShowImage(){
           searchArray.splice(searchValue, 1);
           var arrayElement = arrayElements[searchValue]
           arrayElements.splice(searchValue, 1);
+
           this.deleteMessage(message);
           return {'messageBody': messageBody, 'arrayElement': arrayElement};
         }
@@ -426,14 +495,90 @@ function Camera51ShowImage(){
       if (xhttp.readyState == 4 && xhttp.status == 200) {
       }
     };
-    xhttp.open("GET", sqsUrl+"?Action=DeleteMessage&ReceiptHandle="+encodeURIComponent(receiptHandle), true);
+    xhttp.open("GET", this.sqsUrl+"?Action=DeleteMessage&ReceiptHandle="+encodeURIComponent(receiptHandle), true);
     xhttp.send();
   };
 
-  this.getCookie=  function (name)
+  this.getCookie=  function (cname)
   {
-    var re = new RegExp(name + "=([^;]+)");
-    var value = re.exec(document.cookie);
-    return (value != null) ? unescape(value[1]) : null;
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0)==' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length,c.length);
+      }
+    }
+    return null;
   };
+
+  this.getSQSurl = function(){
+    if(this.sqsUrl == null){
+      return this.setSQSurl(false);
+    }
+    return this.sqsUrl;
+  }
+
+
+  this.setSQSurl = function(sync){
+    var _this = this;
+    var queueStringIdentifier = "camera51.sqsUrl";
+    var sqsUrl = null;
+    if(this.getCookie(queueStringIdentifier)){
+      sqsUrl = this.getCookie(queueStringIdentifier);
+      this.sqsUrl = sqsUrl;
+      return sqsUrl;
+    }
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == 4 && xhttp.status == 200) {
+        var res = JSON.parse(xhttp.responseText);
+        sqsUrl = res.response["queueURL"];
+        var date = new Date();
+        var days = 1000 * 60 * 60 * 24 * 10;
+        date.setTime(date.getTime() + days);
+        document.cookie =
+          queueStringIdentifier +'=' + sqsUrl +
+          '; expires=' + date.toUTCString() +
+          '; path=/';
+        _this.sqsUrl = sqsUrl;
+        return sqsUrl;
+      }
+    };
+
+    xhttp.open("POST", apiUrl  + "Camera51Server/createQueue", (sync==null)? true: sync);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("token="+this.sessionToken+"&customerId="+this.customerId);
+
+  };
+
+  this.requestAsync = function(origImgUrl, element, uniqueTrackId){
+    var _this = this;
+    if(uniqueTrackId == null || uniqueTrackId == ""){
+      uniqueTrackId = this.sessionToken+"-"+Date.now()+"-"+Math.floor((1 + Math.random()) * 0x10000)
+          .toString(16)
+          .substring(1);
+    }
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == 4 && xhttp.status == 200) {
+        try{
+          var res = JSON.parse(xhttp.responseText);
+          _this.addSearchArray(element, res.response.sessionId);
+          _this.startSQS();
+        } catch(err) {
+          console.error(err);
+        }
+      }
+    };
+    xhttp.open("POST", apiUrl + "Camera51Server/processImageAsync", true);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("token="+this.sessionToken+"&customerId="+this.customerId+"&trackId="+uniqueTrackId
+        +"&origImgUrl="+origImgUrl+"&callbackURL="+this.getSQSurl());
+  };
+
+  this.init();
 };

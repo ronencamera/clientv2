@@ -1,3 +1,36 @@
+function getCamera51SessionToken(){
+  var cookieForSession = "camera51.sessionToken";
+  if(camera51SQSFunctionality.getCookie(cookieForSession)){
+    sessionToken = camera51SQSFunctionality.getCookie(cookieForSession);
+    return sessionToken;
+  }
+
+  var settings = {
+    "async": false,
+    "url": apiUrl  + "Camera51Server/getSessionToken",
+    "method": "POST",
+    "headers": {
+      "content-type": "application/x-www-form-urlencoded"
+    },
+    "data": {
+      "token": customerToken,
+      "customerId": customerId,
+    }
+  };
+
+  $.ajax(settings).done(function (response) {
+    sessionToken = response.response["sessionToken"];
+    var date = new Date();
+    date.setTime(date.getTime() + (60 * 60 * 1000));
+    document.cookie =
+      cookieForSession +'=' + sessionToken +
+      '; expires=' + date.toUTCString() +
+      '; path=/';
+
+  });
+}
+
+
 $(document).ready(function () {
   var dropbox;
   var _URL = window.URL;
@@ -54,7 +87,7 @@ create_box = function (e, file, size) {
 //	template += '<div class="progress" id="'+rand+'"><span></span></div>';
   var x ;
   var height = (200/size.h);// * test.h;
-  var width = (200/size.w);// * test.w;
+  var width = (180/size.w);// * test.w;
   if(height < width){
     x = height;
   } else {
@@ -103,7 +136,7 @@ upload = function (file, rand) {
         $(".preview[id='" + rand + "'] .overlay").css("display", "none");
       //  console.log("done", xhr[rand].response);
         data = JSON.parse(xhr[rand].responseText);
-        sqsListener(rand, data.uploadUrl);
+        requestImage(rand, data.uploadUrl);
       } else {
         alert("Error : Unexpected error while uploading file");
       }

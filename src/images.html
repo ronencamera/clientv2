@@ -23,23 +23,28 @@
 <link href="/assets/dragdropfile/style.css" rel="stylesheet">
 
 <style type="text/css">
-  body{
+  body {
     background-color: whitesmoke;
 
   }
+
   .resultImg {
     background-color: white;
-    max-height: 200px;max-width: 200px;
+    max-height: 200px;
+    max-width: 200px;
   }
+
   .modal {
     max-height: 100%;
     width: 80%;
 
   }
+
   .roboto {
     font-family: Roboto, sans-serif;
     font-size: initial
   }
+
   a {
     cursor: pointer !important;
   }
@@ -60,7 +65,9 @@
        class=" modal-action modal-close waves-effect waves-light btn-flat">
       <i style="font-size: 31px;color: white" class="material-icons right">close</i>
     </a>
-    <div style="font-family: Roboto, sans-serif; font-size: 24px; color: white;margin-bottom: 6px;">Background Remover Edit</div>
+    <div style="font-family: Roboto, sans-serif; font-size: 24px; color: white;margin-bottom: 6px;">Background Remover
+      Edit
+    </div>
     <a id="camera51-btn-mark-object" class="waves-effect waves-light btn-flat roboto"
        style="color:#7cb342;font-size: initial;padding: 0px;" onclick="camera51.setColor('colorFG');">
       <i class="material-icons left" style="color:#7cb342;padding-right: 0px;margin-right: 10px;font-size: 24px;">add_circle</i>
@@ -92,10 +99,12 @@
     <div id="ad54" style="height:500px;width:100%"></div>
   </div>
   <div class="modal-footer" style="background-color: white ">
-    <a id="camera51-btn-save-image" class="waves-effect waves-light btn-large btn-flat roboto" onclick="camera51.saveImage()"
+    <a id="camera51-btn-save-image" class="waves-effect waves-light btn-large btn-flat roboto"
+       onclick="camera51.saveImage()"
        style="margin-right: 20px; background-color: #393b4b !important;color: white !important;">Save Image</a>
     <a id="camera51-btn-show-result" class="waves-effect waves-light  btn-large btn-flat roboto"
-       style="color:black !important;margin-right: 20px; background-color: #ffffff !important;" onclick="camera51.showResult()">Show Result</a>
+       style="color:black !important;margin-right: 20px; background-color: #ffffff !important;"
+       onclick="camera51.showResult()">Show Result</a>
   </div>
 </div>
 
@@ -103,149 +112,44 @@
 
   var apiUrl = "http://ec2-54-152-227-158.compute-1.amazonaws.com/";
   //var apiUrl = "http://localhost:8080/";
-  var sqsUrl = null;
+
   var customerId = 3;
   var customerToken = "a059e275-52e0-4524-8050-3872fdd8d9af";
-  var sessionToken = null;
-  var camera51ShowImage = new Camera51ShowImage(); // Object, functions for registering analytics events.
 
-  window.onload = function(){
-    getSession();
-    initCamera51({
-      elementId: "ad54", // Div to insert the iframe.
-      apiUrl: apiUrl,
-      customerId: customerId, //
-      callbackFuncSave: function(imageUrl, elementIdToResponse){
-        elementIdToResponse(imageUrl);
+  var camera51SQSFunctionality = new Camera51SQSFunctionality(
+    customerId, customerToken, "ad54"
+  );
 
-      },
-    });
+  window.onload = function () {
+    getCamera51SessionToken(); // get your session token. Used for request image.
+
   };
 
-  function getSession(){
-    var cookieForSession = "camera51.sessionToken";
-   if(camera51ShowImage.getCookie(cookieForSession)){
-     sessionToken = camera51ShowImage.getCookie(cookieForSession);
-     console.log("cookie",sessionToken);
-     createQueue();
-     return sessionToken;
-   }
-
-    var settings = {
-      "async": false,
-      //  "crossDomain": true,
-      "url": apiUrl  + "Camera51Server/getSessionToken",
-      "method": "POST",
-      "headers": {
-        "content-type": "application/x-www-form-urlencoded"
-      },
-      "data": {
-        "token": customerToken,
-        "customerId": customerId,
-      }
-    };
-
-    $.ajax(settings).done(function (response) {
-      sessionToken = response.response["sessionToken"];
-      var date = new Date();
-      date.setTime(date.getTime() + (60 * 60 * 1000));
-      document.cookie =
-        cookieForSession +'=' + sessionToken +
-        '; expires=' + date.toUTCString() +
-        '; path=/';
-      console.log(sessionToken);
-      createQueue();
-    });
-  }
-
-  function createQueue(){
-    var queueStringIdentifier = "camera51.sqsUrl";
-    if(camera51ShowImage.getCookie(queueStringIdentifier)){
-      sqsUrl = camera51ShowImage.getCookie(queueStringIdentifier);
-      return sqsUrl;
-    }
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-      if (xhttp.readyState == 4 && xhttp.status == 200) {
-        var res = JSON.parse(xhttp.responseText);
-        sqsUrl = res.response["queueURL"];
-        var date = new Date();
-        var days = 1000 * 60 * 60 * 24 * 10;
-        date.setTime(date.getTime() + days);
-        document.cookie =
-          queueStringIdentifier +'=' + sqsUrl +
-          '; expires=' + date.toUTCString() +
-          '; path=/';
-
-      }
-    };
-    xhttp.open("POST", apiUrl  + "Camera51Server/createQueue", true);
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send("token="+sessionToken+"&customerId="+customerId);
-
-  /*  $.ajax(settings).done(function (response) {
-
-      if(response.hasOwnProperty('response')){
-        sqsUrl = response.response["queueURL"];
-        console.log(sqsUrl);
-        camera51ShowImage.checkUpdatesSQS();
-      }else {
-        console.error(response);
-      }
-
-    });*/
-  }
-
-
-  function sqsListener(imageId, origImgUrl) {
-    var settings = {
-      //  "async": true,
-      //  "crossDomain": true,
-      "url": apiUrl + "Camera51Server/processImageAsync",
-      "method": "POST",
-      "headers": {
-        "content-type": "application/x-www-form-urlencoded"
-      },
-      "data": {
-        "origImgUrl": origImgUrl,
-        "token": customerToken,
-        "customerId": customerId,
-        "callbackURL": sqsUrl,
-        "trackId" : origImgUrl
-      }
-    };
-
-    $.ajax(settings).done(function (response) {
-      var trackId = response.response["trackId"];
-      var element = document.getElementById("resultPreview-" + imageId);
-
-      camera51ShowImage.addSearchArray(element, trackId);
-    });
+  /*
+   *  Example call to clear images. Provide camera51 the element. And we will insert the response into this element.
+   *  Element response will include and image or response message. Under it a button.
+   *
+   */
+  function requestImage(imageId, origImgUrl) {
+    var imgElement = document.getElementById("resultPreview-" + imageId);
+    // We are using origImgUrl as trackId, as this is a unique identifier.
+    camera51SQSFunctionality.requestAsync( origImgUrl, imgElement);
   };
 
-    function malabiShowImageCallback(elem, img, processingResultCode, trackId){
-
-      if(processingResultCode == 0){
-        $(elem).html('<img id="theImg-' + elem.id +  '" src="'+img +'" style="width: 100%;height: auto;" onclick="openEditor(\''+trackId+'\',\''+ elem.id+'\');" />');
-      }
-      if(processingResultCode > 0) {
-        $(elem).html('error ' + processingResultCode);
-      }
-    };
-
-  function openEditor(trackId, elementIdToResponse){
-
-    var customerIda = customerId;
-    var trackId = trackId;
-    var todoOnSaveWithResult = function(resultUrl){
-      console.log(resultUrl);
-      $("#theImg-"+elementIdToResponse).attr('src', resultUrl);
+  function openEditor(trackId, elementIdToResponse) {
+    // we are creating a callback function that will be called once user clicks save.
+    // The function recives the result url
+    var todoOnSaveWithResult = function (resultUrl) {
+      $("#theImg-" + elementIdToResponse).attr('src', resultUrl);
       $('#modal1').closeModal();
 
     };
     $('#modal1').openModal();
-    camera51.setDataTrackId({'customerId': customerIda,
-      'trackId': trackId}, todoOnSaveWithResult);
+    // call editor
+    camera51.setDataTrackId({
+      'customerId': customerId,
+      'trackId': trackId
+    }, todoOnSaveWithResult);
   }
 
 </script>
