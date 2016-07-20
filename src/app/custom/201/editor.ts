@@ -38,7 +38,7 @@ var transparentImage = require("url?mimetype=image/png!../../../assets/tools/tra
   // pipes: [TranslatePipe],
   encapsulation: ViewEncapsulation.Emulated,
 
-  styles: [require('./customModal/editor.css'),
+  styles: [require('./editor.css'),
     `
     .cursorRed{
       cursor: url('https://assets-malabi.s3.amazonaws.com/apiexample/assets/tools/red_pointer_6_lastone.cur'), auto;
@@ -57,7 +57,7 @@ var transparentImage = require("url?mimetype=image/png!../../../assets/tools/tra
     }
     `
   ],
-  template: require('./customModal/editor.html')
+  template: require('./editor.html')
 })
 @Injectable()
 export class Editoraa {

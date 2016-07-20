@@ -171,6 +171,12 @@ function camera51obj(obj) {
     }
   };
 
+  this.initilizeView = function(){
+    if(document.getElementById("camera51-btn-show-result")) {
+      var buttonShowresult = document.getElementById("camera51-btn-show-result");
+      buttonShowresult.innerText = this.camera51Text['show-result'];
+    }
+  };
   var element =  document.getElementById('camera51Frame');
   if (element == null || typeof(element) == 'undefined') {   // If iframe doesn't exist, create it.
     this.startLoader();
@@ -205,7 +211,7 @@ function camera51obj(obj) {
   };
 
   this.setDataTrackId = function(obj, responseOnSave) {
-
+    _this.initilizeView();
     if(responseOnSave){
       this.responseOnSave = responseOnSave;
     } else {
@@ -282,7 +288,7 @@ function camera51obj(obj) {
     }
     if(e.data.hasOwnProperty('url') && data.url.length > 5 ){
       _this.enableButtons();
-      console.log(_this.obj);
+     // console.log(_this.obj);
       if(camera51.obj.hasOwnProperty('callbackFuncSave')){
         camera51.obj.callbackFuncSave(data.url, _this.responseOnSave);
       } else {
@@ -312,7 +318,7 @@ function camera51obj(obj) {
       }
       if(document.getElementById("camera51-btn-show-result")) {
         var buttonShowresult = document.getElementById("camera51-btn-show-result");
-        buttonShowresult.innerText = text['show-result'];
+        buttonShowresult.innerText = this.camera51Text['show-result'];
       }
       _this.enableButtons();
     }
@@ -332,7 +338,7 @@ function camera51obj(obj) {
       _this.disableUndo();
       if(document.getElementById("camera51-btn-show-result")) {
         var buttonShowresult = document.getElementById("camera51-btn-show-result");
-        buttonShowresult.innerText = text['back-to-edit'];
+        buttonShowresult.innerText = this.camera51Text['back-to-edit'];
       }
     }
   });
@@ -357,13 +363,13 @@ function Camera51WithQueue(){
   this.init = function(obj){
     this.customerId = obj.customerId;
     this.sessionToken = obj.sessionToken;
-    if(obj.hasOwnProperty("textOverride")){
+    /*if(obj.hasOwnProperty("textOverride")){
       this.te
-    }
+    }*/
     initCamera51({
-      elementId: elementId, // Div to insert the iframe.
+      elementId: obj.camera51EditorIframe, // Div to insert the iframe.
       apiUrl: apiUrl,
-      customerId: customerId, //
+      customerId: obj.customerId, //
     });
     this.apiUrl = camera51.apiUrl;
     this.setSQSurl(true);
