@@ -119,7 +119,7 @@ function camera51obj(obj) {
     }
   };
 
-  this.setEitorText = function(){
+  this.setEditorText = function(){
     var _this = this;
     var listElement = {'camera51-btn-show-result': "show-result",
                         'camera51-btn-save-image':'save-image'
@@ -228,7 +228,7 @@ function camera51obj(obj) {
   iframe.addEventListener("load", function() {
     unsandboxedFrame = document.getElementById('camera51Frame');
     _this.stopLoader(_this.obj.RETURN_IFRAME);
-    _this.setEitorText();
+    _this.setEditorText();
     if(_this.obj.hasOwnProperty('apiUrl')) {
       unsandboxedFrame.contentWindow.postMessage({'initCamera51':JSON.stringify(obj)},frameDomain);
     }
@@ -247,6 +247,8 @@ function camera51obj(obj) {
     _this.initilizeView();
     if(responseOnSave){
       this.responseOnSave = responseOnSave;
+      this.responseOnSave.trackId = obj.trackId;
+      this.responseOnSave.element = event.srcElement.parentElement;
     } else {
       this.responseOnSave = null;
     }
@@ -321,12 +323,12 @@ function camera51obj(obj) {
     }
     if(e.data.hasOwnProperty('url') && data.url.length > 5 ){
       _this.enableButtons();
-     // console.log(_this.obj);
       if(camera51.obj.hasOwnProperty('callbackFuncSave')){
         camera51.obj.callbackFuncSave(data.url, _this.responseOnSave);
       } else {
         if(typeof _this.responseOnSave === 'function' ){
           _this.responseOnSave(data.url);
+          camera51WithQueue.showImageCallback(_this.responseOnSave.element, data.url , 0, _this.responseOnSave.trackId);
         } else {
           console.error("No function to run on save. Implment 'callbackFuncSave', recieves url.");
         }
@@ -415,6 +417,10 @@ function Camera51WithQueue(){
   this.loaded = function () {
 
 
+  };
+
+  this.setDataTrackId = function (obj,onSaveWithResult,wrapperElementForResult ) {
+    camera51.setDataTrackId(obj, onSaveWithResult);
   };
 
   this.addSearchArray = function(ele, str){
@@ -522,12 +528,8 @@ function Camera51WithQueue(){
       //'openEditor("' + trackId + '","' + elem.id + '")';
       elem.innerHTML = null;
       elem.appendChild(img);
-
-                                           // Append the text to <p>
-
     }
     if (processingResultCode > 0) {
-    //  $(elem).html('error ' + processingResultCode);
       elem.innerHTML = null;
       var header = document.createElement('div');
 

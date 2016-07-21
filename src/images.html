@@ -61,6 +61,7 @@
     padding: 10px;
     font-size: 12px;
     text-align: initial;
+    background-color: white;
   }
 </style>
 
@@ -164,11 +165,10 @@
     var onSaveWithResult = function (resultUrl) {
       $("#theImg-" + elementIdToResponse).attr('src', resultUrl);
       $('#modal1').closeModal();
-
     };
     $('#modal1').openModal();
     // call editor
-    camera51.setDataTrackId({
+    camera51WithQueue.setDataTrackId({
       'customerId': customerId,
       'trackId': trackId
     }, onSaveWithResult);
