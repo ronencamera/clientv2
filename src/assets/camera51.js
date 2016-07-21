@@ -7,11 +7,16 @@ var camera51WithQueue = new Camera51WithQueue();
 var camera51Text = {
   "show-result"     : "show result",
   "back-to-edit"    : "back to edit",
-  "save-image"      : "save image",
-  "editor-header"   : "Background Remover Edit",
-  "mark-object"     : "mark object",
-  "mark-background" : "mark background",
-  "undo"            : "undo"
+  "tooltip-mark-background" : "Draw lines to mark areas you want to remove from the image",
+  "tooltip-mark-object" : "Draw lines to mark areas you want to keep in the image",
+
+  "error-header-default": "Press here for manual background removal",
+  "error-header-image-failure": "Image error",
+  "error-text-5" : "We didn't automaticaly remove the background since the image <b>already has a white background</b>",
+  "error-text-2" : "We didn't automaticaly remove the background due to <b>low contrast</b>",
+  "error-text-4" : "We didn't automaticaly remove the background due to <b>cluttered background</b>",
+  "error-text-103" : "The image is <b>too small</b> for background removal.",
+  "error-text-101" : "An image error was detected. Image can not be proccessed",
 };
 
 
@@ -107,6 +112,33 @@ function camera51obj(obj) {
     }
   };
 
+  this.setAttributeText = function(atr, str){
+    if(document.getElementById(atr)) {
+      var buttonShowresult = document.getElementById(atr);
+      buttonShowresult.innerText = str;
+    }
+  };
+
+  this.setEitorText = function(){
+    var _this = this;
+    var listElement = {'camera51-btn-show-result': "show-result",
+                        'camera51-btn-save-image':'save-image'
+                      };
+
+    Object.keys(listElement).forEach(function(key) {
+      if(this.camera51Text.hasOwnProperty(listElement[key])){
+        console.log(this.camera51Text[listElement[key]]);
+        _this.setAttributeText(key, this.camera51Text[listElement[key]]);
+
+      };
+      //this.setAttributeText(key)
+      console.log(key, listElement[key]);
+
+    });
+  };
+
+
+
   var frameDomain = this.camera51HelperExtractDomain(iframeSrc);
 	var iframe = document.createElement('iframe');
   this.obj = obj;
@@ -196,6 +228,7 @@ function camera51obj(obj) {
   iframe.addEventListener("load", function() {
     unsandboxedFrame = document.getElementById('camera51Frame');
     _this.stopLoader(_this.obj.RETURN_IFRAME);
+    _this.setEitorText();
     if(_this.obj.hasOwnProperty('apiUrl')) {
       unsandboxedFrame.contentWindow.postMessage({'initCamera51':JSON.stringify(obj)},frameDomain);
     }
@@ -359,17 +392,21 @@ function Camera51WithQueue(){
   this.sessionToken = null;
   this.sqsRunning = false;
   this.requestStopSQSrequests = false;
+  this.camera51Text = camera51Text;
 
   this.init = function(obj){
     this.customerId = obj.customerId;
     this.sessionToken = obj.sessionToken;
+    this.camera51Text = obj.camera51Text;
     /*if(obj.hasOwnProperty("textOverride")){
       this.te
     }*/
     initCamera51({
       elementId: obj.camera51EditorIframe, // Div to insert the iframe.
       apiUrl: apiUrl,
-      customerId: obj.customerId, //
+      customerId: obj.customerId,
+      camera51Text: obj.camera51Text
+      //
     });
     this.apiUrl = camera51.apiUrl;
     this.setSQSurl(true);
@@ -473,7 +510,7 @@ function Camera51WithQueue(){
   // Can be overridden. using camera51.showImageCallbackOverride
   this.showImageCallback = function(elem, imgUrl , processingResultCode, trackId){
     if (processingResultCode == 0) {
-      console.log(imgUrl);
+      //console.log(imgUrl);
       var img = document.createElement('img');
       img.src = imgUrl;
       img.id = "theImg-" + elem.id;
@@ -486,20 +523,41 @@ function Camera51WithQueue(){
       elem.innerHTML = null;
       elem.appendChild(img);
 
+                                           // Append the text to <p>
+
+    }
+    if (processingResultCode > 0) {
+    //  $(elem).html('error ' + processingResultCode);
+      elem.innerHTML = null;
+      var header = document.createElement('div');
+
+      if(processingResultCode > 5){
+        header.innerHTML = camera51Text['error-header-image-failure'];
+        header.className = "error-header-image-failure";
+      } else {
+        header.innerHTML = camera51Text['error-header-default'];
+        header.className = "error-header-default";
+      }
+
+      elem.appendChild(header);
+      var header = document.createElement('div');
+      var str = "error-text-"+ processingResultCode;
+      header.innerHTML = camera51Text[str];
+      header.className = "camera51-error-text";
+      elem.appendChild(header);
+    }
+
+    if (processingResultCode <= 5) {
+      //  $(elem).html('error ' + processingResultCode);
       var btn = document.createElement('a');
-      btn.innerHTML = "edit";
+      btn.innerHTML = "TOUCH UP";
       btn.onclick =  function () {
         openEditor(trackId,elem.id);
       };
       btn.className = "btn";
-      var para = document.createElement("P");                       // Create a <p> element
-      para.appendChild(btn);                                          // Append the text to <p>
-      // Append the text to <button>
-      elem.appendChild(para);
-    }
-    if (processingResultCode > 0) {
-    //  $(elem).html('error ' + processingResultCode);
-      elem.innerHTML = 'error ' + processingResultCode;
+      elem.appendChild(btn);
+
+      //  elem.innerHTML = 'error ' + processingResultCode;
     }
   }
 

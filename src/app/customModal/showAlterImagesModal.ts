@@ -299,12 +299,12 @@ export class ShowAlterImagesWindow implements ICustomModalComponent {
 
       window.open(sUrl, '_self');
       return true;
-  }
+      }
 
-  window.downloadFile.isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
-  window.downloadFile.isSafari = navigator.userAgent.toLowerCase().indexOf('safari') > -1;
+      window.downloadFile.isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+      window.downloadFile.isSafari = navigator.userAgent.toLowerCase().indexOf('safari') > -1;
 
-  downloadFile(sUrl);
+      downloadFile(sUrl);
     }
 
     saveImageEvent(){

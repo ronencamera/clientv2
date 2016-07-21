@@ -21,7 +21,8 @@
 <style type="text/css">
   body {
     background-color: whitesmoke;
-
+    font-family: Roboto, sans-serif;
+    font-size: initial;
   }
 
   .resultImg {
@@ -33,16 +34,33 @@
   .modal {
     max-height: 100%;
     width: 80%;
-
   }
-
   .roboto {
     font-family: Roboto, sans-serif;
-    font-size: initial
+    font-size: initial;
   }
-
+  .material-tooltip {
+    width: 200px;
+  }
   a {
     cursor: pointer !important;
+  }
+  .error-header-default{
+    background-color: #0288d1;
+    padding: 10px;
+    color: white;
+    font-size: 13px;
+  }
+  .error-header-image-failure{
+    background-color: rgb(249, 168, 37);
+    padding: 10px;
+    color: white;
+    font-size: 13px;
+  }
+  .camera51-error-text{
+    padding: 10px;
+    font-size: 12px;
+    text-align: initial;
   }
 </style>
 
@@ -64,12 +82,14 @@
     <div style="font-family: Roboto, sans-serif; font-size: 24px; color: white;margin-bottom: 6px;">Background Remover
       Edit
     </div>
-    <a id="camera51-btn-mark-object" class="waves-effect waves-light btn-flat roboto"
+    <a id="camera51-btn-mark-object" class="waves-effect waves-light btn-flat roboto tooltipped"
+       data-position="bottom" data-delay="50" data-tooltip="Draw lines to mark areas you want to remove from the image"
        style="color:#7cb342;font-size: initial;padding: 0px;" onclick="camera51.setColor('colorFG');">
       <i class="material-icons left" style="color:#7cb342;padding-right: 0px;margin-right: 10px;font-size: 24px;">add_circle</i>
       Mark Object
     </a>
-    <a id="camera51-btn-mark-background" class="waves-effect waves-light  btn-flat roboto"
+    <a id="camera51-btn-mark-background" class="waves-effect waves-light  btn-flat roboto tooltipped"
+       data-position="bottom" data-delay="50" data-tooltip="Draw lines to mark areas you want to keep in the image"
        style="margin-left:10px;color:#f44336;font-size: initial;padding: 0px;" onclick="camera51.setColor('colorBG');">
       <i class="material-icons left" style="color:#f44336;padding-right: 0px;margin-right: 10px;font-size: 24px;">remove_circle</i>
       Mark Background
@@ -113,11 +133,16 @@
   var customerSessionToken = null;//"a059e275-52e0-4524-8050-3872fdd8d9af";
   var camera51EditorIframe = "camera51Iframe";
 
+  var myTranslation = {
+    "show-result": "walla achi"
+  };
+
   $(document).ready(function () {
     camera51WithQueue.init({
       "customerId": customerId,
       "sessionToken": customerSessionToken,
-      "camera51EditorIframe": camera51EditorIframe
+      "camera51EditorIframe": camera51EditorIframe,
+    //  "camera51Text": myTranslation
     });
   });
 

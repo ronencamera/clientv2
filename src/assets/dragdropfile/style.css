@@ -1,12 +1,5 @@
-*{
-	padding: 0px;
-	margin: 0px;
-	font-family: verdana;
-	font-size: 12px;
-}
-body{
-	background: #fff;
-}
+
+
 #dropbox{
 	/*min-height: 230px;*/
 	overflow: hidden;
@@ -39,8 +32,6 @@ body{
   min-height: 470px;
   height: 416px;
   width: 210px;
-  border-style: dotted;
-  border-width: 3px;
   padding: 10px;
 }
 .preview{
@@ -49,21 +40,21 @@ body{
     height: 200px;
 }
 .preview img{
-    border: 3px solid #FFFFFF;
-    box-shadow: 0 0 2px #000000;
+  box-shadow:0 8px 17px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+
     display: block;
     max-height: 200px;
     max-width: 180px;
-	  box-shadow: 0px 0px 10px 1px #484848;
+
 }
 .overlay{
-    background: rgba(255, 255, 255, 0.5);
-    display: block;
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
+  background: rgba(255, 255, 255, 0.5);
+  display: block;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
 }
 .overlay span{
 	position: absolute;
@@ -73,15 +64,15 @@ body{
 }
 .overlay .updone{
 	position: relative;
-    text-align: right;
-    text-shadow: 1px 1px 1px #D7D7D7, 1px 1px 1px rgba(0, 0, 0, 0.7);
-    transition: all 0.5s linear 0s;
+  text-align: right;
+  text-shadow: 1px 1px 1px #D7D7D7, 1px 1px 1px rgba(0, 0, 0, 0.7);
+  transition: all 0.5s linear 0s;
 	font-size: 25px;
 	text-align: right;
 }
 .resultPreview{
   height: 200px;
-  background-color: #fff;
+
   display: inline-block;
 
 }

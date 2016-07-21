@@ -91,7 +91,7 @@ create_box = function (e, file, size) {
   var imgName = file.name; // not used, Irand just in case if user wanrand to print it.
   var src = e.target.result;
 
-  var template = '<div class="eachImage" id="' + rand + '">';
+  var template = '<div class="eachImage z-depth-1" id="' + rand + '">';
   template += '<span class="preview" id="' + rand + '"><img src="' + src + '"><span class="overlay"><span class="updone"></span></span>';
   template += '</span>';
 //	template += '<div class="progress" id="'+rand+'"><span></span></div>';
@@ -105,7 +105,9 @@ create_box = function (e, file, size) {
   }
   size.hPro = size.h *x;
   size.wPro = size.w *x;
-  template += '<div class="resultPreview" id="resultPreview-' + rand + '" style="width:' + size.wPro+ 'px;height:' +  size.hPro+ 'px;background-color: #fff;" id="' + rand + '">' + loader + '</div>';
+  template += '<div class="resultPreview" id="resultPreview-' + rand +
+      '" style="width:' + size.wPro+ 'px;height:' +  size.hPro+ 'px;background-color: #fff;" id="'
+      + rand + '">' + loader + '</div>';
 
   if ($("#imageList .eachImage").html() == null)
     $("#imageList").html(template);
