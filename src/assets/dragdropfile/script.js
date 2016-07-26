@@ -196,5 +196,6 @@ if(params.customerId && params.token){
   customerId = params.customerId;
   customerSessionToken = params.token;
 } else {
-  alert("Please request token from Mr. Fink");
+   $('show-token-error').show();
+
 }
