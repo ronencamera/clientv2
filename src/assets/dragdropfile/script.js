@@ -14,7 +14,12 @@ $(document).ready(function () {
     if(camera51WithQueue.getCookie(cookieForSession)){
       sessionToken = camera51WithQueue.getCookie(cookieForSession);
       sessionTokenReady(sessionToken);
-
+    }
+    if(customerToken == null){
+      $('#show-token-error').show();
+      $('#errorSubject').html("Missing token");
+      $('#errorSubject').html("Token is missing, please contact info@malabi.co");
+      return;
     }
 
     var settings = {
@@ -198,6 +203,6 @@ if(params.customerId && params.token){
   customerId = params.customerId;
   customerSessionToken = params.token;
 } else {
-   $('show-token-error').show();
+   $('#show-token-error').show();
 
 }

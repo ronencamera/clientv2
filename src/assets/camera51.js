@@ -644,6 +644,11 @@ function Camera51WithQueue(){
 
   this.setSQSurl = function(sync){
 
+    if(this.sessionToken == null || this.customerId == null){
+      console.error("can not retreive sqs url, sessionToken: " +this.sessionToken + " customerId " + this.customerId);
+      return;
+    }
+
     var _this = this;
     var queueStringIdentifier = "camera51.sqsUrl";
     var sqsUrl = null;
@@ -661,7 +666,7 @@ function Camera51WithQueue(){
           try {
             var errorM = res.response.errors;
             console.error("Error", errorM[0]);
-            alert("Camera51 error: "+errorM[0]);
+            //alert("Camera51 error: "+errorM[0]);
           } catch (er){
             console.error(er);
           }
