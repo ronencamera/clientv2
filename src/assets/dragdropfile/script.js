@@ -158,9 +158,9 @@ upload = function (file, rand) {
           data = JSON.parse(xhr[rand].responseText);
 
         } catch (e){
-          console.log(e);
-          console.log(xhr[rand]);
-          console.log("done", xhr[rand].response);
+     //     console.log(e);
+     //     console.log(xhr[rand]);
+     //     console.log("done", xhr[rand].response);
           _this.upload(file, rand);
           return false;
         }
@@ -216,3 +216,21 @@ if(params.customerId && params.token){
    $('#show-token-error').show();
 
 }
+
+function download(img) {
+  var link = document.createElement("a");
+  link.href = img;
+  link.download = true;
+  link.style.display = "none";
+  var evt = new MouseEvent("click", {
+    "view": window,
+    "bubbles": true,
+    "cancelable": true
+  });
+
+  document.body.appendChild(link);
+  link.dispatchEvent(evt);
+  document.body.removeChild(link);
+  console.log("Downloading...");
+}
+

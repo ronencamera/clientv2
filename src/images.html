@@ -109,10 +109,13 @@
   }
 </style>
 
-
+<div class="roboto" style="text-align: center;background-color: rgba(14, 48, 73, 1);color: white;">
+  <img style="    height: 35px;-webkit-user-select: none" src="https://static.wixstatic.com/media/6a46b6_637fba01ae83440b8b0d19cd32516043~mv2.png/v1/fill/w_240,h_62,al_c,lg_1/6a46b6_637fba01ae83440b8b0d19cd32516043~mv2.png">
+  <span  style="font-size: 40px">Ebay Demo</span>
+</div>
 <div id="dropbox">
-  <div class="text">
-    Drop Images Here
+  <div style="margin: 30px">
+    Drop Images In Page
   </div>
 
 </div>
@@ -133,7 +136,7 @@
   </div>
 </div>
 
-<div>
+<div style="text-align: center;">
   <a id="select-all" class="waves-effect waves-light btn-large">Select all</a>
   <a id="delete-selected" class="waves-effect waves-light btn-large deep-orange accent-3">Delete selected</a>
   <a id="download-selected" class="waves-effect waves-light btn-large green">download selected</a>
@@ -209,17 +212,12 @@
 
     });
     $("#download-selected").click(function(){
-      $( ".resultPreview" ).each(function () {
-        var $href = $(this).parent().children('img').attr('src'),
-          $hrefShort = $href.replace('http://example.com/plugins/content/gallery/gallery/thumbs/', 'images\\Pics/');
+      $("input:checkbox:checked").each(function(){
+        var imgSrc = $(this).closest('.eachImage').find(".resultPreview").find('img').attr('src');
+        if(imgSrc != undefined){
+          download(imgSrc);
+        }
 
-        var $iframe = $('<iframe />');
-        $iframe.attr('src', "/plugins/content/jw_sigpro/jw_sigpro/includes/download.php?file=" + $hrefShort);
-
-        $iframe.css('visibility', 'hidden');
-        $iframe.css('height', '0');
-
-        $iframe.appendTo(document.body);
       });
     });
 
