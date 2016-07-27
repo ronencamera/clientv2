@@ -135,7 +135,7 @@ function camera51obj(obj) {
 
       };
       //this.setAttributeText(key)
-      console.log(key, listElement[key]);
+      //console.log(key, listElement[key]);
 
     });
   };

@@ -78,12 +78,12 @@ $(document).ready(function () {
     }
   };
 
-  FileReaderJS.setupDrop(document.getElementById('dropbox'), oprand);
+  FileReaderJS.setupDrop(document.body, oprand);
 
 });
 
 create_box = function (e, file, size) {
-  var loader = '<div class="preloader-wrapper active">'
+  var loader = '<div class="preloader-wrapper">'
     +'<div class="spinner-layer spinner-red-only">'
     +'<div class="circle-clipper left">'
     +'<div class="circle"></div>'
@@ -96,7 +96,7 @@ create_box = function (e, file, size) {
   var imgName = file.name; // not used, Irand just in case if user wanrand to print it.
   var src = e.target.result;
 
-  var template = '<div class="eachImage z-depth-1" id="' + rand + '">';
+  var template = '<div class="eachImage z-depth-1" id="eachImage-' + rand + '">';
   template += '<div class="save-option"><input type="checkbox" class="camera51-select-image filled-in" id="filled-in-box-' + rand + '"  /> ' +
     '<label for="filled-in-box-' + rand + '" style="color: white">Select</label> </div>';
   template += '<span class="preview" id="' + rand + '"><img src="' + src + '"><span class="overlay"><span class="updone"></span></span>';
@@ -127,7 +127,7 @@ create_box = function (e, file, size) {
 
 upload = function (file, rand) {
 
-
+  var _this = this;
   var formData = new FormData();
   formData.append('file', file);
 
@@ -153,9 +153,19 @@ upload = function (file, rand) {
         $(".progress[id='" + rand + "'] span").css("width", "100%");
         $(".preview[id='" + rand + "']").find(".updone").html("100%");
         $(".preview[id='" + rand + "'] .overlay").css("display", "none");
-      //  console.log("done", xhr[rand].response);
-        data = JSON.parse(xhr[rand].responseText);
+        try{
+
+          data = JSON.parse(xhr[rand].responseText);
+
+        } catch (e){
+          console.log(e);
+          console.log(xhr[rand]);
+          console.log("done", xhr[rand].response);
+          _this.upload(file, rand);
+          return false;
+        }
         requestImage(rand, data.uploadUrl);
+
       } else {
         alert("Error : Unexpected error while uploading file");
       }

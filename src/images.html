@@ -19,6 +19,10 @@
 <link href="assets/dragdropfile/style.css" rel="stylesheet">
 
 <style type="text/css">
+  body, html {
+    height: 100%;
+  }
+
   body {
     background-color: whitesmoke;
     font-family: Roboto, sans-serif;
@@ -76,7 +80,6 @@
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 999;
     opacity: 0.6;
     visibility: hidden;
   }
@@ -85,7 +88,7 @@
     position: fixed;
     height: 100%;
     width: 100%;
-    z-index: 10;
+
     top: 0;
     background-color: rgba(255, 255, 255, .85);
   }
@@ -106,24 +109,16 @@
   }
 </style>
 
-<div class="droptarget" >
-  <div class="dropImagePopup">
-    <div class="centerInfo">
-      <h1>Drop Image To Upload</h1>
-      <img width="200px" src=""><br>
-
-      <span></span>
-    </div>
-  </div>
-</div>
-
-
 
 <div id="dropbox">
   <div class="text">
     Drop Images Here
   </div>
+
 </div>
+
+
+
 <div id="show-token-error" style="display:none">
   <div class="row">
         <div class="col s12 m6">
@@ -203,10 +198,33 @@
 <script>
 
   $(document).ready(function(){
+
     $("#select-all").click(function(){
-     // $(".camera51-select-image").prop('checked', $(this).prop("checked"));
       $(".camera51-select-image").prop('checked', true);
     });
+    $("#delete-selected").click(function(){
+      $("input:checkbox:checked").each(function(){
+        $(this).closest('.eachImage').remove();
+      });
+
+    });
+    $("#download-selected").click(function(){
+      $( ".resultPreview" ).each(function () {
+        var $href = $(this).parent().children('img').attr('src'),
+          $hrefShort = $href.replace('http://example.com/plugins/content/gallery/gallery/thumbs/', 'images\\Pics/');
+
+        var $iframe = $('<iframe />');
+        $iframe.attr('src', "/plugins/content/jw_sigpro/jw_sigpro/includes/download.php?file=" + $hrefShort);
+
+        $iframe.css('visibility', 'hidden');
+        $iframe.css('height', '0');
+
+        $iframe.appendTo(document.body);
+      });
+    });
+
+
+
   });
 
   document.addEventListener("drop", function(event) {
@@ -220,6 +238,7 @@
   });
 
   var apiUrl = "http://ebay-sandbox-1580323891.us-east-1.elb.amazonaws.com/";
+  //var apiUrl = "http://54.174.243.146/";
   //var apiUrl = "http://localhost:8080/";
 
   var customerId = null;
@@ -247,6 +266,11 @@
    */
   function requestImage(imageId, origImgUrl) {
     var imgElement = document.getElementById("resultPreview-" + imageId);
+    // start loader
+    var str = 'resultPreview-' + imageId + ' .preloader-wrapper';
+    $("#"+str ).addClass('active');
+
+    //preloader-wrapper
     // We are using origImgUrl as trackId, as this is a unique identifier.
     camera51WithQueue.requestAsync( origImgUrl, imgElement);
   };
