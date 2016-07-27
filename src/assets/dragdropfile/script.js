@@ -92,6 +92,8 @@ create_box = function (e, file, size) {
   var src = e.target.result;
 
   var template = '<div class="eachImage z-depth-1" id="' + rand + '">';
+  template += '<div class="save-option"><input type="checkbox" class="camera51-select-image filled-in" id="filled-in-box-' + rand + '"  /> ' +
+    '<label for="filled-in-box-' + rand + '" style="color: white">Select</label> </div>';
   template += '<span class="preview" id="' + rand + '"><img src="' + src + '"><span class="overlay"><span class="updone"></span></span>';
   template += '</span>';
 //	template += '<div class="progress" id="'+rand+'"><span></span></div>';
@@ -107,7 +109,7 @@ create_box = function (e, file, size) {
   size.wPro = size.w *x;
   template += '<div class="resultPreview" id="resultPreview-' + rand +
       '" style="width:' + size.wPro+ 'px;height:' +  size.hPro+ 'px;background-color: #fff;" id="'
-      + rand + '">' + loader + '</div>';
+      + rand + '"><div>' + loader + '</div></div>';
 
   if ($("#imageList .eachImage").html() == null)
     $("#imageList").html(template);

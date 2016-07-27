@@ -29,8 +29,8 @@
   /*width: 205px;*/
   text-align: center;
 	z-index: 10;
-  min-height: 470px;
-  height: 416px;
+  min-height: 500px;
+  height: 430px;
   width: 210px;
   padding: 10px;
 }
@@ -72,9 +72,7 @@
 }
 .resultPreview{
   height: 200px;
-
   display: inline-block;
-
 }
 .progress{
 	height: 8px;  /* Can be anything */

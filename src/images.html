@@ -45,6 +45,12 @@
   a {
     cursor: pointer !important;
   }
+  .save-option {
+    height: 30px;
+    margin: -10px -10px 5px -10px;
+    background-color: #1c94c4;
+    padding: 5px;
+  }
   .error-header-default{
     background-color: #0288d1;
     padding: 10px;
@@ -63,7 +69,55 @@
     text-align: initial;
     background-color: white;
   }
+  div#dropZone {
+    background: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    opacity: 0.6;
+    visibility: hidden;
+  }
+  .droptarget {
+    display: none;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: 10;
+    top: 0;
+    background-color: rgba(255, 255, 255, .85);
+  }
+  .dropImagePopup {
+    border-radius: 15px;
+    border-width: 4px;
+    border-style: dashed;
+    background-color: #fff;
+    color: #1C6EB5;
+    background: none;
+    border-color: #1C6EB5;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: 20px;
+  }
 </style>
+
+<div class="droptarget" >
+  <div class="dropImagePopup">
+    <div class="centerInfo">
+      <h1>Drop Image To Upload</h1>
+      <img width="200px" src=""><br>
+
+      <span></span>
+    </div>
+  </div>
+</div>
+
+
 
 <div id="dropbox">
   <div class="text">
@@ -78,11 +132,19 @@
               <span class="card-title">Token Error</span>
               <p> Token is missing, please contact info@malabi.co</p>
             </div>
-            
+
           </div>
         </div>
   </div>
-</div>   
+</div>
+
+<div>
+  <a id="select-all" class="waves-effect waves-light btn-large">Select all</a>
+  <a id="delete-selected" class="waves-effect waves-light btn-large deep-orange accent-3">Delete selected</a>
+  <a id="download-selected" class="waves-effect waves-light btn-large green">download selected</a>
+</div>
+
+
 <div id="imageList">
 </div>
 
@@ -140,7 +202,24 @@
 
 <script>
 
-  var apiUrl = "http://ec2-54-152-227-158.compute-1.amazonaws.com/";
+  $(document).ready(function(){
+    $("#select-all").click(function(){
+     // $(".camera51-select-image").prop('checked', $(this).prop("checked"));
+      $(".camera51-select-image").prop('checked', true);
+    });
+  });
+
+  document.addEventListener("drop", function(event) {
+    event.preventDefault();
+    if ( event.target.className == "droptarget" ) {
+      document.getElementById("demo").style.color = "";
+      event.target.style.border = "";
+      var data = event.dataTransfer.getData("Text");
+      event.target.appendChild(document.getElementById(data));
+    }
+  });
+
+  var apiUrl = "http://ebay-sandbox-1580323891.us-east-1.elb.amazonaws.com/";
   //var apiUrl = "http://localhost:8080/";
 
   var customerId = null;
