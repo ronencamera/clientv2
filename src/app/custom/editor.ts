@@ -15,21 +15,21 @@ import {BrowserDomAdapter} from '@angular/platform-browser/src/browser/browser_a
 import {JSONP_PROVIDERS}  from '@angular/http';
 import {Observable}       from 'rxjs/Observable';
 
-import {RequestEditImage} from '../../customModal/editimage.service';
+import {RequestEditImage} from './editimage.service';
 import {Subject} from 'rxjs/Subject';
 
-import {_settings} from '../../settings';
-import {ShowimageService} from '../showimage.service';
+import {_settings} from '../settings';
+import {ShowimageService} from './showimage.service';
 
 import 'rxjs/Rx';
 
-var greenloader = require("url?mimetype=image/png!../../../assets/tools/green_pointer_6.png");
+var greenloader = require("url?mimetype=image/png!../../assets/tools/green_pointer_6.png");
 //var greenloaderCur = require("url?mimetype=image/png!../../../assets/tools/green_pointer_6_lastone.cur");
 
-var redloader = require("url?mimetype=image/png!../../../assets/tools/red_pointer_6.png");
+var redloader = require("url?mimetype=image/png!../../assets/tools/red_pointer_6.png");
 //var redloaderCur = require("url?mimetype=image/png!../../../assets/tools/red_pointer_6_lastone.cur");
 
-var transparentImage = require("url?mimetype=image/png!../../../assets/tools/transparent_bg.png");
+var transparentImage = require("url?mimetype=image/png!../../assets/tools/transparent_bg.png");
 
 @Component({
   selector: 'editor',
@@ -74,7 +74,6 @@ export class Editoraa {
   wrapperShadow = "0 5px 15px rgba(0,0,0,.5)";
   imagewrapperOverflow = 'hidden';
   wrappermarginTop = "0";
-  showProccessError = 'none';
   maskHidden = false;
   imageWrapperMaxHeight;
   greenloader = greenloader;//= require("url?mimetype=image/png!../../../assets/tools/green_pointer_6.png");
@@ -85,10 +84,7 @@ export class Editoraa {
   AMOUNT_ZOOM = 0.05;
   obj:Object;
   assetsUrl = _settings.assetsUrl;
-  setdirection = 'ltr';
-  setTextAlignDirection = "left";
   imageSizeWidth;
-  dataUrl = "";
   disableSaveImage;
   disableColorBG;
   disableUndoButton;

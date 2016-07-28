@@ -3,7 +3,7 @@
  */
 import { Component, ViewEncapsulation } from '@angular/core';
 
-import {Editoraa} from './custom/201/editor'
+import {Editoraa} from './custom/editor'
 
 /*
  * Editpage Component
@@ -23,7 +23,7 @@ import {Editoraa} from './custom/201/editor'
 })
 
 export class Editpage {
- 
+
   constructor(
     ) {
 
