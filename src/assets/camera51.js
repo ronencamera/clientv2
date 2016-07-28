@@ -4,7 +4,7 @@ var camera51; // Object for Interacting with the editor.
 var camera51UserFunctions = new Camera51UserFunctions(); // Object, functions for registering analytics events.
 var camera51WithQueue = new Camera51WithQueue();
 
-document.body.innerHTML += '<div id="camera51highlevelloader" style="top: 1px;display:none;position:absolute;width:100%;height:100%;cursor:progress;height:100%;z-index:34344"></div>';
+document.body.innerHTML += '<div id="camera51highlevelloader" style="top: 1px;display:none;position:absolute;width:100%;height:100%;cursor:wait;height:100%;z-index:34344"></div>';
 
 
 var camera51Text = {
@@ -130,9 +130,7 @@ function camera51obj(obj) {
 
     Object.keys(listElement).forEach(function(key) {
       if(this.camera51Text.hasOwnProperty(listElement[key])){
-        console.log(this.camera51Text[listElement[key]]);
         _this.setAttributeText(key, this.camera51Text[listElement[key]]);
-
       };
       //this.setAttributeText(key)
       //console.log(key, listElement[key]);
@@ -336,7 +334,7 @@ function camera51obj(obj) {
       } else {
         if(typeof _this.responseOnSave === 'function' ){
           _this.responseOnSave(data.url);
-          camera51WithQueue.showImageCallback(_this.responseOnSave.element, data.url , 0, _this.responseOnSave.trackId);
+          camera51WithQueue.showImageCallback(_this.responseOnSave.element.parentElement, data.url , 0, _this.responseOnSave.trackId);
         } else {
           console.error("No function to run on save. Implment 'callbackFuncSave', recieves url.");
         }
@@ -409,9 +407,7 @@ function Camera51WithQueue(){
     this.customerId = obj.customerId;
     this.sessionToken = obj.sessionToken;
     this.camera51Text = obj.camera51Text;
-    /*if(obj.hasOwnProperty("textOverride")){
-      this.te
-    }*/
+
     initCamera51({
       elementId: obj.camera51EditorIframe, // Div to insert the iframe.
       apiUrl: apiUrl,
@@ -524,21 +520,26 @@ function Camera51WithQueue(){
 
   // Can be overridden. using camera51.showImageCallbackOverride
   this.showImageCallback = function(elem, imgUrl , processingResultCode, trackId){
+    var elementHeight = elem.clientHeight;
+    var maxImage = elementHeight - 45;
+    var wrapper = document.createElement('div');
     if (processingResultCode == 0) {
+
       //console.log(imgUrl);
       var img = document.createElement('img');
       img.src = imgUrl;
       img.id = "theImg-" + elem.id;
-      img.style.width = "100%";
-      img.style.height = "auto";
+      img.style.maxWidth = "100%";
+      img.style.maxHeight = maxImage+"px";
       img.onclick =  function () {
         openEditor(trackId,elem.id);
       };
 
-      //'openEditor("' + trackId + '","' + elem.id + '")';
       elem.innerHTML = null;
-
-      elem.appendChild(img);
+      wrapper.appendChild(img);
+      wrapper.style.height = "inherit";
+      wrapper.style.width = "inherit";
+      elem.appendChild(wrapper);
     }
     if (processingResultCode > 0) {
       elem.innerHTML = null;
@@ -552,30 +553,37 @@ function Camera51WithQueue(){
         header.className = "error-header-default";
       }
 
-      elem.appendChild(header);
+      wrapper.appendChild(header);
       var header = document.createElement('div');
       var str = "error-text-"+ processingResultCode;
       header.innerHTML = camera51Text[str];
       header.className = "camera51-error-text";
-      elem.appendChild(header);
+      wrapper.appendChild(header);
+      elem.appendChild(wrapper);
     }
 
-    if (processingResultCode <= 5) {
-      //  $(elem).html('error ' + processingResultCode);
-      var btn = document.createElement('a');
-      btn.innerHTML = "TOUCH UP";
-      btn.onclick =  function () {
-        openEditor(trackId,elem.id);
-      };
-      btn.className = "btn";
-      elem.appendChild(btn);
-      elem.onclick =  function () {
-        openEditor(trackId,elem.id);
-      };
-      elem.style.cursor = "pointer";
-      //  elem.innerHTML = 'error ' + processingResultCode;
-    }
-  }
+      if (processingResultCode <= 5) {
+        var btnWrapper = document.createElement('div');
+        btnWrapper.style.position = "absolute";
+        btnWrapper.style.left = 0;
+        btnWrapper.style.right = 0;
+        btnWrapper.style.bottom = "10px";
+
+        var btn = document.createElement('a');
+        btn.innerHTML = "TOUCH UP";
+        btn.onclick =  function () {
+          openEditor(trackId,elem.id);
+        };
+        btn.className = "btn";
+
+        btnWrapper.appendChild(btn);
+        elem.appendChild(btnWrapper);
+        elem.onclick =  function () {
+          openEditor(trackId,elem.id);
+        };
+        elem.style.cursor = "pointer";
+      }
+  };
 
   this.readMessages = function(messages, searchKey){
 
@@ -603,7 +611,9 @@ function Camera51WithQueue(){
     }
     return null;
   };
+
   this.parseResponse = function(messageBody){
+
   }
 
   this.deleteMessage = function(message){

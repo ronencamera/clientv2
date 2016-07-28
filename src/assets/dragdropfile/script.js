@@ -8,6 +8,24 @@ var customerToken = null;
 $(document).ready(function () {
 
 
+  $("#select-all").click(function(){
+    $(".camera51-select-image").prop('checked', true);
+  });
+  $("#delete-selected").click(function(){
+    $("input:checkbox:checked").each(function(){
+      $(this).closest('.eachImage').remove();
+    });
+
+  });
+  $("#download-selected").click(function(){
+    $("input:checkbox:checked").each(function(){
+      var imgSrc = $(this).closest('.eachImage').find(".resultPreview").find('img').attr('src');
+      if(imgSrc != undefined){
+        download(imgSrc);
+      }
+
+    });
+  });
 
   function getCamera51SessionToken(){
     var cookieForSession = "camera51.sessionToken";
@@ -113,7 +131,7 @@ create_box = function (e, file, size) {
   size.hPro = size.h *x;
   size.wPro = size.w *x;
   template += '<div class="resultPreview" id="resultPreview-' + rand +
-      '" style="width:' + size.wPro+ 'px;height:' +  size.hPro+ 'px;background-color: #fff;" id="'
+      '" style="width:100%;height:250px;" id="'
       + rand + '"><div>' + loader + '</div></div>';
 
   if ($("#imageList .eachImage").html() == null)
@@ -134,8 +152,7 @@ upload = function (file, rand) {
   // now upload the file
   var xhr = new Array();
   xhr[rand] = new XMLHttpRequest();
-  xhr[rand].open("post", "http://api.malabi.co/Camera51Server/uploadimage", true);
-
+  xhr[rand].open("post", apiUrl + "/Camera51Server/uploadimage", true);
   xhr[rand].upload.addEventListener("progress", function (event) {
     //console.log(event);
     if (event.lengthComputable) {
@@ -146,6 +163,11 @@ upload = function (file, rand) {
       alert("Failed to compute file upload length");
     }
   }, false);
+
+  xhr[rand].ontimeout = function (e) {
+    // XMLHttpRequest timed out. Do something here.
+    console.error(e);
+  };
 
   xhr[rand].onreadystatechange = function (oEvent) {
     if (xhr[rand].readyState === 4) {
@@ -167,22 +189,16 @@ upload = function (file, rand) {
         requestImage(rand, data.uploadUrl);
 
       } else {
-        alert("Error : Unexpected error while uploading file");
+        _this.upload(file, rand);
+        return false;
+        console.error(xhr[rand]);
       }
     }
   };
-  // Set headers
-  /*xhr[rand].setRequestHeader("Content-Type", "multipart/form-data");
-   xhr[rand].setRequestHeader("X-File-Name", file.fileName);
-   xhr[rand].setRequestHeader("X-File-Size", file.fileSize);
-   xhr[rand].setRequestHeader("X-File-Type", file.type);
-   */
-  //xhr[rand].setRequestHeader("Content-Type", "multipart/form-data" );
 
-  // Send the file (doh)
   xhr[rand].send(formData);
 
-}
+};
 
 var get_params = function(search_string) {
 

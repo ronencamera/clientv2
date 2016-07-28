@@ -304,7 +304,8 @@ export class Editoraa {
     this.startLoader();
 
     this.initDrawArrays(null);
-
+    this.undoDataUrl = [];
+    this.undoEditResponse = [];
     if (customerId == '' || customerId == null) {
       return;
     }
@@ -413,12 +414,6 @@ export class Editoraa {
       this.stopLoader();
       return;
     }
-    var imageObjMask = new Image();
-    imageObjMask.onload = function () {
-
-    };
-    imageObjMask.src = response.resultEditMaskImageUrl;
-
 
     var imageObj = new Image();
     var that = this;
@@ -431,7 +426,12 @@ export class Editoraa {
       that.initViewOnData(that.sessionId);
       window.callbackEdit({'inEditMode': true});
     };
-    imageObj.src = response.originalImageUrl;
+
+    var imageObjMask = new Image();
+    imageObjMask.onload = function () {
+      imageObj.src = response.originalImageUrl;
+    };
+    imageObjMask.src = response.resultEditMaskImageUrl;
 
   }
 

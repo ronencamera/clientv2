@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="utf-8">
+
   <!-- Compiled and minified CSS -->
   <!--Import Google Icon Font-->
   <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -200,41 +202,6 @@
 
 <script>
 
-  $(document).ready(function(){
-
-    $("#select-all").click(function(){
-      $(".camera51-select-image").prop('checked', true);
-    });
-    $("#delete-selected").click(function(){
-      $("input:checkbox:checked").each(function(){
-        $(this).closest('.eachImage').remove();
-      });
-
-    });
-    $("#download-selected").click(function(){
-      $("input:checkbox:checked").each(function(){
-        var imgSrc = $(this).closest('.eachImage').find(".resultPreview").find('img').attr('src');
-        if(imgSrc != undefined){
-          download(imgSrc);
-        }
-
-      });
-    });
-
-
-
-  });
-
-  document.addEventListener("drop", function(event) {
-    event.preventDefault();
-    if ( event.target.className == "droptarget" ) {
-      document.getElementById("demo").style.color = "";
-      event.target.style.border = "";
-      var data = event.dataTransfer.getData("Text");
-      event.target.appendChild(document.getElementById(data));
-    }
-  });
-
   var apiUrl = "http://ebay-sandbox-1580323891.us-east-1.elb.amazonaws.com/";
   //var apiUrl = "http://54.174.243.146/";
   //var apiUrl = "http://localhost:8080/";
@@ -244,7 +211,8 @@
   var camera51EditorIframe = "camera51Iframe";
 
   var myTranslation = {
-    "show-result": "walla achi"
+    "show-result": "תפנק אותי",
+    "back-to-edit": "לחזור לקשקש"
   };
 
   $(document).ready(function () {
@@ -252,7 +220,7 @@
       "customerId": customerId,
       "sessionToken": customerSessionToken,
       "camera51EditorIframe": camera51EditorIframe,
-    //  "camera51Text": myTranslation
+      "camera51Text": myTranslation
     });
   });
 
