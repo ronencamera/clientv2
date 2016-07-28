@@ -347,12 +347,26 @@ export class Editoraa {
   }
 
   setTrackId(obj) {
+    this.undoEditResponse = [];
+    this.undoImageMaskStack = [];
+    this.undoImageStack = [];
+    this.undoDataUrl = [];
+    this.clickColor = [];
+    this.clickDrag_simple = [];
+    this.clickLineWidth = [];
+    this.clickX_simple = [];
+    this.clickY_simple = [];
+    this.countEdits = 0;
+
 
     var newObj = JSON.parse(obj);
     var customerId = newObj.customerId;
     var trackId = newObj.trackId;
     this.setOutsideConfig(newObj);
     this.clearCanvas_simple();
+
+
+
 
     this.showimageService.customerId = customerId;
     this.showimageService.trackId = trackId;
@@ -1141,29 +1155,6 @@ export class Editoraa {
     image.src = ob.resultImageUrl;
   }
 
-  openResultWindow() {
-    //    console.log("openResultWindow",this.resultImageUrl);
-    this.showimageService.resultUrl = this.resultImageUrl;
-
-    if (this.undoEditResponse.length <= 1) {
-      //  this.undoEditResponse = [];
-      //  this.undoDataUrl = [];
-    }
-
-    this.showimageService.editedStuff = {
-      'clickColor': this.clickColor,
-      'clickX_simple': this.clickX_simple,
-      'clickY_simple': this.clickY_simple,
-      'clickDrag_simple': this.clickDrag_simple,
-      'clickLineWidth': this.clickLineWidth,
-      'undoDataUrl': this.undoDataUrl,
-      'undoEditResponse': this.undoEditResponse
-    }
-    window.callbackEdit({'url': this.resultImageUrl});
-    // this.dialog.close('openResult');
-  }
-
-
   preformEditRequest() {
     var dataURL = this.canvasElement.nativeElement.toDataURL();
     if (this.totalZoom != 0) {
@@ -1231,7 +1222,7 @@ export class Editoraa {
 
     this.countEdits++;
     this.displayLoader = 'none';
-    this.loaderImage = this.assetsUrl + "/assets/tools/smallloader.gif";
+
     //this.stopLoader();
     // was stop loader
     window.callbackEdit({'inEditMode': true});
@@ -1248,9 +1239,17 @@ export class Editoraa {
     if (a.resultEditMaskImageUrl) {
       this.preversioResponseObj = a;
       //document.getElementById('image2Element').src = a.resultEditMaskImageUrl;
-      this.showimageService.resultEditMaskImageUrl = a.resultEditMaskImageUrl;
-      this.undoImageMaskStack.push(a.resultEditMaskImageUrl);
+      var _this = this;
+      var imageObjMask = new Image();
+      imageObjMask.onload = function () {
+        _this.showimageService.resultEditMaskImageUrl = a.resultEditMaskImageUrl;
+        _this.undoImageMaskStack.push(a.resultEditMaskImageUrl);
+        _this.clearCanvas_simple();
+      };
+      imageObjMask.src = a.resultEditMaskImageUrl;
+
     }
+
   }
 
   showInstructions() {
@@ -1288,26 +1287,7 @@ export class Editoraa {
     return true;
   }
 
-  closeWindow(type) {
-    if (this.countEdits > 0) {
-      var i;
-      for (i = 0; i < this.countEdits; i++) {
-        this.undoEdit();
-        //console.log('undo ' + this.countEdits);
-      }
-      this.lastDataUrl = '';
-    }
 
-    this.countEdits = 0;
-
-    if (this.initDataUrl.length > 0) {
-      //console.log(this.initDataUrl);
-      this.showimageService.editedStuff.undoDataUrl = this.initDataUrl;
-      this.showimageService.editedStuff.undoEditResponse = this.initEditResponse.slice();
-      this.showimageService.resultEditMaskImageUrl = this.showimageService.editedStuff.undoEditResponse[this.showimageService.editedStuff.undoEditResponse.length - 1].resultEditMaskImageUrl;
-    }
-    //    this.dialog.close(false);
-  }
 
   saveImage() {
     window.ga('send', 'event', 'CLIENT', 'saveImage',"customerId="+this.showimageService.customerId +",sessionId="+this.sessionId);
