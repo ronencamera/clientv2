@@ -21,94 +21,7 @@
 <link href="assets/dragdropfile/style.css" rel="stylesheet">
 
 <style type="text/css">
-  body, html {
-    height: 100%;
-  }
 
-  body {
-    background-color: whitesmoke;
-    font-family: Roboto, sans-serif;
-    font-size: initial;
-  }
-
-  .resultImg {
-    background-color: white;
-    max-height: 200px;
-    max-width: 200px;
-  }
-
-  .modal {
-    max-height: 100%;
-    width: 80%;
-  }
-  .roboto {
-    font-family: Roboto, sans-serif;
-    font-size: initial;
-  }
-  .material-tooltip {
-    width: 200px;
-  }
-  a {
-    cursor: pointer !important;
-  }
-  .save-option {
-    height: 30px;
-    margin: -10px -10px 5px -10px;
-    background-color: #1c94c4;
-    padding: 5px;
-  }
-  .error-header-default{
-    background-color: #0288d1;
-    padding: 10px;
-    color: white;
-    font-size: 13px;
-  }
-  .error-header-image-failure{
-    background-color: rgb(249, 168, 37);
-    padding: 10px;
-    color: white;
-    font-size: 13px;
-  }
-  .camera51-error-text{
-    padding: 10px;
-    font-size: 12px;
-    text-align: initial;
-    background-color: white;
-  }
-  div#dropZone {
-    background: white;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0.6;
-    visibility: hidden;
-  }
-  .droptarget {
-    display: none;
-    position: fixed;
-    height: 100%;
-    width: 100%;
-
-    top: 0;
-    background-color: rgba(255, 255, 255, .85);
-  }
-  .dropImagePopup {
-    border-radius: 15px;
-    border-width: 4px;
-    border-style: dashed;
-    background-color: #fff;
-    color: #1C6EB5;
-    background: none;
-    border-color: #1C6EB5;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    margin: 20px;
-  }
 </style>
 
 <div class="roboto" style="text-align: center;background-color: rgba(14, 48, 73, 1);color: white;">
@@ -146,6 +59,7 @@
 
 
 <div id="imageList">
+
 </div>
 
 <!-- Modal Structure -->
@@ -203,54 +117,68 @@
 <script>
 
   var apiUrl = "http://ebay-sandbox-1580323891.us-east-1.elb.amazonaws.com/";
-  //var apiUrl = "http://54.174.243.146/";
-  //var apiUrl = "http://localhost:8080/";
 
   var customerId = null;
-  var customerSessionToken = null;//"a059e275-52e0-4524-8050-3872fdd8d9af";
+  var customerSessionToken = null;
   var camera51EditorIframe = "camera51Iframe";
 
+  /* create this mapping and pass it to camera51WithQueue.init in order to
+   * override text with localization
+   * see full list of keys in documentation
+   */
   var myTranslation = {
-    "show-result": "תפנק אותי",
-    "back-to-edit": "לחזור לקשקש"
+    "show-result": "הצג תוצאה",
+    "back-to-edit": "חזור לעריכה"
   };
 
   $(document).ready(function () {
+
+    // call to initialize the Camera51 object
     camera51WithQueue.init({
       "customerId": customerId,
       "sessionToken": customerSessionToken,
       "camera51EditorIframe": camera51EditorIframe,
-      "camera51Text": myTranslation
+      //   "camera51Text": myTranslation  // add your translation object here
     });
+
   });
 
 
-  /*
-   *  Example call to clear images. Provide camera51 the element. And we will insert the response into this element.
-   *  Element response will include and image or response message. Under it a button.
-   *
-   */
+  // implement this function and call it after your user has uploaded a new image
   function requestImage(imageId, origImgUrl) {
     var imgElement = document.getElementById("resultPreview-" + imageId);
+
     // start loader
     var str = 'resultPreview-' + imageId + ' .preloader-wrapper';
     $("#"+str ).addClass('active');
 
-    //preloader-wrapper
-    // We are using origImgUrl as trackId, as this is a unique identifier.
+    /*
+     call to process an image. pass the element
+     and camera51.js will insert the response into this element.
+     response will include and image or response message. Under it a button.
+     */
     camera51WithQueue.requestAsync( origImgUrl, imgElement);
-  };
+  }
 
-  function openEditor(trackId, elementIdToResponse) {
-    // we are creating a callback function that will be called once user clicks save.
-    // The function recives the result url
+  /*
+    implement this function to open Camera51 Editor.
+    function name must be camera51OpenEditor in order to use camera51 builtin callback.
+    function receives a trackId and imgElementId to set the src to the resultUrl.
+   */
+  function camera51OpenEditor(trackId, imgElementId) {
+
+    /*
+     implement the onSaveWithResult and pass it to Camera51.openEditorWithTrackId.
+     this function specify what to do once the user selected an image in the editor.
+     */
     var onSaveWithResult = function (resultUrl) {
-      $("#theImg-" + elementIdToResponse).attr('src', resultUrl);
       $('#modal1').closeModal();
     };
+
     $('#modal1').openModal();
-    // call editor
-    camera51WithQueue.setDataTrackId({
+
+    // open the editor
+    camera51WithQueue.openEditorWithTrackId({
       'customerId': customerId,
       'trackId': trackId
     }, onSaveWithResult);

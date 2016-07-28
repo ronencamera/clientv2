@@ -1,4 +1,19 @@
-// Version 1.0
+// Version 2.0
+/*
+ *  Copyright 2016 Camera51, www.camera51.com
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 
 var camera51; // Object for Interacting with the editor.
 var camera51UserFunctions = new Camera51UserFunctions(); // Object, functions for registering analytics events.
@@ -68,7 +83,7 @@ function camera51obj(obj) {
   if (obj.hasOwnProperty('iframeSrc') && obj.iframeSrc.length > 1) {
     iframeSrc = obj.iframeSrc;
   } else {
-    iframeSrc = window.location.protocol+"//assets-malabi.s3.amazonaws.com/version/v1/index.html";
+    iframeSrc = window.location.protocol+"//assets-malabi.s3.amazonaws.com/version/v2/index.html";
     // For development, if working in local host, use local iframe file:
     if (document.location.hostname == "localhost") {
       iframeSrc ="index.html";
@@ -249,7 +264,7 @@ function camera51obj(obj) {
     return true;
   };
 
-  this.setDataTrackId = function(obj, responseOnSave) {
+  this.openEditorWithTrackId = function(obj, responseOnSave) {
     _this.initilizeView();
     if(responseOnSave){
       this.responseOnSave = responseOnSave;
@@ -424,8 +439,8 @@ function Camera51WithQueue(){
 
   };
 
-  this.setDataTrackId = function (obj,onSaveWithResult,wrapperElementForResult ) {
-    camera51.setDataTrackId(obj, onSaveWithResult);
+  this.openEditorWithTrackId = function (obj, onSaveWithResult, wrapperElementForResult ) {
+    camera51.openEditorWithTrackId(obj, onSaveWithResult);
   };
 
   this.addSearchArray = function(ele, str){
@@ -528,13 +543,13 @@ function Camera51WithQueue(){
       //console.log(imgUrl);
       var img = document.createElement('img');
       img.src = imgUrl;
-      img.id = "theImg-" + elem.id;
+     // img.id = "theImg-" + elem.id;
       img.style.maxWidth = "100%";
       img.style.maxHeight = maxImage+"px";
       img.onclick =  function () {
-        openEditor(trackId,elem.id);
+        camera51OpenEditor(trackId,elem.id);
       };
-
+      wrapper.style.cursor = "pointer";
       elem.innerHTML = null;
       wrapper.appendChild(img);
       wrapper.style.height = "inherit";
@@ -551,14 +566,18 @@ function Camera51WithQueue(){
       } else {
         header.innerHTML = camera51Text['error-header-default'];
         header.className = "error-header-default";
+        wrapper.onclick =  function () {
+          camera51OpenEditor(trackId,elem.id);
+        };
+        wrapper.style.cursor = "pointer";
       }
 
       wrapper.appendChild(header);
-      var header = document.createElement('div');
+      var errorText = document.createElement('div');
       var str = "error-text-"+ processingResultCode;
-      header.innerHTML = camera51Text[str];
-      header.className = "camera51-error-text";
-      wrapper.appendChild(header);
+      errorText.innerHTML = camera51Text[str];
+      errorText.className = "camera51-error-text";
+      wrapper.appendChild(errorText);
       elem.appendChild(wrapper);
     }
 
@@ -572,16 +591,14 @@ function Camera51WithQueue(){
         var btn = document.createElement('a');
         btn.innerHTML = "TOUCH UP";
         btn.onclick =  function () {
-          openEditor(trackId,elem.id);
+          camera51OpenEditor(trackId,elem.id);
         };
         btn.className = "btn";
 
         btnWrapper.appendChild(btn);
         elem.appendChild(btnWrapper);
-        elem.onclick =  function () {
-          openEditor(trackId,elem.id);
-        };
-        elem.style.cursor = "pointer";
+
+        //elem.style.cursor = "pointer";
       }
   };
 

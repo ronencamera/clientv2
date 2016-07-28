@@ -168,7 +168,7 @@ function runCameraTrackId(customerId,trackId){
   $.extend( nObj, {customerId: customerId,
     trackId: trackId} );
 
-	camera51.setDataTrackId(nObj);
+	camera51.openEditorWithTrackId(nObj);
 
 	document.getElementById('resultUrl').value = "";
 	document.getElementById('responseError').value = "";

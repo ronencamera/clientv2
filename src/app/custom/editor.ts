@@ -346,16 +346,27 @@ export class Editoraa {
 
   }
 
-  setTrackId(obj) {
-    this.undoEditResponse = [];
-    this.undoImageMaskStack = [];
-    this.undoImageStack = [];
-    this.undoDataUrl = [];
+
+  resetDrawing(){
+
     this.clickColor = [];
     this.clickDrag_simple = [];
     this.clickLineWidth = [];
     this.clickX_simple = [];
     this.clickY_simple = [];
+
+  }
+
+  setTrackId(obj) {
+    this.undoEditResponse = [];
+    this.undoImageMaskStack = [];
+    this.undoImageStack = [];
+    this.undoDataUrl = [];
+
+    this.resetDrawing();
+
+    this.initializeCanvas();
+
     this.countEdits = 0;
 
 
@@ -363,7 +374,7 @@ export class Editoraa {
     var customerId = newObj.customerId;
     var trackId = newObj.trackId;
     this.setOutsideConfig(newObj);
-    this.clearCanvas_simple();
+
 
 
 
@@ -434,6 +445,7 @@ export class Editoraa {
       that.sessionId = response.sessionId;
       that.stopLoader();
       that.initViewOnData(that.sessionId);
+
       window.callbackEdit({'inEditMode': true});
     };
 
@@ -596,21 +608,21 @@ export class Editoraa {
     window.ga('send', 'event', 'CLIENT', 'undo',"customerId="+this.showimageService.customerId +",sessionId="+this.sessionId);
 
     var undoDataUrl = this.undoDataUrl;
-    if (undoDataUrl.length <= 1) {
-      console.log("undoDataUrl is empty");
+    if (this.undoEditResponse.length <= 1) {
+      console.log("UNDO is empty");
       return;
     }
 
     //  console.log(context);
-    var image = undoDataUrl[undoDataUrl.length - 2];
+    //var image = undoDataUrl[undoDataUrl.length - 2];
     var imageMask = this.undoEditResponse[undoDataUrl.length - 2];
 
-    this.undoImageStack.push(image);
+   // this.undoImageStack.push(image);
     this.undoImageMaskStack.push(imageMask.resultEditMaskImageUrl);
 
     this.undoDataUrl.pop();
     this.undoEditResponse.pop();
-    this.showimageService.lastDataUrl = image;
+ //   this.showimageService.lastDataUrl = image;
     this.clearCanvas_simple();
     this.showimageService.resultEditMaskImageUrl = imageMask.resultEditMaskImageUrl;
     this.preversioResponseObj = imageMask;
@@ -618,7 +630,7 @@ export class Editoraa {
     this.initDrawArrays();
     this.redrawSimple();
 
-    this.setImageToCanvas(image);
+    //this.setImageToCanvas(image);
     //  console.log("undo", this.undoDataUrl);
   }
 
@@ -652,10 +664,9 @@ export class Editoraa {
       this.initEditResponse = editFromPreviousOpenWindow.undoEditResponse.slice();
 
       this.preversioResponseObj.resultEditMaskImageUrl = this.showimageService.editedStuff.undoEditResponse[this.showimageService.editedStuff.undoEditResponse.length - 1].resultEditMaskImageUrl;
-      this.showimageService.lastDataUrl = this.showimageService.editedStuff.undoDataUrl[this.showimageService.editedStuff.undoDataUrl.length - 1];
+    //  this.showimageService.lastDataUrl = this.showimageService.editedStuff.undoDataUrl[this.showimageService.editedStuff.undoDataUrl.length - 1];
     } else {
-      this.undoDataUrl = [];
-      this.undoEditResponse = [];
+
 
       this.clickColor = [];
       this.clickX_simple = [];
@@ -897,18 +908,6 @@ export class Editoraa {
     }
   }
 
-
-  setImageScalingVariables() {
-
-    var totalScale = 1 + (this.AMOUNT_ZOOM * this.totalZoom);
-    if (totalScale > 0) {
-      radius = 10 / totalScale;
-    }
-    if (this.totalScale < 0) {
-      radius = -(10 * totalScale);
-    }
-  }
-
   addClickSimple(x, y, dragging) {
     var totalScale = this.totalScale;
     //    console.log(totalScale)
@@ -954,7 +953,6 @@ export class Editoraa {
       this.setImageToCanvas(this.showimageService.lastDataUrl);
     }
 
-
     for (var i = 0; i < this.clickX_simple.length; i++) {
       //console.log("inredraw");
       this.ctx.strokeStyle = this.clickColor[i];
@@ -971,6 +969,8 @@ export class Editoraa {
       this.ctx.closePath();
       this.ctx.stroke();
     }
+
+    //this.resetDrawing();
     //    this.ctxTemp.drawImage(this.canvasElement.nativeElement, 0, 0);
   }
 
@@ -1146,7 +1146,9 @@ export class Editoraa {
       that.flagShowResult = true;
       that.View_Result = "EDIT_PAGE_BACK_TO_EDIT_BUTTON";
       if (isSaveRequest) {
-        that.openResultWindow();
+        window.callbackEdit({'url': that.resultImageUrl});
+
+//        that.openResultWindow();
       } else {
         window.callbackEdit({'callbackInShowResult': true});
 
@@ -1249,7 +1251,7 @@ export class Editoraa {
       imageObjMask.src = a.resultEditMaskImageUrl;
 
     }
-
+    this.resetDrawing();
   }
 
   showInstructions() {
@@ -1257,6 +1259,11 @@ export class Editoraa {
   }
 
   ngAfterViewInit() {
+    this.initializeCanvas();
+  }
+
+  initializeCanvas(){
+
     this.ctx = this.canvasElement.nativeElement.getContext("2d");
     this.ctx.scale(this.totalScale, this.totalScale);
     if (this.flagShouldInitizlize == true) {
@@ -1265,6 +1272,7 @@ export class Editoraa {
       this.undoEditResponse.push(this.obj);
     }
   }
+
 
   ngOnChanges() {
 //        console.log("changes",document.getElementById('image1Element').offsetWidth);
