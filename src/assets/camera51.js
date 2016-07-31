@@ -631,7 +631,7 @@ function Camera51WithQueue(){
 
   this.parseResponse = function(messageBody){
 
-  }
+  };
 
   this.deleteMessage = function(message){
     var receiptHandle = message.getElementsByTagName("ReceiptHandle")[0].textContent;
@@ -666,7 +666,7 @@ function Camera51WithQueue(){
       return this.setSQSurl(false);
     }
     return this.sqsUrl;
-  }
+  };
 
 
   this.setSQSurl = function(sync){

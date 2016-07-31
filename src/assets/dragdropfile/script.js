@@ -1,5 +1,7 @@
 
 
+var apiUrl = "http://ebay-sandbox-1580323891.us-east-1.elb.amazonaws.com/";
+
 var customerId = null;
 var customerToken = null;
 

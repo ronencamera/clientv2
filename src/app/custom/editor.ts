@@ -300,6 +300,8 @@ export class Editoraa {
     this.startLoader();
 
     this.initDrawArrays(null);
+    this.totalScale = 0;
+    this.totalZoom = 0;
     this.undoDataUrl = [];
     this.undoEditResponse = [];
     if (customerId == '' || customerId == null) {
@@ -594,6 +596,11 @@ export class Editoraa {
 
       //      console.log('totalZoom',this.totalZoom);
       //if(this.canvasWidth > )
+    } else {
+      this.imageSizeWidth = this.obj.origWidth;
+      this.imageSizeHeight = this.obj.origHeight;
+      this.imagewrapperSizeheight = this.obj.origHeight;
+      this.imagewrapperSizeWidth = this.obj.origWidth;
     }
 
     this.totalScale = 1 + (this.AMOUNT_ZOOM * this.totalZoom);
@@ -1285,7 +1292,7 @@ export class Editoraa {
     window.onresize = function () {
       that.cdr.detectChanges();
       //that.cdr.detach();
-      that.calculateImageSize();
+    //  that.calculateImageSize();
       //  console.log("resize");
       that.redrawSimple();
     };
