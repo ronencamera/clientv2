@@ -601,6 +601,7 @@ export class Editoraa {
       this.imageSizeHeight = this.obj.origHeight;
       this.imagewrapperSizeheight = this.obj.origHeight;
       this.imagewrapperSizeWidth = this.obj.origWidth;
+      this.totalScale = 1;
     }
 
     this.totalScale = 1 + (this.AMOUNT_ZOOM * this.totalZoom);
