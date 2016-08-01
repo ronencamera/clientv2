@@ -30,11 +30,11 @@ var camera51Text = {
 
   "error-header-default": "Press here for manual background removal",
   "error-header-image-failure": "Image error",
-  "error-text-5" : "We didn't automaticaly remove the background since the image <b>already has a white background</b>",
-  "error-text-2" : "We didn't automaticaly remove the background due to <b>low contrast</b>",
-  "error-text-4" : "We didn't automaticaly remove the background due to <b>cluttered background</b>",
-  "error-text-103" : "The image is <b>too small</b> for background removal.",
-  "error-text-101" : "An image error was detected. Image can not be proccessed",
+  "error-text-5" : "Background was not automatically removed since the image <b>already has a white background</b>",
+  "error-text-2" : "Background was not automatically removed due to <b>low contrast</b>",
+  "error-text-4" : "Background was not automatically removed due to a <b>cluttered background</b>",
+  "error-text-103" : "Image <b>too small</b> to be processed",
+  "error-text-101" : "Image cannot be processed",
 };
 
 

@@ -32,6 +32,7 @@
     opts: {
       dragClass: "drag",
       accept: false,
+      maxFiles: null,
       readAsDefault: 'DataURL',
       readAsMap: {
       },
@@ -160,6 +161,7 @@
     }
     var instanceOptions = extend(extend({}, FileReaderJS.opts), opts);
     var dragClass = instanceOptions.dragClass;
+    var dragClass = instanceOptions.dragClass;
     var initializedOnBody = false;
 
     // Bind drag events to the dropbox to add the class while dragging, and accept the drop data transfer.
@@ -272,6 +274,16 @@
       if (--filesLeft === 0) {
         groupEnd();
       }
+    }
+
+    function showErrors(msg){
+      opts.on.showerrors(msg);
+    }
+
+    if(filesLeft > opts.maxFiles){
+      groupEnd();
+      showErrors('maxFiles');
+      return;
     }
 
     FileReaderJS.output.push(group);

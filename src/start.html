@@ -4,10 +4,8 @@
 <head>
 	<!-- Compiled and minified CSS -->
 	<!--Import Google Icon Font-->
-		 <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
-
+	<link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
 <!-- Compiled and minified JavaScript -->
 
 </head>
@@ -17,7 +15,6 @@
 <style type="text/css">
 	body{
 		background-color: whitesmoke;
-
 	}
 </style>
 <div style="margin-left:20px">
@@ -32,22 +29,22 @@
   </div>
   <div class="row">
     <div class="input-field col s8">
-      <input id="trackId" type="text" class="validate" value="a059e275-52e0-4524-8050-3872fdd8d9af-1469691184765-8127">
+      <input id="trackId" type="text" class="validate" value="a059e275-52e0-4524-8050-3872fdd8d9af-1469973953332-551c">
       <label >Track Id</label>
     </div>
     <div class="input-field col s4">
       <button class="btn waves-effect waves-light " onclick="runCameraTrackId()" style="	background-color: papayawhip;color:black;    font-size: 13px;">Submit TrackId</button>
     </div>
   </div>
-  <div class="row">
-    <div class="input-field col s8">
-      <input id="originalImageUrl" type="text" class="validate" value="https://s3.amazonaws.com/cam51-img-proc/07062016/32/SID_6cfd844c23c14a00a635b8e37de2890a/3acc8680759b4514bc951ce7c7991017.jpg">
-      <label >originalImageUrl</label>
-    </div>
-    <div class="input-field col s4">
-      <button class="btn waves-effect waves-light " onclick="submitOriginalImageUrl()" style="	background-color: deepskyblue;color:black;    font-size: 13px;">Submit Original URL</button>
-    </div>
-  </div>
+  <!--<div class="row">-->
+    <!--<div class="input-field col s8">-->
+      <!--<input id="originalImageUrl" type="text" class="validate" value="https://s3.amazonaws.com/cam51-img-proc/07062016/32/SID_6cfd844c23c14a00a635b8e37de2890a/3acc8680759b4514bc951ce7c7991017.jpg">-->
+      <!--<label >originalImageUrl</label>-->
+    <!--</div>-->
+    <!--<div class="input-field col s4">-->
+      <!--<button class="btn waves-effect waves-light " onclick="submitOriginalImageUrl()" style="	background-color: deepskyblue;color:black;    font-size: 13px;">Submit Original URL</button>-->
+    <!--</div>-->
+  <!--</div>-->
 
 </p>
 </div>
@@ -187,14 +184,12 @@ function disableButtons(){
 window.onload = function(){
 	initCamera51({
 		elementId: "ad54", // Div to insert the iframe.
-		apiUrl: "//sandbox.malabi.co", // Production url provided upon request !
+		apiUrl: "//api.malabi.co", // Production url provided upon request !
 		showWrapperShadow: true, // shadow for around the image
 		decreaseInnerHeight: 20, // should the wrapper be a little smaller to show the shadow.
 		wrappermarginTop:10,
 		backgroundColor: "#fff", // background color in the edit window
 		customerId: 3, //
-		//trackId: "http://s3.amazonaws.com/cam-dev-server/19052016/1231234/SID_ed69efad9948419b90e6a7500c42bda4/5588751fc6d340fc9ed2982f9a77ef80.jpg",
-		//originalImageUrl: "http://s3.amazonaws.com/cam51-img-proc/02062016/1231234/SID_0e138bbe2dcd4b9a849b5edb9167c837/a8cdc54a45a34b029a705eca4b8f05bb.jpg",
 		callbackStartLoader: function(){
 			document.getElementById('imgLoader').style.visibility = "";
 			disableButtons();

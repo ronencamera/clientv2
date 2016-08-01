@@ -1,6 +1,6 @@
 
 
-var apiUrl = "http://ebay-sandbox-1580323891.us-east-1.elb.amazonaws.com/";
+var apiUrl = "http://api.malabi.co/";
 
 var customerId = null;
 var customerToken = null;
@@ -38,7 +38,7 @@ $(document).ready(function () {
     if(customerToken == null){
       $('#show-token-error').show();
       $('#errorSubject').html("Missing token");
-      $('#errorSubject').html("Token is missing, please contact info@malabi.co");
+      $('#errorMessage').html("Token is missing, please contact info@malabi.co");
       return;
     }
 
@@ -67,13 +67,17 @@ $(document).ready(function () {
     });
   }
 
+
+
+
   var dropbox;
   var _URL = window.URL;
   var oprand = {
     dragClass: "active",
+    maxFiles: 2,
     on: {
       load: function (e, file) {
-
+        console.log(file);
         // check file type
         var imageType = /image.*/;
         if (!file.type.match(imageType)) {
@@ -95,12 +99,21 @@ $(document).ready(function () {
         };
         img.src = _URL.createObjectURL(file);
       },
+      showerrors: function (msg) {
+        $('#show-token-error').show();
+        $('#errorSubject').html("Error uploading");
+        $('#errorMessage').html("You may upload a MAXIMUM of 30 files at a time");
+      }
     }
   };
 
-  FileReaderJS.setupDrop(document.body, oprand);
-
+  try {
+    FileReaderJS.setupDrop(document.body, oprand);
+  } catch (e){
+    console.log(e);
+  }
 });
+
 
 create_box = function (e, file, size) {
   var loader = '<div class="preloader-wrapper">'
@@ -218,11 +231,11 @@ var get_params = function(search_string) {
     }
 
     return pairs.length == 1 ? params : parse(params, pairs.slice(1))
-  }
+  };
 
   // Get rid of leading ?
   return search_string.length == 0 ? {} : parse({}, search_string.substr(1).split('&'));
-}
+};
 
 
 var params = get_params(location.search);
