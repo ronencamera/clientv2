@@ -418,11 +418,18 @@ function Camera51WithQueue(){
   this.camera51Text = camera51Text;
   this.iframeElement = null;
 
+
+
   this.init = function(obj){
     this.customerId = obj.customerId;
     this.sessionToken = obj.sessionToken;
     this.camera51Text = obj.camera51Text;
-
+    var apiUrl = null;
+    if (obj.hasOwnProperty('apiUrl') && obj.apiUrl.length > 1) {
+      apiUrl = obj.apiUrl;
+    } else {
+      apiUrl = "//api.malabi.co";
+    }
     initCamera51({
       elementId: obj.camera51EditorIframe, // Div to insert the iframe.
       apiUrl: apiUrl,
@@ -713,7 +720,7 @@ function Camera51WithQueue(){
       }
     };
 
-    xhttp.open("POST", this.apiUrl  + "Camera51Server/createQueue", (sync==null)? true: sync);
+    xhttp.open("POST", this.apiUrl  + "/Camera51Server/createQueue", (sync==null)? true: sync);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send("token="+this.sessionToken+"&customerId="+this.customerId);
 
@@ -738,7 +745,7 @@ function Camera51WithQueue(){
         }
       }
     };
-    xhttp.open("POST", apiUrl + "Camera51Server/processImageAsync", true);
+    xhttp.open("POST", this.apiUrl + "/Camera51Server/processImageAsync", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send("token="+this.sessionToken+"&customerId="+this.customerId+"&trackId="+uniqueTrackId
         +"&origImgUrl="+origImgUrl+"&callbackURL="+this.getSQSurl());

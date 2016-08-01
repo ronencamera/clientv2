@@ -1,6 +1,6 @@
 
 
-var apiUrl = "http://api.malabi.co/";
+var apiUrl = "http://api.malabi.co";
 
 var customerId = null;
 var customerToken = null;
@@ -67,17 +67,13 @@ $(document).ready(function () {
     });
   }
 
-
-
-
   var dropbox;
   var _URL = window.URL;
   var oprand = {
     dragClass: "active",
-    maxFiles: 2,
+    maxFiles: 30,
     on: {
       load: function (e, file) {
-        console.log(file);
         // check file type
         var imageType = /image.*/;
         if (!file.type.match(imageType)) {
