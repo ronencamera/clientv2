@@ -557,14 +557,14 @@ function Camera51WithQueue(){
         camera51OpenEditor(trackId,elem.id);
       };
       wrapper.style.cursor = "pointer";
-      elem.innerHTML = null;
+      elem.innerHTML = "";
       wrapper.appendChild(img);
       wrapper.style.height = "inherit";
       wrapper.style.width = "inherit";
       elem.appendChild(wrapper);
     }
     if (processingResultCode > 0) {
-      elem.innerHTML = null;
+      elem.innerHTML = "";
       var header = document.createElement('div');
 
       if(processingResultCode > 5){
