@@ -42,6 +42,7 @@
   var sessionId = 0;
   var parentDocHeight = document.documentElement.clientHeight;
   var parentDocWidth = document.documentElement.clientWidth;
+  document.body.innerHTML += '<div id="camera51highlevelloader" style="top: 0px;display:none;position:absolute;width:100%;height:100%;cursor:wait;height:100%;z-index:34344"></div>';
 
   var mainWindow;
   var eventPost;
@@ -202,7 +203,15 @@
     }
   }
   function callbackEdit(mes) {
+    console.log(mes);
+    if(mes.hasOwnProperty('loader')){
+      if(mes.loader == false){
+        document.getElementById('camera51highlevelloader').style.display= "none";
+      } else {
+        document.getElementById('camera51highlevelloader').style.display= "block";
+      }
 
+    }
     mainWindow.postMessage(mes, eventPost.origin);
     return true;
   }

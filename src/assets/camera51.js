@@ -19,9 +19,6 @@ var camera51; // Object for Interacting with the editor.
 var camera51UserFunctions = new Camera51UserFunctions(); // Object, functions for registering analytics events.
 var camera51WithQueue = new Camera51WithQueue();
 
-document.body.innerHTML += '<div id="camera51highlevelloader" style="top: 1px;display:none;position:absolute;width:100%;height:100%;cursor:wait;height:100%;z-index:34344"></div>';
-
-
 var camera51Text = {
   "show-result"     : "show result",
   "back-to-edit"    : "back to edit",
@@ -166,7 +163,7 @@ function camera51obj(obj) {
     } else {
       if(document.getElementById("camera51-loader")){
         document.getElementById('camera51-loader').style.visibility = "";
-        document.getElementById('camera51highlevelloader').style.display= "block";
+       // document.getElementById('camera51highlevelloader').style.display= "block";
 
 
       } else {
@@ -181,7 +178,7 @@ function camera51obj(obj) {
     } else {
       if(document.getElementById("camera51-loader")){
         document.getElementById('camera51-loader').style.visibility = "hidden";
-        document.getElementById('camera51highlevelloader').style.display= "none";
+     //   document.getElementById('camera51highlevelloader').style.display= "none";
       } else {
         console.error("Error Camera51 Init: Loader element not found, looking for #camera51-loader element. Or add your override with your own callbackStopLoader function.");
       }

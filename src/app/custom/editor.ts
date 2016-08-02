@@ -488,7 +488,7 @@ export class Editoraa {
 
 
     this.getImageDimensions(this.showimageService.originalImageUrl);
-    //this.stopLoader();
+    this.stopLoader();
     window.callbackEdit({'inEditMode': true});
 
   }
@@ -1113,28 +1113,13 @@ export class Editoraa {
 
   startLoader() {
     window.callbackEdit({'loader': true});
-    this.width = 0;
-    this.progressPercent = 30;
 
-    this.timeProgress = TimerWrapper.setInterval(frame, 1);
-    var that = this;
 
-    function frame() {
-      //console.log("A");
-      if (that.progressPercent >= 100) {
-        //  TimerWrapper.clearInterval(that.timeProgress);
-        that.progressPercent = 0;
-      } else {
-        that.progressPercent + 20;
-      }
-    }
   }
 
   stopLoader() {
     window.callbackEdit({'loader': false});
-    if (this.progressPercent > 0)
-      TimerWrapper.clearInterval(this.timeProgress);
-    this.progressPercent = 0;
+
   }
 
 
@@ -1233,7 +1218,7 @@ export class Editoraa {
     this.countEdits++;
     this.displayLoader = 'none';
 
-    //this.stopLoader();
+    this.stopLoader();
     // was stop loader
     window.callbackEdit({'inEditMode': true});
     this.disableShowResult = false;
