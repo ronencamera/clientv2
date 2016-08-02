@@ -248,6 +248,7 @@ function download(img) {
   var link = document.createElement("a");
   link.href = img;
   link.download = true;
+  link.type = 'image/jpg';
   link.style.display = "none";
   var evt = new MouseEvent("click", {
     "view": window,
