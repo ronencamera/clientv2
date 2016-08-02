@@ -143,7 +143,7 @@
 
   // implement this function and call it after your user has uploaded a new image
   function requestImage(imageId, origImgUrl) {
-    var imgElement = document.getElementById("resultPreview-" + imageId);
+    var responseElement = document.getElementById("resultPreview-" + imageId);
 
     // start loader
     var str = 'resultPreview-' + imageId + ' .preloader-wrapper';
@@ -154,7 +154,7 @@
      and camera51.js will insert the response into this element.
      response will include and image or response message. Under it a button.
      */
-    camera51WithQueue.requestAsync( origImgUrl, imgElement);
+    camera51WithQueue.requestAsync( origImgUrl, responseElement);
   }
 
   /*
@@ -162,8 +162,9 @@
     function name must be camera51OpenEditor in order to use camera51 builtin callback.
     function receives a trackId and imgElementId to set the src to the resultUrl.
    */
-  function camera51OpenEditor(trackId, imgElementId) {
+  function camera51OpenEditor(trackId, responseElementId) {
 
+    var responseElement = document.getElementById(responseElementId);
     /*
      implement the onSaveWithResult and pass it to Camera51.openEditorWithTrackId.
      this function specify what to do once the user selected an image in the editor.
@@ -178,7 +179,7 @@
     camera51WithQueue.openEditorWithTrackId({
       'customerId': customerId,
       'trackId': trackId
-    }, onSaveWithResult);
+    }, onSaveWithResult, responseElement);
   }
 
 </script>

@@ -264,12 +264,12 @@ function camera51obj(obj) {
     return true;
   };
 
-  this.openEditorWithTrackId = function(obj, responseOnSave) {
+  this.openEditorWithTrackId = function(obj, responseOnSave, responseElement) {
     _this.initilizeView();
     if(responseOnSave){
       this.responseOnSave = responseOnSave;
       this.responseOnSave.trackId = obj.trackId;
-      this.responseOnSave.element = event.srcElement.parentElement;
+      this.responseOnSave.responseElement = responseElement;
     } else {
       this.responseOnSave = null;
     }
@@ -349,7 +349,7 @@ function camera51obj(obj) {
       } else {
         if(typeof _this.responseOnSave === 'function' ){
           _this.responseOnSave(data.url);
-          camera51WithQueue.showImageCallback(_this.responseOnSave.element.parentElement, data.url , 0, _this.responseOnSave.trackId);
+          camera51WithQueue.showImageCallback(_this.responseOnSave.responseElement, data.url , 0, _this.responseOnSave.trackId);
         } else {
           console.error("No function to run on save. Implment 'callbackFuncSave', recieves url.");
         }
@@ -446,8 +446,8 @@ function Camera51WithQueue(){
 
   };
 
-  this.openEditorWithTrackId = function (obj, onSaveWithResult, wrapperElementForResult ) {
-    camera51.openEditorWithTrackId(obj, onSaveWithResult);
+  this.openEditorWithTrackId = function (obj, onSaveWithResult , responseElement ) {
+    camera51.openEditorWithTrackId(obj, onSaveWithResult, responseElement);
   };
 
   this.addSearchArray = function(ele, str){
