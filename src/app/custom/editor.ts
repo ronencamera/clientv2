@@ -446,13 +446,9 @@ that.cdr.detectChanges();
       that.showimageService.originalImageUrl = response.originalImageUrl;
       that.maskUrl = response.resultEditMaskImageUrl;
       that.showimageService.resultImageUrl = response.resultImageUrl;
-
-      console.log(that.showimageService.resultImageUrl);
       that.sessionId = response.sessionId;
       that.stopLoader();
       that.initViewOnData(that.sessionId);
-console.log("block");
-
       window.callbackEdit({'inEditMode': true});
     };
 
