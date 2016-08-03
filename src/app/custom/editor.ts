@@ -296,7 +296,7 @@ export class Editoraa {
     this.maskHidden = false;
     this.flagShowResult = false;
 
-    this.showEditorView = 'none';
+    //this.showEditorView = 'none';
     this.startLoader();
 
     this.initDrawArrays(null);
@@ -400,7 +400,7 @@ export class Editoraa {
       that.obj.imageSize.width = width;//this.image1Element.nativeElement.naturalWidth;
 
       that.calculateImageSize();
-      that.showEditorView = 'block';
+
       var dataURL = that.canvasElement.nativeElement.toDataURL();
       that.undoDataUrl.push(dataURL);
       that.undoEditResponse.push(that.obj);
@@ -409,7 +409,8 @@ export class Editoraa {
         that.ctx.setTransform(1, 0, 0, 1, 0, 0);
         that.ctx.scale(that.totalScale, that.totalScale);
         //console.log("scale", that.totalScale);
-
+        that.showEditorView = "block";
+that.cdr.detectChanges();
       }, 200);
 
       //that.doZoom('out');
@@ -438,21 +439,30 @@ export class Editoraa {
       return;
     }
 
+  //  this.showEditorView = "block";
     var imageObj = new Image();
     var that = this;
     imageObj.onload = function () {
       that.showimageService.originalImageUrl = response.originalImageUrl;
       that.maskUrl = response.resultEditMaskImageUrl;
       that.showimageService.resultImageUrl = response.resultImageUrl;
+
+      console.log(that.showimageService.resultImageUrl);
       that.sessionId = response.sessionId;
       that.stopLoader();
       that.initViewOnData(that.sessionId);
+console.log("block");
 
       window.callbackEdit({'inEditMode': true});
     };
 
+
+
+    //this.cdr.detach();
+
     var imageObjMask = new Image();
     imageObjMask.onload = function () {
+    //  that.cdr.detectChanges();
       imageObj.src = response.originalImageUrl;
     };
     imageObjMask.src = response.resultEditMaskImageUrl;
@@ -489,6 +499,7 @@ export class Editoraa {
 
     this.getImageDimensions(this.showimageService.originalImageUrl);
     this.stopLoader();
+    this.cdr.detectChanges();
     window.callbackEdit({'inEditMode': true});
 
   }
