@@ -14,12 +14,17 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+(function(window, document) {
 
 var camera51; // Object for Interacting with the editor.
 var camera51UserFunctions = new Camera51UserFunctions(); // Object, functions for registering analytics events.
 var camera51WithQueue = new Camera51WithQueue();
 
-var camera51Text = {
+  window.camera51 = camera51;
+  window.camera51UserFunctions = camera51UserFunctions;
+  window.camera51WithQueue = camera51WithQueue;
+
+  var camera51Text = {
   "show-result"     : "show result",
   "back-to-edit"    : "back to edit",
   "tooltip-mark-background" : "Draw lines to mark areas you want to remove from the image",
@@ -53,7 +58,7 @@ Camera51UserFunctions.prototype.sendEventResultImage = function(resultImageUrl, 
 };
 
 function initCamera51(obj) {
- camera51 = new camera51obj(obj);
+  window.camera51 = new camera51obj(obj);
 }
 
 function camera51obj(obj) {
@@ -141,8 +146,8 @@ function camera51obj(obj) {
                       };
 
     Object.keys(listElement).forEach(function(key) {
-      if(this.camera51Text.hasOwnProperty(listElement[key])){
-        _this.setAttributeText(key, this.camera51Text[listElement[key]]);
+      if(_this.camera51Text.hasOwnProperty(listElement[key])){
+        _this.setAttributeText(key, _this.camera51Text[listElement[key]]);
       };
       //this.setAttributeText(key)
       //console.log(key, listElement[key]);
@@ -229,7 +234,6 @@ function camera51obj(obj) {
   var element =  document.getElementById('camera51Frame');
   if (element == null || typeof(element) == 'undefined') {   // If iframe doesn't exist, create it.
     this.startLoader();
-
     iframe.frameBorder=0;
     iframe.width="100%";
     iframe.height="100%";
@@ -341,8 +345,8 @@ function camera51obj(obj) {
     }
     if(e.data.hasOwnProperty('url') && data.url.length > 5 ){
       _this.enableButtons();
-      if(camera51.obj.hasOwnProperty('callbackFuncSave')){
-        camera51.obj.callbackFuncSave(data.url, _this.responseOnSave);
+      if(window.camera51.obj.hasOwnProperty('callbackFuncSave')){
+        window.camera51.obj.callbackFuncSave(data.url, _this.responseOnSave);
       } else {
         if(typeof _this.responseOnSave === 'function' ){
           _this.responseOnSave(data.url);
@@ -365,8 +369,8 @@ function camera51obj(obj) {
       _this.stopLoader();
     }
     if(e.data.hasOwnProperty('returnFromShowResult')) {
-      if(camera51.obj.hasOwnProperty('returnFromShowResult')){
-        camera51.obj.returnFromShowResult();
+      if(window.camera51.obj.hasOwnProperty('returnFromShowResult')){
+        window.camera51.obj.returnFromShowResult();
         return;
       }
       if(document.getElementById("camera51-btn-show-result")) {
@@ -378,13 +382,13 @@ function camera51obj(obj) {
     if(e.data.hasOwnProperty('inEditMode') ) {
       _this.stopLoader();
       _this.enableButtons();
-      if(camera51.obj.hasOwnProperty('callbackInEditMode')){
-        camera51.obj.callbackInEditMode();
+      if(window.camera51.obj.hasOwnProperty('callbackInEditMode')){
+        window.camera51.obj.callbackInEditMode();
       }
     }
     if(e.data.hasOwnProperty('callbackInShowResult')) {
-      if(camera51.obj.hasOwnProperty('callbackInShowResult')){
-        camera51.obj.callbackInShowResult();
+      if(window.camera51.obj.hasOwnProperty('callbackInShowResult')){
+        window.camera51.obj.callbackInShowResult();
       }
       _this.stopLoader();
       _this.enableButtons();
@@ -415,7 +419,8 @@ function Camera51WithQueue(){
   this.camera51Text = camera51Text;
   this.iframeElement = null;
 
-
+  this.callbackAsyncRequestError = noop;
+  this.callbackAsyncRequest = noop;
 
   this.init = function(obj){
     this.customerId = obj.customerId;
@@ -434,7 +439,7 @@ function Camera51WithQueue(){
       camera51Text: obj.camera51Text
       //
     });
-    this.apiUrl = camera51.apiUrl;
+    this.apiUrl = window.camera51.apiUrl;
     this.setSQSurl(true);
   };
 
@@ -444,7 +449,7 @@ function Camera51WithQueue(){
   };
 
   this.openEditorWithTrackId = function (obj, onSaveWithResult , responseElement ) {
-    camera51.openEditorWithTrackId(obj, onSaveWithResult, responseElement);
+    window.camera51.openEditorWithTrackId(obj, onSaveWithResult, responseElement);
   };
 
   this.addSearchArray = function(ele, str){
@@ -462,7 +467,7 @@ function Camera51WithQueue(){
     if(this.sqsRunning == false){
       this.checkUpdatesSQS();
     }
-  }
+  };
 
   this.checkUpdatesSQS = function(){
     var callbackURL = this.sqsUrl+"?Action=ReceiveMessage&VisibilityTimeout=10";
@@ -494,7 +499,7 @@ function Camera51WithQueue(){
       if(this.readyState ===4) {
         if (this.status == 200) {
           var xmlDoc = xhr.responseXML;
-          x = xmlDoc.getElementsByTagName("ReceiveMessageResponse")[0];
+          var x = xmlDoc.getElementsByTagName("ReceiveMessageResponse")[0];
 
           x = x.getElementsByTagName("ReceiveMessageResult")[0];
           var res = _this.readMessages(x,searchFor );
@@ -610,7 +615,7 @@ function Camera51WithQueue(){
 
     var message = null;
     var messageBody = null;
-    var lengthMessages = messages.getElementsByTagName("Message").length
+    var lengthMessages = messages.getElementsByTagName("Message").length;
     for(i=0; i < lengthMessages; i++){
       message = messages.getElementsByTagName("Message")[i];
       messageBody = message.getElementsByTagName("Body")[0].textContent;
@@ -676,7 +681,7 @@ function Camera51WithQueue(){
   this.setSQSurl = function(sync){
 
     if(this.sessionToken == null || this.customerId == null){
-      console.error("can not retreive sqs url, sessionToken: " +this.sessionToken + " customerId " + this.customerId);
+      console.error("can not retrieve sqs url, sessionToken: " +this.sessionToken + " customerId " + this.customerId);
       return;
     }
 
@@ -735,9 +740,16 @@ function Camera51WithQueue(){
       if (xhttp.readyState == 4 && xhttp.status == 200) {
         try{
           var res = JSON.parse(xhttp.responseText);
-          _this.addSearchArray(element, res.response.sessionId);
-          _this.startSQS();
+          _this.callbackAsyncRequest(res);
+          if(res.hasOwnProperty("response") && res.response.hasOwnProperty("sessionId")){
+            _this.addSearchArray(element, res.response.sessionId);
+            _this.startSQS();
+          } else {
+            _this.callbackAsyncRequestError(res);
+            console.error(err);
+          }
         } catch(err) {
+          _this.callbackAsyncRequestError(err);
           console.error(err);
         }
       }
@@ -749,4 +761,10 @@ function Camera51WithQueue(){
   };
 
   this.loaded();
-};
+}
+
+function noop(){
+  //do nothing
+}
+
+})(this, document);
