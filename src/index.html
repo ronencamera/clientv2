@@ -12,6 +12,62 @@
       margin: 0px;
       background-color: white;
     }
+    #show-tutorial-first-time {
+      display: none;
+      position: absolute;
+      top: 3%;
+      margin: 37px;
+      left: 80px;
+      width: 43%;
+      margin: auto 0;
+      padding: 20px;
+      opacity: 1;
+      background-color: rgb(97, 97, 97);
+      color: white;
+    }
+    .md-button {
+      padding: 0 6px 0 6px;
+      /*margin: 6px 8px 6px 8px;*/
+      min-width: 88px;
+      border-radius: 3px;
+      cursor:  pointer !important;;
+      text-align: center;
+      text-transform: uppercase;
+      text-decoration:none;
+      border: none;
+      outline: none;
+      padding: 4px;
+    }
+    .md-button {
+      color : currentColor;
+    }
+    .md-button:not([disabled]):hover {
+      background-color: rgba(158, 158, 158, 0.2);
+       padding: 4px;
+
+    }
+    .md-button[disabled] {
+      color : rgba(0, 0, 0, 0.26);
+      background-color: transparent;
+    }
+    .animate-hide {
+      -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 2s;
+      -moz-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 2s;
+      -o-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 2s;
+      transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 2s;
+      line-height:20px;
+      opacity:1;
+      padding:10px;
+      background:white;
+      position: absolute;
+      left: 0;
+      top: 10px;
+    }
+    .animate-hide.ng-hide {
+      left: -100%;
+      opacity:0;
+      padding:0 10px;
+    }
   </style>
   <script>
     (function (i, s, o, g, r, a, m) {
@@ -37,9 +93,57 @@
   <app-malabi lang="en" shadow="true">
   </app-malabi>
 </div>
+<div id="show-tutorial-first-time" class="animate-hide">
+  Use <span style="color:#f44336">MARK BACKGROUND</span>  to adjust the background.<br>
+  Use <span style="color:#7cb342">MARK OBJECT</span> for the object.<br>
+  The Background Remover will automatically make adjustments, so there is no need to be precise.<br><br>
 
+  <b style="color:#7cb342;float: right;margin-left: 80%;" class="md-button">GOT IT</b>
+</div>
 
 <script>
+  var flagShowTutorial = false;
+  window.onload=function(){
+    if(getCookie("camera51Tutorial") == ""){
+      document.getElementById("show-tutorial-first-time").style.display = 'block';
+      flagShowTutorial = true;
+    }
+  };
+
+
+  window.addEventListener("click", function(){
+    if(flagShowTutorial){
+      //document.getElementById('show-tutorial-first-time').style.display= "none";
+      var fadeTarget = document.getElementById("show-tutorial-first-time");
+      var fadeEffect = setInterval(function () {
+        if (!fadeTarget.style.opacity) {
+          fadeTarget.style.opacity = 1;
+        }
+        if (fadeTarget.style.opacity < 0.1) {
+          clearInterval(fadeEffect);
+        } else {
+          fadeTarget.style.opacity -= 0.5;
+        }
+      }, 100);
+      document.cookie = "camera51Tutorial=seen";
+    }
+  });
+
+  function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0)==' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length,c.length);
+      }
+    }
+    return "";
+  }
+
   var customerId = 0;
   var sessionId = 0;
   var parentDocHeight = document.documentElement.clientHeight;
@@ -62,13 +166,13 @@
       if (e.data.customerId != '' && e.data.customerId !== undefined && e.data.trackId) {
         sessionId = getSession(e.data.trackId);
 
-        ga('send', 'event', 'CLIENT', 'setTrackId', "customerId=" + customerId + ",sessionId=" + sessionId);
+        ga('send', 'event', 'CLIENT', 'setTrackId', "customerId=" + customerId + ",trackId=" + e.data.trackId);
         if (e.data.hasOwnProperty('objInJsonString')) {
           window.camera51App.zone.run(function () {
             window.camera51Edit.setTrackId(e.data.objInJsonString);
           });
         } else {
-          console.log(e.data);
+
           var ob = {};
           ob.trackId = e.data.trackId;
           ob.customerId = e.data.customerId;
@@ -106,7 +210,6 @@
       if (e.data.backgroundColor) {
         document.body.style.backgroundColor = e.data.backgroundColor;
       }
-      //   console.log(result);
       if (result == "openEdit") {
         ga('send', 'event', 'CLIENT', 'openEdit', "customerId=" + customerId + ",sessionId=" + sessionId);
         window.camera51App.zone.run(function () {
@@ -115,7 +218,6 @@
         return;
       }
       if (result == 'setColor_colorBG') {
-
         ga('send', 'event', 'CLIENT', 'drawFG', "customerId=" + customerId + ",sessionId=" + sessionId);
         window.camera51App.zone.run(function () {
           window.camera51Edit.setColor('colorBG')
@@ -130,7 +232,6 @@
         return;
       }
       if (result == 'saveImage') {
-
         window.camera51App.zone.run(function () {
           window.camera51Edit.saveImage()
         });
