@@ -226,8 +226,6 @@ export class Editoraa {
       this.runGetTracker(this.showimageService.customerId, this.showimageService.trackId);
 
     }
-
-
   }
 
   getSession(path) {
@@ -296,7 +294,7 @@ export class Editoraa {
     this.maskHidden = false;
     this.flagShowResult = false;
 
-    //this.showEditorView = 'none';
+    this.showEditorView = 'none';
     this.startLoader();
 
     this.initDrawArrays(null);
