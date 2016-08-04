@@ -530,7 +530,14 @@ function Camera51WithQueue(){
     if( typeof res.trackId === 'string'){
       trackId = res.trackId;
     }
-    this.showImageCallback(elem, img , processingResultCode, trackId);
+
+    var imga = new Image();
+    var _this = this;
+    imga.onload = function () {
+      _this.showImageCallback(elem, img , processingResultCode, trackId);
+    };
+    imga.src = img;
+
   };
 
   // Can be overridden. using camera51.showImageCallbackOverride
@@ -545,7 +552,7 @@ function Camera51WithQueue(){
     var wrapper = document.createElement('div');
     if (processingResultCode == 0) {
 
-      //console.log(imgUrl);
+
       var img = document.createElement('img');
       img.src = imgUrl;
      // img.id = "theImg-" + elem.id;
