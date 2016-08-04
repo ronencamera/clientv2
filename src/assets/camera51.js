@@ -413,7 +413,7 @@ function Camera51WithQueue(){
   this.requestStopSQSrequests = false;
   this.camera51Text = camera51Text;
   this.iframeElement = null;
-
+  this.queueStringIdentifier = "camera51.sqsUrl";
   this.callbackAsyncRequestError = noop;
   this.callbackAsyncRequest = noop;
 
@@ -530,15 +530,16 @@ function Camera51WithQueue(){
     if( typeof res.trackId === 'string'){
       trackId = res.trackId;
     }
-    if ( typeof this.showImageCallbackOverride === 'function' ) {
-      this.showImageCallbackOverride(elem, img , processingResultCode, trackId);
-    } else {
-      this.showImageCallback(elem, img , processingResultCode, trackId);
-    }
+    this.showImageCallback(elem, img , processingResultCode, trackId);
   };
 
   // Can be overridden. using camera51.showImageCallbackOverride
   this.showImageCallback = function(elem, imgUrl , processingResultCode, trackId){
+    if ( typeof this.showImageCallbackOverride === 'function' ) {
+      this.showImageCallbackOverride(elem, imgUrl , processingResultCode, trackId);
+
+    } else {
+
     var elementHeight = elem.clientHeight;
     var maxImage = elementHeight - 45;
     var wrapper = document.createElement('div');
@@ -608,6 +609,7 @@ function Camera51WithQueue(){
 
         //elem.style.cursor = "pointer";
       }
+    }
   };
 
   this.readMessages = function(messages, searchKey){
@@ -676,6 +678,23 @@ function Camera51WithQueue(){
     return this.sqsUrl;
   };
 
+  this.validateSQS = function (url) {
+    var _this = this;
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == 4 && xhttp.status == 200) {
+
+      }
+      if (xhttp.readyState == 4 && xhttp.status == 400) {
+        _this.requestNewSQSURL();
+      }
+
+    };
+    var a = url+"?Action=ReceiveMessage&WaitTimeSeconds=0&VisibilityTimeout=0";
+    xhttp.open("GET", a, true);
+    xhttp.send();
+  };
+
 
   this.setSQSurl = function(sync){
 
@@ -684,14 +703,20 @@ function Camera51WithQueue(){
       return;
     }
 
-    var _this = this;
-    var queueStringIdentifier = "camera51.sqsUrl";
     var sqsUrl = null;
-    if(this.getCookie(queueStringIdentifier)){
-      sqsUrl = this.getCookie(queueStringIdentifier);
+    if(this.getCookie(this.queueStringIdentifier)){
+      sqsUrl = this.getCookie(this.queueStringIdentifier);
       this.sqsUrl = sqsUrl;
+      this.validateSQS(sqsUrl);
       return sqsUrl;
     }
+    this.requestNewSQSURL(sync);
+
+  };
+
+  this.requestNewSQSURL = function(sync){
+    var _this = this;
+    var sqsUrl;
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (xhttp.readyState == 4 && xhttp.status == 200) {
@@ -712,7 +737,7 @@ function Camera51WithQueue(){
         var days = 1000 * 60 * 60 * 24 * 10;
         date.setTime(date.getTime() + days);
         document.cookie =
-          queueStringIdentifier +'=' + sqsUrl +
+          _this.queueStringIdentifier +'=' + sqsUrl +
           '; expires=' + date.toUTCString() +
           '; path=/';
 
@@ -726,6 +751,7 @@ function Camera51WithQueue(){
     xhttp.send("token="+this.sessionToken+"&customerId="+this.customerId);
 
   };
+
 
   this.requestAsync = function(origImgUrl, element, uniqueTrackId){
     var _this = this;
@@ -756,7 +782,7 @@ function Camera51WithQueue(){
     xhttp.open("POST", this.apiUrl + "/Camera51Server/processImageAsync", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send("token="+this.sessionToken+"&customerId="+this.customerId+"&trackId="+uniqueTrackId
-        +"&origImgUrl="+origImgUrl+"&callbackURL="+this.getSQSurl());
+        +"&origImgUrl="+origImgUrl+"&callbackURL="+this.sqsUrl);
   };
 
   this.loaded();
