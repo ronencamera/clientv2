@@ -25,18 +25,19 @@ var camera51WithQueue = new Camera51WithQueue();
   window.camera51WithQueue = camera51WithQueue;
 
   var camera51Text = {
-  "show-result"     : "show result",
-  "back-to-edit"    : "back to edit",
-  "tooltip-mark-background" : "Draw lines to mark areas you want to remove from the image",
-  "tooltip-mark-object" : "Draw lines to mark areas you want to keep in the image",
+    "show-result"     : "show result",
+    "back-to-edit"    : "back to edit",
+    "tooltip-mark-background" : "Draw lines to mark areas you want to remove from the image",
+    "tooltip-mark-object" : "Draw lines to mark areas you want to keep in the image",
 
-  "error-header-default": "Press here for manual background removal",
-  "error-header-image-failure": "Image error",
-  "error-text-5" : "Background was not automatically removed since the image <b>already has a white background</b>",
-  "error-text-2" : "Background was not automatically removed due to <b>low contrast</b>",
-  "error-text-4" : "Background was not automatically removed due to a <b>cluttered background</b>",
-  "error-text-103" : "Image <b>too small</b> to be processed",
-  "error-text-101" : "Image cannot be processed",
+    "error-header-default": "Press here for manual background removal",
+    "error-header-image-failure": "Image error",
+    "error-text-5" : "Background was not automatically removed since the image <b>already has a white background</b>",
+    "error-text-2" : "Background was not automatically removed due to <b>low contrast</b>",
+    "error-text-4" : "Background was not automatically removed due to a <b>cluttered background</b>",
+    "error-text-103" : "Image <b>too small</b> to be processed",
+    "error-text-101" : "Image cannot be processed",
+    "error-text-default" : "Background was not automatically removed, you may remove it manually"
 };
 
 
@@ -154,8 +155,6 @@ function camera51obj(obj) {
 
     });
   };
-
-
 
   var frameDomain = this.camera51HelperExtractDomain(iframeSrc);
 	var iframe = document.createElement('iframe');
@@ -399,14 +398,10 @@ function camera51obj(obj) {
       }
     }
   });
-
-
 }
 
 
 function Camera51WithQueue(){
-  //var apiUrl = "http://sandbox.malabi.co/Camera51Server/processImageAsync";
-
   var searchFor = "sessionId";
   var searchArray = [];
   var arrayElements = [];
@@ -584,7 +579,11 @@ function Camera51WithQueue(){
       wrapper.appendChild(header);
       var errorText = document.createElement('div');
       var str = "error-text-"+ processingResultCode;
-      errorText.innerHTML = camera51Text[str];
+      if(camera51Text.hasOwnProperty(str) ){
+        errorText.innerHTML = camera51Text[str];
+      } else {
+        errorText.innerHTML = camera51Text["error-text-default"];
+      }
       errorText.className = "camera51-error-text";
       wrapper.appendChild(errorText);
       elem.appendChild(wrapper);
