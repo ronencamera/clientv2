@@ -13,10 +13,13 @@ body {
   max-height: 200px;
   max-width: 200px;
 }
-
+.font14{
+  font-size: 14px;
+}
 .modal {
   max-height: 100%;
   width: 80%;
+  z-index: 3;
 }
 .roboto {
   font-family: Roboto, sans-serif;

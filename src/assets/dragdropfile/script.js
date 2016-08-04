@@ -36,7 +36,7 @@ $(document).ready(function () {
       sessionTokenReady(sessionToken);
     }
     if(customerToken == null){
-      $('#show-token-error').show();
+      $('#show-token-error').openModal();
       $('#errorSubject').html("Missing token");
       $('#errorMessage').html("Token is missing, please contact info@malabi.co");
       return;
@@ -96,9 +96,10 @@ $(document).ready(function () {
         img.src = _URL.createObjectURL(file);
       },
       showerrors: function (msg) {
-        $('#show-token-error').show();
-        $('#errorSubject').html("Error uploading");
-        $('#errorMessage').html("You may upload a MAXIMUM of 30 files at a time");
+      //  $('#show-token-error').show();
+        $('#show-token-error').openModal();
+        $('#errorSubject').html("Images were not uploaded");
+        $('#errorMessage').html("You may upload a MAXIMUM of 30 images at a time");
       }
     }
   };
@@ -240,8 +241,10 @@ if(params.customerId && params.token){
   customerId = params.customerId;
   customerSessionToken = params.token;
 } else {
-   $('#show-token-error').show();
 
+  $('#show-token-error').openModal();
+  $('#errorSubject').html("Missing token");
+  $('#errorMessage').html("Token is missing, please contact info@malabi.co");
 }
 
 function download(img) {

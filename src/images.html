@@ -28,19 +28,19 @@
 
 </div>
 
-<div id="show-token-error" style="display:none">
-  <div class="row">
-    <div class="col s12 m6">
-      <div class="card blue-grey darken-1">
-        <div class="card-content white-text">
-          <span class="card-title" id="errorSubject">Token Error</span>
-          <p id="errorMessage"> Token is missing, please contact info@malabi.co</p>
-        </div>
 
-      </div>
-    </div>
+<!-- Modal error messages -->
+<div id="show-token-error" class="modal">
+  <div class="modal-content">
+    <h5 id="errorSubject"></h5>
+    <p id="errorMessage" class="font14"></p>
+  </div>
+  <div class="modal-footer">
+    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat font14" >Close</a>
   </div>
 </div>
+
+
 
 <div style="text-align: center;">
   <a id="select-all" class="waves-effect waves-light btn-large">Select all</a>
