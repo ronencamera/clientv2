@@ -572,7 +572,12 @@ function Camera51WithQueue(){
     imga.onload = function () {
       _this.showImageCallback(elem, img , processingResultCode, trackId);
     };
-    imga.src = img;
+    if(processingResultCode == 0){
+      imga.src = img;
+    } else {
+      this.showImageCallback(elem, img , processingResultCode, trackId);
+    }
+    
 
   };
 

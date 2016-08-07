@@ -120,6 +120,7 @@
       var fadeEffect = setInterval(function () {
         if (!fadeTarget.style.opacity) {
           fadeTarget.style.opacity = 1;
+
         }
         if (fadeTarget.style.opacity < 0.1) {
           clearInterval(fadeEffect);
@@ -128,6 +129,11 @@
         }
       }, 100);
       document.cookie = "camera51Tutorial=seen";
+      setTimeout(function () {
+        fadeTarget.style.display = "none";
+
+      }, 700);
+
     }
   });
 
