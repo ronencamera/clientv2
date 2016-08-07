@@ -268,6 +268,7 @@ function camera51obj(obj) {
   iframe.addEventListener("load", function() {
     unsandboxedFrame = document.getElementById('camera51Frame');
     _this.stopLoader(_this.obj.RETURN_IFRAME);
+    _this.enableButtons();
     _this.setEditorText();
     if(_this.obj.hasOwnProperty('apiUrl')) {
       unsandboxedFrame.contentWindow.postMessage({'initCamera51':JSON.stringify(obj)},frameDomain);
@@ -577,7 +578,7 @@ function Camera51WithQueue(){
     } else {
       this.showImageCallback(elem, img , processingResultCode, trackId);
     }
-    
+
 
   };
 
