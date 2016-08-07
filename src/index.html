@@ -27,7 +27,6 @@
     }
     .md-button {
       padding: 0 6px 0 6px;
-      /*margin: 6px 8px 6px 8px;*/
       min-width: 88px;
       border-radius: 3px;
       cursor:  pointer !important;;
@@ -102,14 +101,17 @@
 </div>
 
 <script>
+  var showTutorial = true;
   var flagShowTutorial = false;
-  window.onload=function(){
-    if(getCookie("camera51Tutorial") == ""){
+
+
+
+  function callShowTutorial(){
+    if(showTutorial == true && getCookie("camera51Tutorial") == ""){
       document.getElementById("show-tutorial-first-time").style.display = 'block';
       flagShowTutorial = true;
     }
-  };
-
+  }
 
   window.addEventListener("click", function(){
     if(flagShowTutorial){
@@ -165,7 +167,6 @@
       result = e.data;
       if (e.data.customerId != '' && e.data.customerId !== undefined && e.data.trackId) {
         sessionId = getSession(e.data.trackId);
-
         ga('send', 'event', 'CLIENT', 'setTrackId', "customerId=" + customerId + ",trackId=" + e.data.trackId);
         if (e.data.hasOwnProperty('objInJsonString')) {
           window.camera51App.zone.run(function () {
@@ -194,6 +195,11 @@
         if (a.customerId) {
           customerId = a.customerId;
         }
+        if (a.showTutorial === false) {
+          showTutorial = false;
+        }
+
+        callShowTutorial();
 
         window.camera51App.zone.run(function () {
           window.camera51Edit.initApp(e.data.initCamera51);

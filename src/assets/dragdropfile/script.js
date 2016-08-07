@@ -29,6 +29,20 @@ $(document).ready(function () {
     });
   });
 
+  camera51WithQueue.callbackAsyncRequestError = function(mes){
+    $('#show-token-error').openModal();
+    $('#errorSubject').html("callbackAsyncRequestError");
+    $('#errorMessage').html(mes);
+  };
+
+  camera51WithQueue.callbackNewSQSRequestError = function(mes){
+    $('#show-token-error').openModal();
+    $('#errorSubject').html("callbackNewSQSRequestError");
+    $('#errorMessage').html("Error in creating SQS, please contact info@malabi.co <br> <br> error " + mes);
+  };
+
+
+
   function getCamera51SessionToken(){
     var cookieForSession = "camera51.sessionToken";
     if(camera51WithQueue.getCookie(cookieForSession)){

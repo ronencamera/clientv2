@@ -62,6 +62,10 @@ function initCamera51(obj) {
   window.camera51 = new camera51obj(obj);
 }
 
+var showTutorial = true;
+var overrideTutorialElement = null;
+var injectStyleToIframe = null;
+
 function camera51obj(obj) {
   obj.RETURN_IFRAME = 1;
   obj.RETURN_EDITOR = 2;
@@ -70,11 +74,18 @@ function camera51obj(obj) {
   var trackId = null;
   var imageElement = null;
   this.camera51Text = camera51Text;
+  obj.showTutorial = showTutorial;
+  this.overrideTutorialElement = overrideTutorialElement;
+  this.injectStyleToIframe = injectStyleToIframe; // has to be type style.
 
   if (obj.hasOwnProperty('apiUrl') && obj.apiUrl.length > 1) {
     apiUrl = obj.apiUrl;
   } else {
     apiUrl = "//api.malabi.co";
+  }
+
+  if (obj.hasOwnProperty('camera51Text')) {
+    this.camera51Text = Object.assign(this.camera51Text, obj.camera51Text);
   }
 
   if (obj.hasOwnProperty('camera51Text')) {
@@ -89,6 +100,9 @@ function camera51obj(obj) {
     iframeSrc = window.location.protocol+"//assets-malabi.s3.amazonaws.com/version/v2/index.html";
     // For development, if working in local host, use local iframe file:
     if (document.location.hostname == "localhost") {
+      iframeSrc ="index.html";
+    }
+    if (document.location.hostname.indexOf("sandbox-malabi") !== -1) {
       iframeSrc ="index.html";
     }
   }
@@ -158,6 +172,7 @@ function camera51obj(obj) {
 
   var frameDomain = this.camera51HelperExtractDomain(iframeSrc);
 	var iframe = document.createElement('iframe');
+  this.iframeElement = iframe;
   this.obj = obj;
 
   this.startLoader = function(){
@@ -232,6 +247,7 @@ function camera51obj(obj) {
   };
   var element =  document.getElementById('camera51Frame');
   if (element == null || typeof(element) == 'undefined') {   // If iframe doesn't exist, create it.
+
     this.startLoader();
     iframe.frameBorder=0;
     iframe.width="100%";
@@ -239,8 +255,11 @@ function camera51obj(obj) {
     iframe.id="camera51Frame";
     iframe.setAttribute("src", iframeSrc);
     iframe.style = "border:0;";
+
     document.getElementById(obj.elementId).appendChild(iframe);
-    this.iframeElement =  document.getElementById(obj.elementId);
+
+
+  //  this.iframeElement =  document.getElementById(obj.elementId);
   }
 
   var unsandboxedFrame;
@@ -256,6 +275,15 @@ function camera51obj(obj) {
     if(_this.obj.hasOwnProperty('backgroundColor')) {
       unsandboxedFrame.contentWindow.postMessage({'backgroundColor':_this.obj.backgroundColor},frameDomain);
     }
+    if(_this.injectStyleToIframe){
+      _this.iframeElement.contentDocument.head.appendChild(_this.injectStyleToIframe);
+    }
+    if(_this.overrideTutorialElement){
+      _this.iframeElement.contentDocument.getElementById("show-tutorial-first-time").innerHTML ="";
+      _this.iframeElement.contentDocument.getElementById("show-tutorial-first-time").
+        appendChild(_this.overrideTutorialElement);
+    }
+
   });
 
   this.setDataOriginalUrl = function(obj) {
@@ -416,11 +444,19 @@ function Camera51WithQueue(){
   this.queueStringIdentifier = "camera51.sqsUrl";
   this.callbackAsyncRequestError = noop;
   this.callbackAsyncRequest = noop;
+  this.callbackNewSQSRequestError = noop; // error during request sqs
+
+
+
 
   this.init = function(obj){
     this.customerId = obj.customerId;
     this.sessionToken = obj.sessionToken;
     this.camera51Text = obj.camera51Text;
+    showTutorial = (obj.showTutorial === false) ? false : showTutorial;
+    overrideTutorialElement = (obj.overrideTutorialElement) ? obj.overrideTutorialElement : null;
+    injectStyleToIframe = (obj.injectStyleToIframe) ? obj.injectStyleToIframe : null;
+
     var apiUrl = null;
     if (obj.hasOwnProperty('apiUrl') && obj.apiUrl.length > 1) {
       apiUrl = obj.apiUrl;
@@ -733,11 +769,11 @@ function Camera51WithQueue(){
           try {
             var errorM = res.response.errors;
             console.error("Error", errorM[0]);
+            _this.callbackNewSQSRequestError(errorM[0]);
             //alert("Camera51 error: "+errorM[0]);
           } catch (er){
             console.error(er);
           }
-
           return;
         }
         var date = new Date();
@@ -770,20 +806,16 @@ function Camera51WithQueue(){
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (xhttp.readyState == 4 && xhttp.status == 200) {
-        try{
+
           var res = JSON.parse(xhttp.responseText);
           _this.callbackAsyncRequest(res);
           if(res.hasOwnProperty("response") && res.response.hasOwnProperty("sessionId")){
             _this.addSearchArray(element, res.response.sessionId);
             _this.startSQS();
           } else {
-            _this.callbackAsyncRequestError(res);
-            console.error(err);
+            _this.callbackAsyncRequestError(JSON.stringify(res.response));
+            console.error(res.response);
           }
-        } catch(err) {
-          _this.callbackAsyncRequestError(err);
-          console.error(err);
-        }
       }
     };
     xhttp.open("POST", this.apiUrl + "/Camera51Server/processImageAsync", true);

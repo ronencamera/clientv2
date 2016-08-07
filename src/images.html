@@ -125,12 +125,26 @@
 
   $(document).ready(function () {
 
+    var css = 'body { background: red; }';
+
+    var s = document.createElement("style");
+    ts = 'text/css';
+    s.appendChild(document.createTextNode(css));
+    //  this.overrideTutorialElement.styleSheet.cssText = css;
+
+var myTutorial = document.createElement("div");
+    myTutorial.style.direction = "rtl";
+    myTutorial.innerHTML = " גם זה טוב";
+
     // call to initialize the Camera51 object
     camera51WithQueue.init({
       "customerId": customerId,
       "sessionToken": customerSessionToken,
       "camera51EditorIframe": camera51EditorIframe,
       // "camera51Text": myTranslation  // add your translation object here
+//      "showTutorial": false,
+    //  "injectStyleToIframe" : s
+    //  "overrideTutorialElement": myTutorial
     });
 
   });
