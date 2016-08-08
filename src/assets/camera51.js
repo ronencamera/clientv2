@@ -20,27 +20,25 @@ var camera51; // Object for Interacting with the editor.
 var camera51UserFunctions = new Camera51UserFunctions(); // Object, functions for registering analytics events.
 var camera51WithQueue = new Camera51WithQueue();
 
-  window.camera51 = camera51;
-  window.camera51UserFunctions = camera51UserFunctions;
-  window.camera51WithQueue = camera51WithQueue;
+window.camera51 = camera51;
+window.camera51UserFunctions = camera51UserFunctions;
+window.camera51WithQueue = camera51WithQueue;
 
-  var camera51Text = {
-    "show-result"     : "show result",
-    "back-to-edit"    : "back to edit",
-    "tooltip-mark-background" : "Draw lines to mark areas you want to remove from the image",
-    "tooltip-mark-object" : "Draw lines to mark areas you want to keep in the image",
+var camera51Text = {
+  "show-result"     : "show result",
+  "back-to-edit"    : "back to edit",
+  "tooltip-mark-background" : "Draw lines to mark areas you want to remove from the image",
+  "tooltip-mark-object" : "Draw lines to mark areas you want to keep in the image",
 
-    "error-header-default": "Press here for manual background removal",
-    "error-header-image-failure": "Image error",
-    "error-text-5" : "Background was not automatically removed since the image <b>already has a white background</b>",
-    "error-text-2" : "Background was not automatically removed due to <b>low contrast</b>",
-    "error-text-4" : "Background was not automatically removed due to a <b>cluttered background</b>",
-    "error-text-103" : "Image <b>too small</b> to be processed",
-    "error-text-101" : "Image cannot be processed",
-    "error-text-default" : "Background was not automatically removed, you may remove it manually"
+  "error-header-default": "Press here for manual background removal",
+  "error-header-image-failure": "Image error",
+  "error-text-5" : "Background was not automatically removed since the image <b>already has a white background</b>",
+  "error-text-2" : "Background was not automatically removed due to <b>low contrast</b>",
+  "error-text-4" : "Background was not automatically removed due to a <b>cluttered background</b>",
+  "error-text-103" : "Image <b>too small</b> to be processed",
+  "error-text-101" : "Image cannot be processed",
+  "error-text-default" : "Background was not automatically removed, you may remove it manually"
 };
-
-
 
 function Camera51UserFunctions(){};
 
@@ -58,7 +56,8 @@ Camera51UserFunctions.prototype.sendEventResultImage = function(resultImageUrl, 
   xhttp.send("customerId="+customerId+"&resultImageUrl="+resultImageUrl+"&type="+type);
 };
 
-function initCamera51(obj) {
+
+this.initCamera51 = function(obj) {
   window.camera51 = new camera51obj(obj);
 }
 

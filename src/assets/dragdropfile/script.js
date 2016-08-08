@@ -5,7 +5,13 @@ var apiUrl = "http://api.malabi.co";
 var customerId = null;
 var customerToken = null;
 
+window.onbeforeunload = function() {
+  var numItems = $('.eachImage').length;
+  if(numItems >0){
+    return "Data will be lost if you leave the page, are you sure?";
+  }
 
+};
 
 $(document).ready(function () {
 

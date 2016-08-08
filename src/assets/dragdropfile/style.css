@@ -7,6 +7,13 @@ body {
   font-family: Roboto, sans-serif;
   font-size: initial;
 }
+.zoomRippel{
+  margin-left: 20px;
+  color: #393b4b;
+  margin-top: 7px;
+  margin-right: 6px;
+  margin-bottom: 4px;
+}
 
 .malabiBG{
   background-color: #393b4b;
@@ -29,7 +36,7 @@ body {
   font-size: initial;
 }
 .material-tooltip {
-  width: 200px;
+  width: 180px;
 }
 a {
   cursor: pointer !important;

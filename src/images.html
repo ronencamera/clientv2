@@ -81,12 +81,12 @@
     <a id="camera51-zoom-in" class="waves-effect waves-circle transparent"
        style="position: absolute;top: 148px;left: 30px" onmousedown="camera51.onclickLongZoomIn()"
        onmouseup="camera51.onmouseupLongZoomIn()">
-      <i class="material-icons right small" style="color:#393b4b;">zoom_in</i>
+      <i class="material-icons right small zoomRippel" style="color:#393b4b;">zoom_in</i>
     </a>
     <a id="camera51-zoom-out" class="waves-effect waves-circle transparent"
        style="position: absolute;top: 182px;left: 30px" onmousedown="camera51.onclickLongZoomOut()"
        onmouseup="camera51.onmouseupLongZoomOut()">
-      <i class="material-icons right small" style="color:#393b4b;">zoom_out</i>
+      <i class="material-icons right small zoomRippel" style="color:#393b4b;">zoom_out</i>
     </a>
   </div>
   <div class="progress" style="margin: 0px;visibility: hidden;height: 3px" id="camera51-loader">
@@ -117,36 +117,17 @@
    * override text with localization
    * see full list of keys in documentation
    */
-  var myTranslation = {
-    "show-result": "הצג תוצאה",
-    "back-to-edit": "חזור לעריכה",
 
-  };
 
   $(document).ready(function () {
 
-    var css = 'body { background: red; }';
-
-    var s = document.createElement("style");
-    ts = 'text/css';
-    s.appendChild(document.createTextNode(css));
-    //  this.overrideTutorialElement.styleSheet.cssText = css;
-
-var myTutorial = document.createElement("div");
-    myTutorial.style.direction = "rtl";
-    myTutorial.innerHTML = " גם זה טוב";
 
     // call to initialize the Camera51 object
     camera51WithQueue.init({
       "customerId": customerId,
       "sessionToken": customerSessionToken,
       "camera51EditorIframe": camera51EditorIframe,
-      // "camera51Text": myTranslation  // add your translation object here
-//      "showTutorial": false,
-    //  "injectStyleToIframe" : s
-    //  "overrideTutorialElement": myTutorial
     });
-
   });
 
 
