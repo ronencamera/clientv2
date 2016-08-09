@@ -38,6 +38,9 @@ body {
 .material-tooltip {
   width: 180px;
 }
+.modal-footer{
+  height: 82px !important;
+}
 a {
   cursor: pointer !important;
 }

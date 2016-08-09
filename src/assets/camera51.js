@@ -25,7 +25,7 @@ window.camera51UserFunctions = camera51UserFunctions;
 window.camera51WithQueue = camera51WithQueue;
 
 var camera51Text = {
-  "show-result"     : "show result",
+  "show-result"     : "preview result",
   "back-to-edit"    : "back to edit",
   "tooltip-mark-background" : "Draw lines to mark areas you want to remove from the image",
   "tooltip-mark-object" : "Draw lines to mark areas you want to keep in the image",

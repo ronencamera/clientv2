@@ -56,35 +56,35 @@
 <!-- Modal Structure -->
 <div id="modal1" class="modal" style="margin-bottom: -8px; ">
   <div class="modal-content" style="padding-top: 20px;padding-bottom: 5px;background-color: #393b4b;">
-    <a style="position: absolute; right: 0px; top: 16px;"
-       class=" modal-action modal-close waves-effect waves-light btn-flat">
-      <i style="font-size: 31px;color: white" class="material-icons right">close</i>
+    <a style="position: absolute; right: 11px; top: 16px;"
+       class="btn-floating modal-action modal-close waves-effect waves-light btn-flat">
+      <i style="font-size: 24px;color: white" class="material-icons right">close</i>
     </a>
     <div style="font-family: Roboto, sans-serif; font-size: 24px; color: white;margin-bottom: 6px;">Background Remover
       Edit
     </div>
     <a id="camera51-btn-mark-object" class="waves-effect waves-light btn-flat roboto tooltipped"
        data-position="bottom" data-delay="50" data-tooltip="Draw lines to mark areas you want to keep in the image"
-       style="color:#7cb342;font-size: initial;padding: 0px;" onclick="camera51.setColor('colorFG');">
+       style="color:#7cb342;font-size: 14px;padding-right: 10px; padding-left: 10px;" onclick="camera51.setColor('colorFG');">
       <i class="material-icons left" style="color:#7cb342;padding-right: 0px;margin-right: 10px;font-size: 24px;">add_circle</i>
       Mark Object
     </a>
     <a id="camera51-btn-mark-background" class="waves-effect waves-light  btn-flat roboto tooltipped"
        data-position="bottom" data-delay="50" data-tooltip="Draw lines to mark areas you want to remove from the image"
-       style="margin-left:10px;color:#f44336;font-size: initial;padding: 0px;" onclick="camera51.setColor('colorBG');">
+       style="margin-left:10px;color:#f44336;font-size: 14px;padding-right: 10px; padding-left: 10px;" onclick="camera51.setColor('colorBG');">
       <i class="material-icons left" style="color:#f44336;padding-right: 0px;margin-right: 10px;font-size: 24px;">remove_circle</i>
       Mark Background
     </a>
-    <a id="camera51-btn-undo" class="waves-effect waves-light btn-flat roboto" style="color: white;font-size: initial;"
+    <a id="camera51-btn-undo" class="waves-effect waves-light btn-flat roboto" style="color: white;font-size: 14px;"
        onclick="camera51.undo()">UNDO</a>
     <br>
     <a id="camera51-zoom-in" class="waves-effect waves-circle transparent"
-       style="position: absolute;top: 148px;left: 30px" onmousedown="camera51.onclickLongZoomIn()"
+       style="position: absolute;top: 141px;left: 36px" onmousedown="camera51.onclickLongZoomIn()"
        onmouseup="camera51.onmouseupLongZoomIn()">
       <i class="material-icons right small zoomRippel" style="color:#393b4b;">zoom_in</i>
     </a>
     <a id="camera51-zoom-out" class="waves-effect waves-circle transparent"
-       style="position: absolute;top: 182px;left: 30px" onmousedown="camera51.onclickLongZoomOut()"
+       style="position: absolute;top: 194px;left: 36px" onmousedown="camera51.onclickLongZoomOut()"
        onmouseup="camera51.onmouseupLongZoomOut()">
       <i class="material-icons right small zoomRippel" style="color:#393b4b;">zoom_out</i>
     </a>
@@ -98,10 +98,10 @@
   <div class="modal-footer" style="background-color: white ">
     <a id="camera51-btn-save-image" class=" btn white-text   waves-light btn-flat btn-large malabiBG "
        onclick="camera51.saveImage()"
-       style="">Save Image</a>
-    <a id="camera51-btn-show-result" class="waves-effect waves-teal btn-flat btn-large "
-       style=""
-       onclick="camera51.showResult()">Show Result</a>
+       style="font-size: 14px;margin-right: 9px; margin-left: 23px;">Save Changes</a>
+    <a id="camera51-btn-show-result" class="waves-effect waves-teal btn-flat btn "
+       style="font-size: 14px; margin-left: 10px; margin-top: 17px;"
+       onclick="camera51.showResult()">preview result</a>
   </div>
 </div>
 
