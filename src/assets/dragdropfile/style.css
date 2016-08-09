@@ -41,6 +41,10 @@ body {
 .modal-footer{
   height: 82px !important;
 }
+.btn-flat:hover {
+  background-color: rgba(0,0,0,0.6) !important;
+  box-shadow: none;
+}
 a {
   cursor: pointer !important;
 }
