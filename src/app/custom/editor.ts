@@ -1245,11 +1245,16 @@ that.cdr.detectChanges();
         _this.showimageService.resultEditMaskImageUrl = a.resultEditMaskImageUrl;
         _this.undoImageMaskStack.push(a.resultEditMaskImageUrl);
         _this.clearCanvas_simple();
+        _this.cdr.detectChanges();
+
       };
+
       imageObjMask.src = a.resultEditMaskImageUrl;
 
     }
     this.resetDrawing();
+
+
   }
 
   showInstructions() {
