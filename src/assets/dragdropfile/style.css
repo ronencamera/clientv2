@@ -41,8 +41,8 @@ body {
 .modal-footer{
   height: 82px !important;
 }
-.btn-flat:hover {
-  background-color: rgba(0,0,0,0.6) !important;
+#camera51-btn-save-image:hover {
+  background-color: rgba(0,0,0,0.6);
   box-shadow: none;
 }
 a {
