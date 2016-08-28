@@ -9,7 +9,7 @@
             <canvas #canvasElement id="camera51Canvas" class="cursorRed imageTransition" [ngClass]="{cursorGreen : isGreen}" (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)"
                 (mouseup)="onMouseUp($event)" (mouseout)="onMouseLeave($event)"  (mouseleave)="onMouseLeave($event)" width="{{canvasWidth}}" height="{{canvasHeight}}" [hidden]="maskHidden" style=" position: absolute; top: 0; left: 0;"></canvas>
             <img src="{{srcImageResult}}" [style.display]="showResultImage" class="nodrag transparentBg imageTransition" [style.width.px]="imageSizeWidth" [style.height.px]="imageSizeHeight"
-              style=" position: absolute; top: 0; left: 0;"/>
+              style=" position: absolute; top: 0; left: 0;" onmousedown="event.preventDefault ? event.preventDefault() : event.returnValue = false"/>
           </div>
       </div>
     </div>

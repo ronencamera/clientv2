@@ -57,9 +57,10 @@ Camera51UserFunctions.prototype.sendEventResultImage = function(resultImageUrl, 
 };
 
 
+
 this.initCamera51 = function(obj) {
   window.camera51 = new camera51obj(obj);
-}
+};
 
 var showTutorial = true;
 var overrideTutorialElement = null;
@@ -446,9 +447,6 @@ function Camera51WithQueue(){
   this.callbackAsyncRequest = noop;
   this.callbackNewSQSRequestError = noop; // error during request sqs
 
-
-
-
   this.init = function(obj){
     this.customerId = obj.customerId;
     this.sessionToken = obj.sessionToken;
@@ -596,6 +594,14 @@ function Camera51WithQueue(){
 
       var img = document.createElement('img');
       img.src = imgUrl;
+      img.onmousedown = function(event){
+        if(event.preventDefault){
+          event.preventDefault();
+        } else {
+          event.returnValue = false;
+        }
+
+      }
      // img.id = "theImg-" + elem.id;
       img.style.maxWidth = "100%";
       img.style.maxHeight = maxImage+"px";

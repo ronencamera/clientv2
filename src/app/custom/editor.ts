@@ -1003,7 +1003,10 @@ that.cdr.detectChanges();
   }
 
   onMouseDown(e) {
-
+    if (e.which != 1){
+      e.preventDefault();
+      return false;
+    }
     var mousePos = this.getMousePos(this.canvasElement.nativeElement, e);
     //  console.log(mousePos);
     this.paint_simple = true;
@@ -1026,6 +1029,10 @@ that.cdr.detectChanges();
   }
 
   onMouseUp(e) {
+    if (e.which != 1){
+      e.preventDefault();
+      return false;
+    }
     this.paint_simple = false;
     //  this.redrawSimple();
     this.preformEditRequest();

@@ -104,7 +104,11 @@
   var showTutorial = true;
   var flagShowTutorial = false;
 
-
+  window.oncontextmenu = function (e) {
+    console.log("Right Click Disabled");
+    e.preventDefault();
+    return false;
+  };
 
   function callShowTutorial(){
     if(showTutorial == true && getCookie("camera51Tutorial") == ""){

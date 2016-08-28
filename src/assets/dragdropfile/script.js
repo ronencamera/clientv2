@@ -6,7 +6,9 @@ var customerId = null;
 var customerToken = null;
 
 
-
+$(document).bind("contextmenu",function(e){
+  e.preventDefault()
+});
 
 
 $(window).bind('beforeunload', function(){
@@ -20,8 +22,6 @@ $(window).bind('beforeunload', function(){
 
 
 $(document).ready(function () {
-
-
   $("#select-all").click(function(){
     $(".camera51-select-image").prop('checked', true);
   });
@@ -93,11 +93,12 @@ $(document).ready(function () {
     });
   }
 
+  var MAX_FILES_TO_UPLOAD = 30;
   var dropbox;
   var _URL = window.URL;
   var oprand = {
     dragClass: "active",
-    maxFiles: 30,
+    maxFiles: MAX_FILES_TO_UPLOAD,
     on: {
       load: function (e, file) {
         // check file type
@@ -107,11 +108,18 @@ $(document).ready(function () {
           return false;
         }
         // check file size
-        if (parseInt(file.size / 1024) > 6050) {
-          alert("File \"" + file.name + "\" is too big.Max allowed size is 2 MB.");
+        if (parseInt(file.size / 1024) > 18050) {
+          alert("File \"" + file.name + "\" is too big.Max allowed size is 6 MB.");
           return false;
         }
 
+        var numItems = $('.eachImage').length;
+        if(numItems > MAX_FILES_TO_UPLOAD){
+          $('#show-token-error').openModal();
+          $('#errorSubject').html("Images were not uploaded");
+          $('#errorMessage').html("You may upload a MAXIMUM of "+MAX_FILES_TO_UPLOAD+" images");
+          return false;
+        }
         var img = new Image();
 
         img.onload = function () {
@@ -125,7 +133,7 @@ $(document).ready(function () {
       //  $('#show-token-error').show();
         $('#show-token-error').openModal();
         $('#errorSubject').html("Images were not uploaded");
-        $('#errorMessage').html("You may upload a MAXIMUM of 30 images at a time");
+        $('#errorMessage').html("You may upload a MAXIMUM of "+MAX_FILES_TO_UPLOAD+" images");
       }
     }
   };
@@ -136,7 +144,6 @@ $(document).ready(function () {
     console.log(e);
   }
 });
-
 
 create_box = function (e, file, size) {
   var loader = '<div class="preloader-wrapper">'
@@ -155,7 +162,7 @@ create_box = function (e, file, size) {
   var template = '<div class="eachImage z-depth-1" id="eachImage-' + rand + '">';
   template += '<div class="save-option"><input type="checkbox" class="camera51-select-image filled-in" id="filled-in-box-' + rand + '"  /> ' +
     '<label for="filled-in-box-' + rand + '" style="color: white">Select</label> <i style="font-size: initial;color: white;cursor: pointer !important;" title="remove" class="material-icons right" onclick="$(this).closest(\'.eachImage\').remove();">close</i></div>';
-  template += '<span class="preview" id="' + rand + '"><img src="' + src + '"><span class="overlay"><span class="updone"></span></span>';
+  template += '<span class="preview" id="' + rand + '" ><img src="' + src + '"><span class="overlay"><span class="updone"></span></span>';
   template += '</span>';
 //	template += '<div class="progress" id="'+rand+'"><span></span></div>';
   var x ;
@@ -179,7 +186,7 @@ create_box = function (e, file, size) {
 
   // upload image
   upload(file, rand);
-}
+};
 
 upload = function (file, rand) {
 
