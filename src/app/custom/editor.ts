@@ -639,8 +639,8 @@ that.cdr.detectChanges();
     this.clearCanvas_simple();
     this.showimageService.resultEditMaskImageUrl = imageMask.resultEditMaskImageUrl;
     this.preversioResponseObj = imageMask;
-
-    this.initDrawArrays();
+   // this.preversioResponseObj.resultEditMaskImageUrl = imageMask.resultEditMaskImageUrl;
+    this.initDrawArrays(null);
     this.redrawSimple();
 
     //this.setImageToCanvas(image);
@@ -686,8 +686,8 @@ that.cdr.detectChanges();
       this.clickY_simple = [];
       this.clickDrag_simple = [];
       this.clickLineWidth = [];
-      if (this.obj.hasOwnProperty('resultEditMaskImageUrl')) {
-        this.preversioResponseObj = {}
+      if (this.obj.hasOwnProperty('resultEditMaskImageUrl') == false) {
+        this.preversioResponseObj = {};
         this.preversioResponseObj.resultEditMaskImageUrl = this.obj.resultEditMaskImageUrl;
       }
     }
