@@ -88,10 +88,6 @@ function camera51obj(obj) {
     this.camera51Text = Object.assign(this.camera51Text, obj.camera51Text);
   }
 
-  if (obj.hasOwnProperty('camera51Text')) {
-    this.camera51Text = Object.assign(this.camera51Text, obj.camera51Text);
-  }
-
   this.apiUrl = apiUrl;
 
   if (obj.hasOwnProperty('iframeSrc') && obj.iframeSrc.length > 1) {
@@ -461,13 +457,21 @@ function Camera51WithQueue(){
     } else {
       apiUrl = "//api.malabi.co";
     }
-    initCamera51({
+    var initCamera51Object = {
       elementId: obj.camera51EditorIframe, // Div to insert the iframe.
       apiUrl: apiUrl,
       customerId: obj.customerId,
       camera51Text: obj.camera51Text
       //
-    });
+    };
+    if(obj.hasOwnProperty('decreaseInnerHeight') && obj.decreaseInnerHeight > 1){
+      initCamera51Object.decreaseInnerHeight = obj.decreaseInnerHeight;
+    }
+    if(obj.hasOwnProperty('wrappermarginTop') && obj.wrappermarginTop > 1){
+      initCamera51Object.wrappermarginTop = obj.wrappermarginTop;
+    }
+
+    initCamera51(initCamera51Object);
     this.apiUrl = window.camera51.apiUrl;
     this.setSQSurl(true);
   };
