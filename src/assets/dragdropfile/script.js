@@ -34,11 +34,15 @@ $(document).ready(function () {
   $("#download-selected").click(function(){
     $("input:checkbox:checked").each(function(){
       var imgSrc = $(this).closest('.eachImage').find(".resultPreview").find('img').attr('src');
+      var imgE = $(this).closest('.eachImage').find(".resultPreview").find('img');
       if(imgSrc != undefined){
-        download(imgSrc);
+        //download(imgSrc);
+        $(imgE).addClass("downloadMeDownload");
       }
 
     });
+    $('.downloadMeDownload').multiDownload();
+    $(".downloadMeDownload").removeClass("downloadMeDownload");
   });
 
   camera51WithQueue.callbackAsyncRequestError = function(mes){
@@ -280,7 +284,7 @@ if(params.customerId && params.token){
   $('#errorMessage').html("Token is missing, please contact info@malabi.co");
 }
 
-function download(img) {
+/*function downloadCam(img) {
   var link = document.createElement("a");
   link.href = img;
   link.download = true;
@@ -296,5 +300,5 @@ function download(img) {
   link.dispatchEvent(evt);
   document.body.removeChild(link);
   console.log("Downloading...");
-}
+}*/
 
