@@ -564,13 +564,7 @@ that.cdr.detectChanges();
 
     if (divide > 0) {
       var numIn = 0;
-      //  var divide = this.obj.origWidth / windowWidth;
-      //var numIn = divide/ this.AMOUNT_ZOOM;
-      //  console.log('numIn',numIn);
-      //  var numIn = numIn.toPrecision(2);
-      //  divide = numIn * this.AMOUNT_ZOOM;
-      //   console.log('divide',divide);
-      //  divide = Math.floor(divide);
+
 
       var a = 1 / divide;
       numIn = (1 - a) / this.AMOUNT_ZOOM;
@@ -727,7 +721,7 @@ that.cdr.detectChanges();
       //alert("no more zoom out");
       return;
     }
-    if (15 < this.totalZoom && type == 'in') {
+    if (35 < this.totalZoom && type == 'in') {
       //alert("no more zoom out");
       return;
     }

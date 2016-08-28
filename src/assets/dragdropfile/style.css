@@ -48,6 +48,11 @@ body {
 a {
   cursor: pointer !important;
 }
+.helper {
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
 .save-option {
   height: 30px;
   margin: -10px -10px 5px -10px;
