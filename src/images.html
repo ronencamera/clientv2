@@ -1,35 +1,46 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
+  <meta charset="utf-8">
+  <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-<!-- Compiled and minified CSS -->
-<!--Import Google Icon Font-->
-<link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<!-- Compiled and minified JavaScript -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="assets/dragdropfile/style.css" rel="stylesheet">
 
 </head>
 <body>
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
-<link href="assets/dragdropfile/style.css" rel="stylesheet">
+  <nav style="background-color: rgba(14, 48, 73, 1);color: white;" role="navigation">
+    <div class="nav-wrapper container">
 
-<div class="roboto" style="text-align: center;background-color: rgba(14, 48, 73, 1);color: white;height: 59px">
-  <div style="width: 980px; height: inherit;display: inline-block;text-align: left;">
-  <span class="helper"></span>
-  <img style=" vertical-align: middle;    height: 41px;-webkit-user-select: none" src="https://static.wixstatic.com/media/6a46b6_637fba01ae83440b8b0d19cd32516043~mv2.png/v1/fill/w_240,h_62,al_c,lg_1/6a46b6_637fba01ae83440b8b0d19cd32516043~mv2.png">
+        <img style=" vertical-align: middle;    height: 41px;-webkit-user-select: none" src="https://static.wixstatic.com/media/6a46b6_637fba01ae83440b8b0d19cd32516043~mv2.png/v1/fill/w_240,h_62,al_c,lg_1/6a46b6_637fba01ae83440b8b0d19cd32516043~mv2.png">
+
+      <ul class="right hide-on-med-and-down">
+        <li><a href="#"></a></li>
+      </ul>
+      <ul id="nav-mobile" class="side-nav">
+        <li><a href="#"></a></li>
+      </ul>
+      <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+    </div>
+  </nav>
+
+
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+      <br><br>
+      <div class="row center">
+        <div id="dropbox">
+          <div style="margin: 30px">
+            Drop Images In Page
+          </div>
+        </div>
+        <!--<a id="download-selected" class="waves-effect waves-light btn-large green" style="background-color: #2B6CA3 !important">Download images</a>-->
+      </div>
+    </div>
   </div>
-</div>
-<div id="dropbox">
-  <div style="margin: 30px">
-    Drop Images In Page
-  </div>
-
-</div>
-
 
 <!-- Modal error messages -->
 <div id="show-token-error" class="modal">
@@ -42,20 +53,15 @@
   </div>
 </div>
 
-
-
 <div style="text-align: center;">
-
   <a id="download-selected" class="waves-effect waves-light btn-large green" style="background-color: #2B6CA3 !important">Download images</a>
 </div>
 
-
 <div id="imageList">
-
 </div>
 
 <!-- Modal Structure -->
-<div id="modal1" class="modal" style="margin-bottom: -8px; ">
+<div id="modal1" class="modal modalLarger" style="margin-bottom: -8px; ">
   <div class="modal-content" style="padding-top: 20px;padding-bottom: 5px;background-color: #393b4b;">
     <a style="position: absolute; right: 11px; top: 16px;"
        class="btn-floating modal-action modal-close waves-effect waves-light btn-flat">
@@ -107,13 +113,9 @@
 </div>
 
 <script>
-
-
-
   var customerId = null;
   var customerSessionToken = null;
   var camera51EditorIframe = "camera51Iframe";
-
   /* create this mapping and pass it to camera51WithQueue.init in order to
    * override text with localization
    * see full list of keys in documentation
@@ -176,35 +178,7 @@
       'trackId': trackId
     }, onSaveWithResult, responseElement);
   }
-  ;(function($, window, document, undefined) {
-    "use strict"
 
-    var download = function (options) {
-      var triggerDelay = (options && options.delay) || 100
-      var cleaningDelay = (options && options.cleaningDelay) || 1000
-
-      this.each(function (index, item) {
-        createIFrame(item, index * triggerDelay, cleaningDelay)
-      })
-      return this
-    }
-
-    var createIFrame = function (item, triggerDelay, cleaningDelay) {
-      setTimeout(function () {
-        var frame = $('<iframe style="display: none;" class="multi-download-frame"></iframe>')
-
-        frame.attr('src', $(item).attr('href') || $(item).attr('src'))
-        $(item).after(frame)
-
-        setTimeout(function () { frame.remove() }, cleaningDelay)
-      }, triggerDelay)
-    }
-
-    $.fn.multiDownload = function(options) {
-      return download.call(this, options)
-    }
-
-  })(jQuery, window, document);
 </script>
 
 <script src="assets/camera51.js"></script>

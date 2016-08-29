@@ -32,6 +32,11 @@ body {
 }
 .modal {
   max-height: 100%;
+  width: 30%;
+  z-index: 3;
+}
+.modalLarger {
+  max-height: 100%;
   width: 80%;
   z-index: 3;
 }
@@ -117,17 +122,18 @@ div#dropZone {
 
 #dropbox{
 	/*min-height: 230px;*/
-	overflow: hidden;
-	position: relative;
-	background: none repeat scroll 0 0 #F7F7F7;
-    border-radius: 8px;
-    box-shadow: 0 0 10px #C0C0C0 inset;
-    text-align: center;
-    text-shadow: 1px 1px 1px #D7D7D7, 1px 1px 1px rgba(0, 0, 0, 0.7);
-    transition: all 0.5s linear 0s;
-	z-index: 2;
-	border:1px solid #fff;
-	margin-bottom: 20px;
+
+  border: 3px dashed #DDD;
+  border-radius: 10px;
+  padding: 10px;
+  width: 400px;
+  height: 100px;
+  color: #CCC;
+  text-align: center;
+  display: inline-block;
+  vertical-align: middle;
+  cursor: pointer;
+
 }
 
 

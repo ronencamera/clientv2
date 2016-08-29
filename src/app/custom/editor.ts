@@ -366,21 +366,12 @@ export class Editoraa {
     this.undoDataUrl = [];
 
     this.resetDrawing();
-
     this.initializeCanvas();
-
     this.countEdits = 0;
-
-
     var newObj = JSON.parse(obj);
     var customerId = newObj.customerId;
     var trackId = newObj.trackId;
     this.setOutsideConfig(newObj);
-
-
-
-
-
     this.showimageService.customerId = customerId;
     this.showimageService.trackId = trackId;
     this.runGetTracker(this.showimageService.customerId, this.showimageService.trackId);
@@ -391,14 +382,13 @@ export class Editoraa {
     var img = new Image();
     var that = this;
     img.onload = function () {
+      that.cdr.detectChanges();
       var height = img.height;
       var width = img.width;
-      //    console.log("hw" , height, width);
-      // code here to use the dimensions
       that.obj.imageSize = {};
       that.obj.imageSize.height = height;//this.image1Element.nativeElement.naturalHeight;
       that.obj.imageSize.width = width;//this.image1Element.nativeElement.naturalWidth;
-
+      that.cdr.detectChanges();
       that.calculateImageSize();
 
       var dataURL = that.canvasElement.nativeElement.toDataURL();
@@ -410,12 +400,9 @@ export class Editoraa {
         that.ctx.scale(that.totalScale, that.totalScale);
         //console.log("scale", that.totalScale);
         that.showEditorView = "block";
-that.cdr.detectChanges();
+        that.cdr.detectChanges();
       }, 200);
 
-      //that.doZoom('out');
-
-      //that.resetSize('up');that.resetSize('down');
     }
     img.src = url;
   }
@@ -449,13 +436,15 @@ that.cdr.detectChanges();
       that.sessionId = response.sessionId;
       that.stopLoader();
       that.initViewOnData(that.sessionId);
+      that.cdr.detectChanges();
+
       window.callbackEdit({'inEditMode': true});
     };
 
     var imageObjMask = new Image();
     imageObjMask.onload = function () {
-    //  that.cdr.detectChanges();
       imageObj.src = response.originalImageUrl;
+      that.cdr.detectChanges();
     };
     imageObjMask.src = response.resultEditMaskImageUrl;
 
@@ -590,6 +579,7 @@ that.cdr.detectChanges();
       this.totalScale = divide;
 
       this.totalZoomInitial = -numIn;
+      this.cdr.detectChanges();
 
       //      console.log('totalZoom',this.totalZoom);
       //if(this.canvasWidth > )
@@ -1108,7 +1098,8 @@ that.cdr.detectChanges();
       that.showResultImage = 'block';
       that.maskHidden = true;
       that.flagShowResult = true;
-      that.View_Result = "EDIT_PAGE_BACK_TO_EDIT_BUTTON";
+      that.cdr.detectChanges();
+
       if (isSaveRequest) {
         window.callbackEdit({'url': that.resultImageUrl});
 

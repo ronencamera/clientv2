@@ -1,7 +1,7 @@
 
-var apiUrl = "http://api.malabi.co";
+var apiUrl = "http://sandbox-lb-1845392311.us-east-1.elb.amazonaws.com";
 //var apiUrl = "http://prod-elb-577420654.us-east-1.elb.amazonaws.com";
-//var apiUrl = "http://172.30.11.40";
+//var apiUrl = "http://api.malabi.co";
 
 var customerId = null;
 var customerToken = null;
@@ -33,16 +33,17 @@ $(document).ready(function () {
 
   });
   $("#download-selected").click(function(){
-    $("input:checkbox:checked").each(function(){
-      var imgSrc = $(this).closest('.eachImage').find(".resultPreview").find('img').attr('src');
-      var imgE = $(this).closest('.eachImage').find(".resultPreview").find('img');
+    $(".eachImage").each(function(){
+      var imgSrc = $(this).find(".resultPreview").find('img').attr('src');
+      var imgE = $(this).find(".resultPreview").find('img');
       if(imgSrc != undefined){
         //download(imgSrc);
         $(imgE).addClass("downloadMeDownload");
       }
     });
-    $('.downloadMeDownload').multiDownload();
-    $(".downloadMeDownload").removeClass("downloadMeDownload");
+    $(".downloadMeDownload").multiDownload();
+
+
   });
 
   camera51WithQueue.callbackAsyncRequestError = function(mes){
@@ -147,6 +148,38 @@ $(document).ready(function () {
   } catch (e){
     console.log(e);
   }
+
+
+  (function($, window, document, undefined) {
+    "use strict"
+
+    var download = function (options) {
+      var triggerDelay = (options && options.delay) || 100;
+      var cleaningDelay = (options && options.cleaningDelay) || 10000;
+
+      this.each(function (index, item) {
+        createIFrame(item, index * triggerDelay, cleaningDelay)
+      });
+      return this;
+    };
+
+    var createIFrame = function (item, triggerDelay, cleaningDelay) {
+      setTimeout(function () {
+        var frame = $('<iframe style="display: none;" class="multi-download-frame"></iframe>');
+
+        frame.attr('src', $(item).attr('href') || $(item).attr('src'));
+        $(item).after(frame);
+
+        setTimeout(function () { frame.remove() }, cleaningDelay);
+      }, triggerDelay);
+    };
+
+    $.fn.multiDownload = function(options) {
+      return download.call(this, options)
+    }
+
+  })(jQuery, window, document);
+
 });
 
 create_box = function (e, file, size) {
@@ -283,6 +316,7 @@ if(params.customerId && params.token){
   $('#errorSubject').html("Missing token");
   $('#errorMessage').html("Token is missing, please contact info@malabi.co");
 }
+
 
 /*function downloadCam(img) {
   var link = document.createElement("a");

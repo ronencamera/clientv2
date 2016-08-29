@@ -32,6 +32,9 @@ var camera51Text = {
 
   "error-header-default": "Press here for manual background removal",
   "error-header-image-failure": "Image error",
+  "error-text-7" : "Background was not automatically removed, you may remove it manually",
+  "error-text-6" : "Background was not automatically removed, you may remove it manually",
+
   "error-text-5" : "Background was not automatically removed since the image <b>already has a white background</b>",
   "error-text-2" : "Background was not automatically removed due to <b>low contrast</b>",
   "error-text-4" : "Background was not automatically removed due to a <b>cluttered background</b>",
@@ -99,6 +102,9 @@ function camera51obj(obj) {
       iframeSrc ="index.html";
     }
     if (document.location.hostname.indexOf("sandbox-malabi") !== -1) {
+      iframeSrc ="index.html";
+    }
+    if (document.location.hostname.indexOf("ebaydemo") !== -1) {
       iframeSrc ="index.html";
     }
   }
@@ -623,7 +629,7 @@ function Camera51WithQueue(){
       elem.innerHTML = "";
       var header = document.createElement('div');
 
-      if(processingResultCode > 5){
+      if(processingResultCode > 100){
         header.innerHTML = camera51Text['error-header-image-failure'];
         header.className = "error-header-image-failure";
       } else {
@@ -648,7 +654,7 @@ function Camera51WithQueue(){
       elem.appendChild(wrapper);
     }
 
-      if (processingResultCode <= 5) {
+      if (processingResultCode <= 100) {
         var btnWrapper = document.createElement('div');
         btnWrapper.style.position = "absolute";
         btnWrapper.style.left = 0;
