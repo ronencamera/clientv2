@@ -96,6 +96,7 @@ export class Editoraa {
   public paint_simple;
   public clickX_simple = [];
   public clickY_simple = [];
+  public clickSend = [];
   public clickDrag_simple = [];
   public clickColor = [];
   public clickLineWidth = [];
@@ -354,6 +355,7 @@ export class Editoraa {
     this.clickLineWidth = [];
     this.clickX_simple = [];
     this.clickY_simple = [];
+    this.clickSend = [];
 
   }
 
@@ -449,10 +451,6 @@ that.cdr.detectChanges();
       that.initViewOnData(that.sessionId);
       window.callbackEdit({'inEditMode': true});
     };
-
-
-
-    //this.cdr.detach();
 
     var imageObjMask = new Image();
     imageObjMask.onload = function () {
@@ -619,26 +617,18 @@ that.cdr.detectChanges();
       console.log("UNDO is empty");
       return;
     }
-
-    //  console.log(context);
-    //var image = undoDataUrl[undoDataUrl.length - 2];
     var imageMask = this.undoEditResponse[undoDataUrl.length - 2];
 
-   // this.undoImageStack.push(image);
     this.undoImageMaskStack.push(imageMask.resultEditMaskImageUrl);
 
     this.undoDataUrl.pop();
     this.undoEditResponse.pop();
- //   this.showimageService.lastDataUrl = image;
     this.clearCanvas_simple();
     this.showimageService.resultEditMaskImageUrl = imageMask.resultEditMaskImageUrl;
     this.preversioResponseObj = imageMask;
    // this.preversioResponseObj.resultEditMaskImageUrl = imageMask.resultEditMaskImageUrl;
     this.initDrawArrays(null);
     this.redrawSimple();
-
-    //this.setImageToCanvas(image);
-    //  console.log("undo", this.undoDataUrl);
   }
 
   setImageToCanvas(image) {
@@ -658,12 +648,7 @@ that.cdr.detectChanges();
 
     if (editFromPreviousOpenWindow != null && typeof editFromPreviousOpenWindow === 'object') {
       console.log("get last");
-      /*    this.clickColor= editFromPreviousOpenWindow.clickColor;
-       this.clickX_simple = editFromPreviousOpenWindow.clickX_simple;
-       this.clickY_simple = editFromPreviousOpenWindow.clickY_simple;
-       this.clickDrag_simple = editFromPreviousOpenWindow.clickDrag_simple;
-       this.clickLineWidth = editFromPreviousOpenWindow.clickLineWidth;
-       */
+
       this.undoDataUrl = editFromPreviousOpenWindow.undoDataUrl;
       this.undoEditResponse = editFromPreviousOpenWindow.undoEditResponse;
 
@@ -678,6 +663,7 @@ that.cdr.detectChanges();
       this.clickColor = [];
       this.clickX_simple = [];
       this.clickY_simple = [];
+      this.clickSend = [];
       this.clickDrag_simple = [];
       this.clickLineWidth = [];
       if (this.obj.hasOwnProperty('resultEditMaskImageUrl') == false) {
@@ -777,11 +763,8 @@ that.cdr.detectChanges();
 
         var totalZoom = -this.totalZoom;
         scale = 1 - (AMOUNT_ZOOM * totalZoom);
-        //scale = -scale;
         var zoomW = this.obj.origWidth * scale;
         var zoomH = this.obj.origHeight * scale;
-
-        //    console.log('zoomH',zoomH);
       }
       this.ctx.canvas.width = zoomW;
       this.ctx.canvas.height = zoomH;
@@ -795,11 +778,7 @@ that.cdr.detectChanges();
       this.imagewrapperOverflow = "auto";
     }
     this.imagewrapper.nativeElement.scrollLeft = (this.imagewrapper.nativeElement.scrollWidth - this.imagewrapper.nativeElement.clientWidth) / 2
-    //this.imagewrapper.nativeElement.scrollHeight = ( this.imagewrapper.nativeElement.clientHeight) / 2
 
-    //this.imagewrapper.nativeElement.overflow = 'auto';
-    //    console.log(type,scale, zoomW, zoomH);
-    //  console.log(this.totalZoom);
     var yMove = (zoomH - this.imagewrapperSizeheight);
     var xMove = (zoomW - this.imagewrapperSizeWidth);
     this.imagewrapperSizeWidth = zoomW;
@@ -917,9 +896,7 @@ that.cdr.detectChanges();
 
   addClickSimple(x, y, dragging) {
     var totalScale = this.totalScale;
-    //    console.log(totalScale)
-    //totalScale = 1;
-    //    y = y -20;
+
     x = x + 3;
     y = y + 3;
 
@@ -938,10 +915,10 @@ that.cdr.detectChanges();
     this.clickX_simple.push(x);
     this.clickY_simple.push(y);
 
+    this.clickSend.push(x,y);
+
     this.clickDrag_simple.push(dragging);
     this.clickColor.push(this.colorChoosen);
-    //  console.log("totalScale",this.totalScale);
-
     this.clickLineWidth.push(radius);
   }
 
@@ -950,9 +927,7 @@ that.cdr.detectChanges();
 
     //console.log('in redrawSimple');
     this.clearCanvas_simple();
-    //  var canvas = this.ctx;
-    //  this.ctxTemp.globalAlpha = 0.5;
-    //	this.ctx.strokeStyle = "#fff";
+
     this.ctx.lineJoin = "round";
     //  this.ctx.lineCap = 'round';
     //this.ctx.lineWidth = radius;
@@ -976,16 +951,12 @@ that.cdr.detectChanges();
       this.ctx.closePath();
       this.ctx.stroke();
     }
-
-    //this.resetDrawing();
-    //    this.ctxTemp.drawImage(this.canvasElement.nativeElement, 0, 0);
   }
 
   clearCanvas_simple() {
     //console.log('clearCanvas_simple',this.obj.origWidth, this.obj.origHeight);
     this.ctx.clearRect(0, 0, this.obj.origWidth, this.obj.origHeight);
     //  this.ctxTemp.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-
   }
 
   getMousePos(canvas, evt) {
@@ -1019,8 +990,7 @@ that.cdr.detectChanges();
       //			this.addClickSimple(e.layerX, e.layerY, true);
       this.redrawSimple();
     }
-    //console.log(e.layerX, e.layerY);
-  }
+ }
 
   onMouseUp(e) {
     if (e.which != 1){
@@ -1101,7 +1071,6 @@ that.cdr.detectChanges();
     //  console.log(this.showimageService);
     var dataURL = this.canvasElement.nativeElement.toDataURL();
     this.displayLoader = 'block';
-    this.loaderImage = this.assetsUrl + "/assets/tools/malabiloader.gif";
     this.startLoader();
     this.requestEditImage.search(dataURL,
       this.obj.originalImageUrl,
@@ -1109,7 +1078,7 @@ that.cdr.detectChanges();
       this.obj.customerId,
       this.obj.sessionId,
       this.apiProcessUrl,
-      this.showimageService.resultEditMaskImageUrl,
+      this.preversioResponseObj.resultEditMaskImageUrl,
       true,
       this.applyShadow,
       this.showimageService.applyTransparent, isSaveRequest
@@ -1119,15 +1088,11 @@ that.cdr.detectChanges();
 
   startLoader() {
     window.callbackEdit({'loader': true});
-
-
   }
 
   stopLoader() {
     window.callbackEdit({'loader': false});
-
   }
-
 
   // after matting
   showResultResponse(ob, isSaveRequest) {
@@ -1157,12 +1122,23 @@ that.cdr.detectChanges();
   }
 
   preformEditRequest() {
-    var dataURL = this.canvasElement.nativeElement.toDataURL();
+    var dataURL ;
+
+    this.clickSend.unshift(this.ctx.lineWidth);
+    if(this.colorChoosen == "rgb(0, 255, 0)"){
+      this.clickSend.unshift("GREEN");
+    } else {
+      this.clickSend.unshift("RED");
+    }
+
     if (this.totalZoom != 0) {
       this.resetSize('down');
       dataURL = this.canvasElement.nativeElement.toDataURL();
       this.resetSize('up');
+    } else {
+      dataURL = this.canvasElement.nativeElement.toDataURL();
     }
+   // dataURL = this.clickSend;
     //console.log(dataURL);
     this.disableShowResult = true;
     this.disableSaveImage = true;
@@ -1181,9 +1157,10 @@ that.cdr.detectChanges();
       "origImgUrl": this.obj.originalImageUrl,
       "imageId": this.obj.imageId,
       "sessionId": this.obj.sessionId,
-
+      "directResponse": true,
       "customerId": this.obj.customerId,
       "doMatting": false,
+      "userInputData" : this.clickSend,
       "previousMaskURL": this.preversioResponseObj.resultEditMaskImageUrl,
       "shadow": this.applyShadow,
       "transparent": this.showimageService.applyTransparent,
@@ -1237,25 +1214,33 @@ that.cdr.detectChanges();
     } else {
       this.disableColorFG = false;
     }
-    if (a.resultEditMaskImageUrl) {
+    if(a.data){
       this.preversioResponseObj = a;
-      //document.getElementById('image2Element').src = a.resultEditMaskImageUrl;
-      var _this = this;
-      var imageObjMask = new Image();
-      imageObjMask.onload = function () {
-        _this.showimageService.resultEditMaskImageUrl = a.resultEditMaskImageUrl;
-        _this.undoImageMaskStack.push(a.resultEditMaskImageUrl);
-        _this.clearCanvas_simple();
-        _this.cdr.detectChanges();
 
-      };
+      this.showimageService.resultEditMaskImageUrl = "data:image/png;base64,"+a.data;
+      this.undoImageMaskStack.push(a.resultEditMaskImageUrl);
+      this.clearCanvas_simple();
+      this.cdr.detectChanges();
+     } else {
 
-      imageObjMask.src = a.resultEditMaskImageUrl;
 
+      if (a.resultEditMaskImageUrl) {
+          this.preversioResponseObj = a;
+          //document.getElementById('image2Element').src = a.resultEditMaskImageUrl;
+          var _this = this;
+          var imageObjMask = new Image();
+          imageObjMask.onload = function () {
+            _this.showimageService.resultEditMaskImageUrl = a.resultEditMaskImageUrl;
+            _this.undoImageMaskStack.push(a.resultEditMaskImageUrl);
+            _this.clearCanvas_simple();
+            _this.cdr.detectChanges();
+
+          };
+
+          imageObjMask.src = a.resultEditMaskImageUrl;
+        }
     }
     this.resetDrawing();
-
-
   }
 
   showInstructions() {
@@ -1299,23 +1284,9 @@ that.cdr.detectChanges();
     return true;
   }
 
-
-
   saveImage() {
     window.ga('send', 'event', 'CLIENT', 'saveImage',"customerId="+this.showimageService.customerId +",sessionId="+this.sessionId);
-
-    //  if (this.flagShowResult == false) {
-      this.runMatting(true);
-  //    return false;
-   // }
-   // this.openResultWindow();
-
-    /*
-     var link = document.createElement("a");
-     link.download = "yourfile";
-     link.href = this.srcImageResult;
-     link.click();
-     */
+    this.runMatting(true);
     return false;
   }
 

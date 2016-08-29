@@ -14,7 +14,11 @@ body {
   margin-right: 6px;
   margin-bottom: 4px;
 }
-
+.disabled{
+  pointer-events: none;
+  cursor: default;
+  opacity: 0.6;
+}
 .malabiBG{
   background-color: #393b4b;
 }

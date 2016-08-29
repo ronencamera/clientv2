@@ -1,6 +1,7 @@
 
-
 var apiUrl = "http://api.malabi.co";
+//var apiUrl = "http://prod-elb-577420654.us-east-1.elb.amazonaws.com";
+//var apiUrl = "http://172.30.11.40";
 
 var customerId = null;
 var customerToken = null;
@@ -39,7 +40,6 @@ $(document).ready(function () {
         //download(imgSrc);
         $(imgE).addClass("downloadMeDownload");
       }
-
     });
     $('.downloadMeDownload').multiDownload();
     $(".downloadMeDownload").removeClass("downloadMeDownload");

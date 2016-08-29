@@ -95,7 +95,7 @@ function camera51obj(obj) {
   } else {
     iframeSrc = window.location.protocol+"//assets-malabi.s3.amazonaws.com/version/v2/index.html";
     // For development, if working in local host, use local iframe file:
-    if (document.location.hostname == "localhost") {
+    if (document.location.hostname == "localhost" || document.location.hostname == "192.168.1.162"  ) {
       iframeSrc ="index.html";
     }
     if (document.location.hostname.indexOf("sandbox-malabi") !== -1) {
@@ -803,6 +803,7 @@ function Camera51WithQueue(){
         return sqsUrl;
       }
     };
+
 
     xhttp.open("POST", this.apiUrl  + "/Camera51Server/createQueue", (sync==null)? true: sync);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
