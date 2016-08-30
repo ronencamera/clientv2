@@ -65,7 +65,7 @@ this.initCamera51 = function(obj) {
   window.camera51 = new camera51obj(obj);
 };
 
-var showTutorial = true;
+var showTutorial = false;
 var overrideTutorialElement = null;
 var injectStyleToIframe = null;
 
@@ -456,6 +456,10 @@ function Camera51WithQueue(){
     showTutorial = (obj.showTutorial === false) ? false : showTutorial;
     overrideTutorialElement = (obj.overrideTutorialElement) ? obj.overrideTutorialElement : null;
     injectStyleToIframe = (obj.injectStyleToIframe) ? obj.injectStyleToIframe : null;
+
+    if (obj.hasOwnProperty('showTutorial')) {
+      showTutorial = (obj.showTutorial === false) ? false : true;
+    }
 
     var apiUrl = null;
     if (obj.hasOwnProperty('apiUrl') && obj.apiUrl.length > 1) {

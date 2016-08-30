@@ -101,7 +101,7 @@
 </div>
 
 <script>
-  var showTutorial = true;
+  var showTutorial = false;
   var flagShowTutorial = false;
 
   window.oncontextmenu = function (e) {
@@ -205,8 +205,8 @@
         if (a.customerId) {
           customerId = a.customerId;
         }
-        if (a.showTutorial === false) {
-          showTutorial = false;
+        if (a.showTutorial === true) {
+          showTutorial = true;
         }
 
         callShowTutorial();
