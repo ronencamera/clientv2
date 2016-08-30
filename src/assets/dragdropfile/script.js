@@ -224,7 +224,7 @@ create_box = function (e, file, size) {
   var template = '<div class="eachImage z-depth-1" id="eachImage-' + rand + '">';
   template += '<div class="save-option">' +
     '<i style="font-size: initial;cursor: pointer !important;" title="remove" class="material-icons right" onclick="$(this).closest(\'.eachImage\').remove();">close</i></div>';
-  template += '<span class="preview" id="' + rand + '" ><img src="' + src + '"><span class="overlay"><span class="updone"></span></span>';
+  template += '<span class="preview " id="' + rand + '" ><img src="' + src + '"><span class="overlay"><span class="updone"></span></span>';
   template += '</span>';
 //	template += '<div class="progress" id="'+rand+'"><span></span></div>';
   var x ;

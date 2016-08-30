@@ -616,7 +616,7 @@ function Camera51WithQueue(){
         }
 
       }
-     // img.id = "theImg-" + elem.id;
+      img.className = "img-result-preview";
       img.style.maxWidth = "100%";
       img.style.maxHeight = maxImage+"px";
       img.onclick =  function () {
