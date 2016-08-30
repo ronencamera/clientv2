@@ -32,7 +32,7 @@ $(document).ready(function () {
     });
 
   });
-  $("#download-selected").click(function(){
+  $("#download-images").click(function(){
     $(".eachImage").each(function(){
       var imgSrc = $(this).find(".resultPreview").find('img').attr('src');
       var imgE = $(this).find(".resultPreview").find('img');
@@ -150,16 +150,16 @@ $(document).ready(function () {
     console.log(e);
   }
 
-
-
   $('#imageList').on('DOMNodeInserted', function(e) {
-    if($(e.target).find('.btn-touchup').length != 0){
-      var a =   $(e.target).find('.btn-touchup');
-      $(a).addClass("waves-effect waves-light btn ");
-      console.log(a);
+    var numItems = $('.eachImage').length;
+    if(numItems > 0){
+      $("#download-images").css('visibility','visible');
     }
 
-
+    if($(e.target).find('.btn-touchup').length != 0){
+      var a =   $(e.target).find('.btn-touchup');
+      $(a).addClass("waves-effect waves-teal btn-flat ");
+    }
   });
 
   $('#fileupload-example-4-label').on('click', function () {
@@ -171,11 +171,12 @@ $(document).ready(function () {
 
     var download = function (options) {
       var triggerDelay = (options && options.delay) || 100;
-      var cleaningDelay = (options && options.cleaningDelay) || 10000;
+      var cleaningDelay = (options && options.cleaningDelay) || 1000;
 
       this.each(function (index, item) {
-        createIFrame(item, index * triggerDelay, cleaningDelay)
+        createIFrame(item, index * triggerDelay, cleaningDelay);
       });
+
       return this;
     };
 
@@ -186,7 +187,15 @@ $(document).ready(function () {
         frame.attr('src', $(item).attr('href') || $(item).attr('src'));
         $(item).after(frame);
 
-        setTimeout(function () { frame.remove() }, cleaningDelay);
+        setTimeout(function () {
+          frame.remove();
+          $( item ).parents(".eachImage").remove();
+          if($('.eachImage').length == 0){
+            $("#download-images").css('visibility','hidden');
+          }
+
+        }, cleaningDelay);
+
       }, triggerDelay);
     };
 
@@ -200,7 +209,7 @@ $(document).ready(function () {
 
 create_box = function (e, file, size) {
   var loader = '<div class="preloader-wrapper">'
-    +'<div class="spinner-layer spinner-red-only">'
+    +'<div class="spinner-layer " style="border-color:#77c2df ">'
     +'<div class="circle-clipper left">'
     +'<div class="circle"></div>'
     +'</div><div class="gap-patch">'
