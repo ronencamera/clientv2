@@ -33,11 +33,12 @@
       <br><br>
       <div class="row center">
         <div id="dropbox">
-          <div style="margin: 30px">
+          <div style="">
             Drop Images In Page
           </div>
         </div>
-        <!--<a id="download-selected" class="waves-effect waves-light btn-large green" style="background-color: #2B6CA3 !important">Download images</a>-->
+
+        <button  class="file-upload waves-effect waves-light btn-large green" style="background-color: #0e3049 !important"><input type="file" class="file-input">upload</button>
       </div>
     </div>
   </div>
@@ -54,7 +55,7 @@
 </div>
 
 <div style="text-align: center;">
-  <a id="download-selected" class="waves-effect waves-light btn-large green" style="background-color: #2B6CA3 !important">Download images</a>
+  <a id="download-selected" class="waves-effect waves-light btn-large green" style="background-color: #44a6cb !important">Download images</a>
 </div>
 
 <div id="imageList">
@@ -124,16 +125,15 @@
 
   $(document).ready(function () {
 
-
     // call to initialize the Camera51 object
     camera51WithQueue.init({
       "customerId": customerId,
+      "showTutorial": true,
       "sessionToken": customerSessionToken,
       "camera51EditorIframe": camera51EditorIframe,
       "decreaseInnerHeight": 20,
       "wrappermarginTop":10,
       "apiUrl":apiUrl
-
     });
   });
 
