@@ -12,7 +12,7 @@
 <body>
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
-  <nav style="background-color: rgba(14, 48, 73, 1);color: white;" role="navigation">
+  <nav style="background-color: #0e3049;color: white;" role="navigation">
     <div class="nav-wrapper container">
 
         <img style=" vertical-align: middle;    height: 41px;-webkit-user-select: none" src="https://static.wixstatic.com/media/6a46b6_637fba01ae83440b8b0d19cd32516043~mv2.png/v1/fill/w_240,h_62,al_c,lg_1/6a46b6_637fba01ae83440b8b0d19cd32516043~mv2.png">
@@ -33,12 +33,11 @@
       <br><br>
       <div class="row center">
         <div id="dropbox">
-          <div style="">
-            Drop Images In Page
-          </div>
+          <div style="font-family: Roboto, sans-serif;font-size: 17px;">Drag and Drop Images Into Page</div>
         </div>
 
-        <button  class="file-upload waves-effect waves-light btn-large green" style="background-color: #0e3049 !important"><input type="file" class="file-input">upload</button>
+        <input id="file-input" type="file" style="display: none" multiple/>
+        <a id="fileupload-example-4-label" for="file-input" class="waves-effect waves-light btn-large">Click me</a>
       </div>
     </div>
   </div>
@@ -56,6 +55,11 @@
 
 <div style="text-align: center;">
   <a id="download-selected" class="waves-effect waves-light btn-large green" style="background-color: #44a6cb !important">Download images</a>
+</div>
+
+<div class="container">
+  <!-- Page Content goes here -->
+  <hr>
 </div>
 
 <div id="imageList">

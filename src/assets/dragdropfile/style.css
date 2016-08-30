@@ -3,7 +3,7 @@ body, html {
 }
 
 body {
-  background-color: whitesmoke;
+  background-color: #f5f5f5;
   font-family: Roboto, sans-serif;
   font-size: initial;
 }
@@ -57,9 +57,21 @@ body {
 a {
   cursor: pointer !important;
 }
+#fileupload-example-4 {
+  height: 0;
+  width: 0px;
+  border: 0px;
 
-.file-upload input.file-input {
+}
+button:focus {outline:0;}
+
+#fileupload-example-4-label {
+  background-color: #0e3049;
+}
+.file-input {
   position: absolute;
+  overflow: hidden;
+
   top: 0;
   right: 0;
   margin: 0;
@@ -67,7 +79,8 @@ a {
   font-size: 20px;
   cursor: pointer;
   opacity: 0;
-  filter: alpha(opacity=0); }
+  filter: alpha(opacity=0);
+}
 
 .helper {
   display: inline-block;
@@ -107,6 +120,11 @@ div#dropZone {
   opacity: 0.6;
   visibility: hidden;
 }
+
+.btn-touchup{
+  background-color: #77c2df;
+}
+
 .droptarget {
   display: none;
   position: fixed;
@@ -134,14 +152,14 @@ div#dropZone {
 
 #dropbox{
 	/*min-height: 230px;*/
-
+  height: 54px;
+  margin-right: 7px;
   border: 3px dashed #DDD;
-  border-radius: 10px;
   padding: 10px;
   width: 400px;
   background-color: white;
-  color: #CCC;
-  text-align: center;
+  color: #989898;
+  text-align: left;
   display: inline-block;
   vertical-align: middle;
   cursor: pointer;
@@ -150,8 +168,9 @@ div#dropZone {
 
 
 .eachImage {
+  background-color: #e8e8e8;
   float: left;
-  margin: 10px;
+  margin: 20px;
   position: relative;
   /*width: 205px;*/
   text-align: center;

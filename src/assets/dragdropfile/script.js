@@ -145,10 +145,26 @@ $(document).ready(function () {
 
   try {
     FileReaderJS.setupDrop(document.body, oprand);
+    FileReaderJS.setupInput(document.getElementById('file-input'), oprand);
   } catch (e){
     console.log(e);
   }
 
+
+
+  $('#imageList').on('DOMNodeInserted', function(e) {
+    if($(e.target).find('.btn-touchup').length != 0){
+      var a =   $(e.target).find('.btn-touchup');
+      $(a).addClass("waves-effect waves-light btn ");
+      console.log(a);
+    }
+
+
+  });
+
+  $('#fileupload-example-4-label').on('click', function () {
+    $('#file-input').trigger('click');
+  });
 
   (function($, window, document, undefined) {
     "use strict"

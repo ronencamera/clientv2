@@ -670,7 +670,7 @@ function Camera51WithQueue(){
         btn.onclick =  function () {
           camera51OpenEditor(trackId,elem.id);
         };
-        btn.className = "btn";
+        btn.className = "btn btn-touchup";
 
         btnWrapper.appendChild(btn);
         elem.appendChild(btnWrapper);
