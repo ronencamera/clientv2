@@ -153,7 +153,8 @@ $(document).ready(function () {
   };
 
   try {
-    FileReaderJS.setupDrop(document.body, oprand);
+    var droptarget  = document.getElementById('droptarget');
+    FileReaderJS.setupDrop(droptarget, oprand);
     FileReaderJS.setupInput(document.getElementById('file-input'), oprand);
   } catch (e){
     console.log(e);
@@ -369,3 +370,65 @@ if(params.customerId && params.token){
   console.log("Downloading...");
 }*/
 
+$(document).ready(function () {
+  document.addEventListener("dragstart", function(event) {
+
+    // Change the opacity of the draggable element
+    event.target.style.opacity = "0.4";
+  });
+
+  // While dragging the p element, change the color of the output text
+  document.addEventListener("drag", function(event) {
+    //      document.getElementById("demo").style.color = "red";
+  });
+
+  // Output some text when finished dragging the p element and reset the opacity
+  document.addEventListener("dragend", function(event) {
+    //    document.getElementById("demo").innerHTML = "Finished dragging the p element.";
+    //    event.target.style.opacity = "1";
+
+
+  });
+
+
+  /* Events fired on the drop target */
+
+  // When the draggable p element enters the droptarget, change the DIVS's border style
+  document.addEventListener("dragenter", function(event) {
+
+    $('.droptarget').css('display','block');
+
+    if ( event.target.className == "droptarget" ) {
+      //event.target.style.border = "3px dotted red";
+
+      $('.dropImagePopup').css('visibility','visible');
+    }
+  });
+  var obj = document.getElementById("droptarget");
+  obj.addEventListener("drop", function(event) {
+
+
+
+      console.log("dropped");
+      $('.droptarget').css('display','none');
+
+  });
+
+
+  // By default, data/elements cannot be dropped in other elements. To allow a drop, we must prevent the default handling of the element
+  document.addEventListener("dragover", function(event) {
+    event.preventDefault();
+  });
+
+  // When the draggable p element leaves the droptarget, reset the DIVS's border style
+  document.addEventListener("dragleave", function(event) {
+
+    if ( event.target.className == "droptarget" ) {
+      event.target.style.border = "";
+      //    that.visible = false;
+     // that.displayNone = true;
+      $('.droptarget').css('display','none');
+
+    }
+  });
+});

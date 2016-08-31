@@ -131,24 +131,25 @@ div#dropZone {
   position: fixed;
   height: 100%;
   width: 100%;
-
+  z-index: 200;
   top: 0;
+  text-align: center;
   background-color: rgba(255, 255, 255, .85);
 }
 .dropImagePopup {
-  border-radius: 15px;
   border-width: 4px;
   border-style: dashed;
   background-color: #fff;
-  color: #1C6EB5;
+  color: #44a6cb;
   background: none;
-  border-color: #1C6EB5;
+  border-color: #44a6cb;
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
   margin: 20px;
+
 }
 
 #dropbox{
@@ -306,3 +307,18 @@ div#dropZone {
 	position: relative;
 	overflow: hidden;
 }
+
+.file_droppa_internal {
+  border: 3px dashed #DDD;
+  border-radius:10px;
+  padding:10px;
+  width:400px;
+  height:100px;
+  color:#CCC;
+  text-align:center;
+  display:table-cell;
+  vertical-align:middle;
+  cursor:pointer;
+}
+
+
