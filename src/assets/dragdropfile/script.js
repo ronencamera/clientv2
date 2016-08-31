@@ -159,10 +159,6 @@ $(document).ready(function () {
     console.log(e);
   }
 
-
-
-
-
   $('#imageList').on('DOMNodeInserted', function(e) {
     var numItems = $('.eachImage').length;
     if(numItems > 0){
@@ -196,7 +192,6 @@ $(document).ready(function () {
     var createIFrame = function (item, triggerDelay, cleaningDelay) {
       setTimeout(function () {
         var frame = $('<iframe style="display: none;" class="multi-download-frame"></iframe>');
-
         frame.attr('src', $(item).attr('href') || $(item).attr('src'));
         $(item).after(frame);
 
@@ -237,8 +232,8 @@ create_box = function (e, file, size) {
   var template = '<div class="eachImage z-depth-1" id="eachImage-' + rand + '">';
   template += '<div class="save-option" onclick="updateRemoveImage()" >' +
     '<i id="save-option" style="font-size: initial;cursor: pointer !important;" title="remove" class="material-icons right" onclick="$(this).closest(\'.eachImage\').remove();">close</i></div>';
-  template += '<span class="preview " id="' + rand + '" ><img src="' + src + '"><span class="overlay"><span class="updone"></span></span>';
-  template += '</span>';
+  template += '<div class="preview " id="' + rand + '" ><img src="' + src + '"><span class="overlay"><span class="updone"></span></span>';
+  template += '</div>';
 //	template += '<div class="progress" id="'+rand+'"><span></span></div>';
   var x ;
   var height = (200/size.h);// * test.h;
@@ -251,7 +246,7 @@ create_box = function (e, file, size) {
   size.hPro = size.h *x;
   size.wPro = size.w *x;
   template += '<div class="resultPreview" id="resultPreview-' + rand +
-      '" style="width:100%;height:250px;" id="'
+      '" style="width:100%;height:200px;" id="'
       + rand + '"><div>' + loader + '</div></div>';
 
   if ($("#imageList .eachImage").html() == null)
