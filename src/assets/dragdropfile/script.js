@@ -6,6 +6,15 @@ var apiUrl = "http://api.malabi.co";
 var customerId = null;
 var customerToken = null;
 
+// remove if no image left
+function updateRemoveImage() {
+  setTimeout(function () {
+    var numItems = $('.eachImage').length;
+    if (numItems == 0) {
+      $("#download-images-wrapper").css('visibility', 'hidden');
+    }
+  }, 100);
+}
 
 $(document).bind("contextmenu",function(e){
   e.preventDefault()
@@ -150,10 +159,14 @@ $(document).ready(function () {
     console.log(e);
   }
 
+
+
+
+
   $('#imageList').on('DOMNodeInserted', function(e) {
     var numItems = $('.eachImage').length;
     if(numItems > 0){
-      $("#download-images").css('visibility','visible');
+      $("#download-images-wrapper").css('visibility','visible');
     }
 
     if($(e.target).find('.btn-touchup').length != 0){
@@ -191,7 +204,7 @@ $(document).ready(function () {
           frame.remove();
           $( item ).parents(".eachImage").remove();
           if($('.eachImage').length == 0){
-            $("#download-images").css('visibility','hidden');
+            $("#download-images-wrapper").css('visibility','hidden');
           }
 
         }, cleaningDelay);
@@ -222,8 +235,8 @@ create_box = function (e, file, size) {
   var src = e.target.result;
 
   var template = '<div class="eachImage z-depth-1" id="eachImage-' + rand + '">';
-  template += '<div class="save-option">' +
-    '<i style="font-size: initial;cursor: pointer !important;" title="remove" class="material-icons right" onclick="$(this).closest(\'.eachImage\').remove();">close</i></div>';
+  template += '<div class="save-option" onclick="updateRemoveImage()" >' +
+    '<i id="save-option" style="font-size: initial;cursor: pointer !important;" title="remove" class="material-icons right" onclick="$(this).closest(\'.eachImage\').remove();">close</i></div>';
   template += '<span class="preview " id="' + rand + '" ><img src="' + src + '"><span class="overlay"><span class="updone"></span></span>';
   template += '</span>';
 //	template += '<div class="progress" id="'+rand+'"><span></span></div>';
