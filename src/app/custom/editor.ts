@@ -209,13 +209,16 @@ export class Editoraa {
     var newObj = JSON.parse(obj);
     this.setOutsideConfig(newObj);
     //  console.log(newObj, this.showimageService);
-    if (this.showimageService.originalImageUrl != null &&
-      this.showimageService.originalImageUrl.length > 0) {
+    if (this.showimageService.imageCopyURL != null &&
+      this.showimageService.imageCopyURL.length > 0) {
 
-      var sessionId = this.getSession(this.showimageService.originalImageUrl);
+      var sessionId = this.getSession(this.showimageService.imageCopyURL);
       //   console.log(sessionId);
+      var strImage = this.resultImageUrl;
+      strImage = strImage.replace("s3.amazonaws.com/cam51-img-proc", "d2f1mfcynop4j.cloudfront.net");
 
-      this.showimageService.resultImageUrl = this.resultImageUrl;
+
+      this.showimageService.resultImageUrl = strImage;
       this.sessionId = sessionId;
 
       this.initViewOnData(sessionId);
@@ -426,13 +429,21 @@ export class Editoraa {
       return;
     }
 
+    var imageCopy = response.imageCopyURL;
+    imageCopy = imageCopy.replace("s3.amazonaws.com/cam51-img-proc", "d2f1mfcynop4j.cloudfront.net");
+    console.log(imageCopy);
+
   //  this.showEditorView = "block";
     var imageObj = new Image();
     var that = this;
     imageObj.onload = function () {
-      that.showimageService.originalImageUrl = response.originalImageUrl;
+      that.showimageService.originalImageUrl = imageCopy;//response.originalImageUrl;
       that.maskUrl = response.resultEditMaskImageUrl;
-      that.showimageService.resultImageUrl = response.resultImageUrl;
+
+      var strImage = response.resultImageUrl;
+      strImage = strImage.replace("s3.amazonaws.com/cam51-img-proc", "d2f1mfcynop4j.cloudfront.net");
+
+      that.showimageService.resultImageUrl = strImage;
       that.sessionId = response.sessionId;
       that.stopLoader();
       that.initViewOnData(that.sessionId);
@@ -443,7 +454,7 @@ export class Editoraa {
 
     var imageObjMask = new Image();
     imageObjMask.onload = function () {
-      imageObj.src = response.originalImageUrl;
+      imageObj.src = imageCopy;//response.originalImageUrl;
       that.cdr.detectChanges();
     };
     imageObjMask.src = response.resultEditMaskImageUrl;

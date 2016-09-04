@@ -172,7 +172,10 @@ $(document).ready(function () {
     }
   });
 
-  $('#fileupload-example-4-label').on('click', function () {
+  $('#fileupload-btn').on('click', function () {
+    $('#file-input').trigger('click');
+  });
+  $('#dropbox').on('click', function () {
     $('#file-input').trigger('click');
   });
 
@@ -230,15 +233,10 @@ create_box = function (e, file, size) {
   var imgName = file.name; // not used, Irand just in case if user wanrand to print it.
   var src = e.target.result;
 
-  var template = '<div class="eachImage z-depth-1" id="eachImage-' + rand + '">';
-  template += '<div class="save-option" onclick="updateRemoveImage()" >' +
-    '<i id="save-option" style="font-size: initial;cursor: pointer !important;" title="remove" class="material-icons right" onclick="$(this).closest(\'.eachImage\').remove();">close</i></div>';
-  template += '<div class="preview " id="' + rand + '" ><img src="' + src + '"><span class="overlay"><span class="updone"></span></span>';
-  template += '</div>';
-//	template += '<div class="progress" id="'+rand+'"><span></span></div>';
   var x ;
   var height = (200/size.h);// * test.h;
   var width = (180/size.w);// * test.w;
+
   if(height < width){
     x = height;
   } else {
@@ -246,9 +244,21 @@ create_box = function (e, file, size) {
   }
   size.hPro = size.h *x;
   size.wPro = size.w *x;
+
+  var template = '<div class="eachImage z-depth-1" id="eachImage-' + rand + '">';
+  template += '<div class="save-option" onclick="updateRemoveImage()" >' +
+    '<i id="save-option" style="cursor: pointer !important;" title="remove" class="material-icons right" onclick="$(this).closest(\'.eachImage\').remove();">close</i></div>';
+  template += '<div class="preview" id="' + rand + '" ><span class="camera51-darken"><img src="' + src + '" style="opacity: 0.6"></span><span class="overlay"><div class="progress" id="'+rand+'"><div class="determinate" style="width: 70%"></div></div>';
+  template += '<div style="font-size: 14px;color: white; ">Uploading...</div></span>';
+  template += '</div><div style="height: 20px;width: 100%"></div> ';
+	//template += '<div class="progress" id="'+rand+'"><div class="determinate" style="width: 70%"></div></div>';
+
+
+  //$(".preview[id='" + rand + "'] img").css("opacity","0.6");
+
   template += '<div class="resultPreview" id="resultPreview-' + rand +
       '" style="width:100%;height:200px;" id="'
-      + rand + '"><div>' + loader + '</div></div>';
+      + rand + '"><div style="top: 70px;position: relative;">' + loader + '</div></div>';
 
   if ($("#imageList .eachImage").html() == null)
     $("#imageList").html(template);
@@ -272,8 +282,10 @@ upload = function (file, rand) {
   xhr[rand].upload.addEventListener("progress", function (event) {
     //console.log(event);
     if (event.lengthComputable) {
-      $(".progress[id='" + rand + "'] span").css("width", (event.loaded / event.total) * 100 + "%");
-      $(".preview[id='" + rand + "'] .updone").html(((event.loaded / event.total) * 100).toFixed(2) + "%");
+   //   console.log((event.loaded / event.total) * 100);
+     // $(".progress[id='" + rand + "'] .determinate").parent(img).css()
+      $(".progress[id='" + rand + "'] .determinate").css("width", (event.loaded / event.total) * 100 + "%");
+   //   $(".preview[id='" + rand + "'] .updone").html(((event.loaded / event.total) * 100).toFixed(2) + "%");
     }
     else {
       alert("Failed to compute file upload length");
@@ -288,7 +300,10 @@ upload = function (file, rand) {
   xhr[rand].onreadystatechange = function (oEvent) {
     if (xhr[rand].readyState === 4) {
       if (xhr[rand].status === 200) {
-        $(".progress[id='" + rand + "'] span").css("width", "100%");
+        $(".progress[id='" + rand + "'] .determinate").css("width", "100%");
+        $(".preview[id='" + rand + "'] img").css("opacity","1");
+        $(".preview[id='" + rand + "'] .camera51-darken").css("background","transparent");
+        $(".preview[id='" + rand + "'] .camera51-darken").css("opacity","1");
         $(".preview[id='" + rand + "']").find(".updone").html("100%");
         $(".preview[id='" + rand + "'] .overlay").css("display", "none");
         try{
@@ -406,12 +421,7 @@ $(document).ready(function () {
   });
   var obj = document.getElementById("droptarget");
   obj.addEventListener("drop", function(event) {
-
-
-
-      console.log("dropped");
       $('.droptarget').css('display','none');
-
   });
 
 

@@ -65,7 +65,7 @@ a {
 }
 button:focus {outline:0;}
 
-#fileupload-example-4-label {
+#fileupload-btn {
   background-color: #0e3049;
 }
 .file-input {
@@ -89,26 +89,54 @@ button:focus {outline:0;}
 }
 .save-option {
   height: 30px;
-  margin: 0px -20px 5px -10px;
   padding-top: 0px;
 }
 .error-header-default{
-  background-color: #0288d1;
+  background-color: #44a6cb;
   padding: 10px;
   color: white;
-  font-size: 13px;
+  font-size: 14px;
 }
 .error-header-image-failure{
-  background-color: rgb(249, 168, 37);
   padding: 10px;
-  color: white;
-  font-size: 13px;
+  color: red;
+  font-size: 20px;
+  font-weight: 500;
 }
 .camera51-error-text{
   padding: 10px;
-  font-size: 12px;
+  font-size: 18px;
   text-align: initial;
+  color: #44a6cb;
+  text-align: center;
+  font-weight: 500;
+}
+.camera51-error-text-failure{
+  padding: 10px;
+  font-size: 14px;
+  text-align: initial;
+  color: black;
+  text-align: center;
+  font-weight: 500;
+}
+.overlay .progress .determinate{
+  background-color: #44a6cb;
+}
+.camera51-error-wrapper{
+  max-width: 180px;
+  max-height: 200px;
+  margin: 0 auto;
   background-color: white;
+  top: 42px;
+  position: relative;
+}
+.camera51-error-wrapper-failure{
+  max-height: 200px;
+  margin: 0 auto;
+}
+.camera51-error-text-wrapper{
+  /*background-color: white;*/
+  height: 70px;
 }
 div#dropZone {
   background: white;
@@ -187,9 +215,8 @@ div#dropZone {
 	z-index: 10;
   height: 520px;
   width: 240px;
-  padding: 10px;
-  padding-left: 29px;
-  padding-right: 29px;
+  /*padding-left: 30px;*/
+  /*padding-right: 30px;*/
 }
 .preview{
     /*display: inline-block;*/
@@ -212,16 +239,16 @@ div#dropZone {
 
 }
 .overlay{
-  background: rgba(255, 255, 255, 0.5);
+  /*background: rgba(255, 255, 255, 0.5);*/
   display: block;
   height: 100%;
   left: 0;
   position: absolute;
-  top: 0;
+  top: 50%;
   width: 100%;
 }
 .overlay span{
-	position: absolute;
+	position: relative;
 	top: 35%;
 	color: black;
 	font-weight: bold;
@@ -240,8 +267,10 @@ div#dropZone {
   position: relative;
 
 }
-.progress{
-	height: 8px;  /* Can be anything */
+.overlay .progress{
+  width: 70%;
+  margin: 0 auto;
+	height: 4px;  /* Can be anything */
 	position: relative;
 	background: #fff;
 	-moz-border-radius: 25px;
@@ -250,6 +279,14 @@ div#dropZone {
 	-webkit-box-shadow: inset 0 -1px 1px rgba(255,255,255,0.3);
 	-moz-box-shadow   : inset 0 -1px 1px rgba(255,255,255,0.3);
 	box-shadow        : inset 0 -1px 1px rgba(255,255,255,0.3);
+}
+.camera51-darken{
+  display: inline-block;
+  background: black;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  opacity:0.6;
 }
 .progress span{
 	border: 1px solid #555;

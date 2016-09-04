@@ -20,25 +20,27 @@ var camera51; // Object for Interacting with the editor.
 var camera51UserFunctions = new Camera51UserFunctions(); // Object, functions for registering analytics events.
 var camera51WithQueue = new Camera51WithQueue();
 
-window.camera51 = camera51;
+
+  window.camera51 = camera51;
 window.camera51UserFunctions = camera51UserFunctions;
 window.camera51WithQueue = camera51WithQueue;
 
 var camera51Text = {
   "show-result"     : "preview result",
   "back-to-edit"    : "back to edit",
+  "click-to-fix"    : "Click to edit",
   "tooltip-mark-background" : "Draw lines to mark areas you want to remove from the image",
   "tooltip-mark-object" : "Draw lines to mark areas you want to keep in the image",
 
   "error-header-default": "Press here for manual background removal",
   "error-header-image-failure": "Image error",
-  "error-text-7" : "Background was not automatically removed, you may remove it manually",
-  "error-text-6" : "Background was not automatically removed, you may remove it manually",
-
-  "error-text-5" : "Background was not automatically removed since the image <b>already has a white background</b>",
-  "error-text-2" : "Background was not automatically removed due to <b>low contrast</b>",
-  "error-text-4" : "Background was not automatically removed due to a <b>cluttered background</b>",
-  "error-text-103" : "Image <b>too small</b> to be processed",
+  "error-text-7" : "<b>GRAFIC BANNER</b>",
+  "error-text-6" : "<b>GRAFIC BANNER</b>",
+  "error-text-100" : "<b>GRAFIC BANNER</b>",
+  "error-text-5" : "<b>WHITE BACKGROUND</b>",
+  "error-text-2" : "<b>LOW CONTRAST</b>",
+  "error-text-4" : "<b>CLUTTERED IMAGE</b>",
+  "error-text-103" : "Image <b>too small</b> to be processed<br><font size='2'>(image size should be at least 70x70px)</font>",
   "error-text-101" : "Image cannot be processed",
   "error-text-default" : "Background was not automatically removed, you may remove it manually"
 };
@@ -570,7 +572,9 @@ function Camera51WithQueue(){
     var res = JSON.parse(response_element.messageBody);
     var elem = response_element.arrayElement;
     if( typeof res.ResultImage === 'string'){
-      img = res.ResultImage;
+      var str = res.ResultImage;
+      str = str.replace("s3.amazonaws.com/cam51-img-proc", "d2f1mfcynop4j.cloudfront.net");
+      img = str;
     }
     if( typeof res.ProcessingResult === 'number'){
       processingResultCode = res.ProcessingResult;
@@ -600,70 +604,84 @@ function Camera51WithQueue(){
 
     } else {
 
-    var elementHeight = elem.clientHeight;
-    var maxImage = elementHeight - 45;
-    var wrapper = document.createElement('div');
-    if (processingResultCode == 0) {
+      var elementHeight = elem.clientHeight;
+      var maxImage = elementHeight;// - 45;
+      var wrapper = document.createElement('div');
+      if (processingResultCode == 0) {
+        var img = document.createElement('img');
+        img.src = imgUrl;
+        img.onmousedown = function(event){
+          if(event.preventDefault){
+            event.preventDefault();
+          } else {
+            event.returnValue = false;
+          }
 
-
-      var img = document.createElement('img');
-      img.src = imgUrl;
-      img.onmousedown = function(event){
-        if(event.preventDefault){
-          event.preventDefault();
-        } else {
-          event.returnValue = false;
         }
-
-      }
-      img.className = "img-result-preview";
-      img.style.maxWidth = "100%";
-      img.style.maxHeight = maxImage+"px";
-      img.onclick =  function () {
-        camera51OpenEditor(trackId,elem.id);
-      };
-      wrapper.style.cursor = "pointer";
-      elem.innerHTML = "";
-      wrapper.appendChild(img);
-      wrapper.style.height = "inherit";
-      wrapper.style.width = "inherit";
-      elem.appendChild(wrapper);
-    }
-    if (processingResultCode > 0) {
-      elem.innerHTML = "";
-      var header = document.createElement('div');
-
-      if(processingResultCode > 100){
-        header.innerHTML = camera51Text['error-header-image-failure'];
-        header.className = "error-header-image-failure";
-      } else {
-        header.innerHTML = camera51Text['error-header-default'];
-        header.className = "error-header-default";
-        wrapper.onclick =  function () {
+        img.className = "img-result-preview";
+        img.style.maxWidth = "180px";
+        img.style.maxHeight = maxImage+"px";
+        img.onclick =  function () {
           camera51OpenEditor(trackId,elem.id);
         };
         wrapper.style.cursor = "pointer";
+        elem.innerHTML = "";
+        wrapper.appendChild(img);
+        wrapper.style.height = "inherit";
+        wrapper.style.width = "inherit";
+        elem.appendChild(wrapper);
       }
+      if (processingResultCode > 0) {
+        elem.innerHTML = "";
+        var errorWrapper = document.createElement('div');
 
-      wrapper.appendChild(header);
-      var errorText = document.createElement('div');
-      var str = "error-text-"+ processingResultCode;
-      if(camera51Text.hasOwnProperty(str) ){
-        errorText.innerHTML = camera51Text[str];
-      } else {
-        errorText.innerHTML = camera51Text["error-text-default"];
+        var header = document.createElement('div');
+
+        if(processingResultCode > 100){
+          header.innerHTML = camera51Text['error-header-image-failure'];
+          header.className = "error-header-image-failure";
+          errorWrapper.className = "camera51-error-wrapper-failure";
+        } else {
+          errorWrapper.className = "camera51-error-wrapper";
+          var errorText = document.createElement('div');
+          var str = "error-text-"+ processingResultCode;
+          header.innerHTML = camera51Text[str];
+          header.className = "error-header-default";
+          wrapper.onclick =  function () {
+            camera51OpenEditor(trackId,elem.id);
+          };
+          wrapper.style.cursor = "pointer";
+          wrapper.style.height = "inherit";
+          wrapper.style.width = "inherit";
+        }
+
+        errorWrapper.appendChild(header);
+        var errorTextWrapper = document.createElement('div');
+
+        var errorText = document.createElement('div');
+        if(processingResultCode > 100){
+          var str = "error-text-"+ processingResultCode;
+          errorText.innerHTML = camera51Text[str];
+          errorText.className = "camera51-error-text-failure";
+        } else {
+          errorText.className = "camera51-error-text";
+          errorText.innerHTML = camera51Text["click-to-fix"];
+        }
+
+
+        errorTextWrapper.className = "camera51-error-text-wrapper";
+        errorTextWrapper.appendChild(errorText);
+        errorWrapper.appendChild(errorTextWrapper);
+        wrapper.appendChild(errorWrapper);
+        elem.appendChild(wrapper);
       }
-      errorText.className = "camera51-error-text";
-      wrapper.appendChild(errorText);
-      elem.appendChild(wrapper);
-    }
 
       if (processingResultCode <= 100) {
         var btnWrapper = document.createElement('div');
-        btnWrapper.style.position = "absolute";
+        btnWrapper.style.position = "relative";
         btnWrapper.style.left = 0;
         btnWrapper.style.right = 0;
-        btnWrapper.style.bottom = "10px";
+        btnWrapper.style.bottom = "-20px";
 
         var btn = document.createElement('a');
         btn.innerHTML = "TOUCH UP";
