@@ -118,11 +118,16 @@ $(document).ready(function () {
         var imageType = /image.*/;
         if (!file.type.match(imageType)) {
           alert("File \"" + file.name + "\" is not a valid image file");
+
           return false;
         }
+
         // check file size
-        if (parseInt(file.size / 1024) > 18050) {
-          alert("File \"" + file.name + "\" is too big.Max allowed size is 6 MB.");
+        if (parseInt(file.size) >= 1024 * 1024 * 6 ) {
+          $('#show-token-error').openModal();
+          $('#errorSubject').html("File \"" + file.name + "\" is too big");
+          $('#errorMessage').html("File \"" + file.name + "\" is too big. Max allowed size is 6 MB.");
+
           return false;
         }
 
@@ -443,4 +448,30 @@ $(document).ready(function () {
 
 
   });
+});
+
+
+var isIE;
+(function() {
+  var ua = window.navigator.userAgent,
+    msie = ua.indexOf('MSIE '),
+    trident = ua.indexOf('Trident/');
+
+  isIE = (msie > -1 || trident > -1) ? true : false;
+})();
+
+$(document).ready(function () {
+
+  if (isIE) {
+
+    $('#show-token-error').openModal();
+    $('#errorSubject').html("Internet Explorer is not supported");
+    $('#errorMessage').html("We do not support Internet Explorer 11 and below. Please use a diffrent web browser.");
+
+
+    $('.modal-footer').hide();
+
+  }
+
+
 });

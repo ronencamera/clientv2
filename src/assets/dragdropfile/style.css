@@ -126,6 +126,7 @@ button:focus {outline:0;}
 }
 .overlay .progress .determinate{
   background-color: #44a6cb;
+  width: 0px;
 }
 .camera51-error-wrapper{
   max-width: 180px;
