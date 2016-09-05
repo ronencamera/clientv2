@@ -209,10 +209,10 @@ export class Editoraa {
     var newObj = JSON.parse(obj);
     this.setOutsideConfig(newObj);
     //  console.log(newObj, this.showimageService);
-    if (this.showimageService.imageCopyURL != null &&
-      this.showimageService.imageCopyURL.length > 0) {
+    if (this.showimageService.originalImageUrl != null &&
+      this.showimageService.originalImageUrl.length > 0) {
 
-      var sessionId = this.getSession(this.showimageService.imageCopyURL);
+      var sessionId = this.getSession(this.showimageService.originalImageUrl);
       //   console.log(sessionId);
       var strImage = this.resultImageUrl;
       strImage = strImage.replace("s3.amazonaws.com/cam51-img-proc", "d2f1mfcynop4j.cloudfront.net");
