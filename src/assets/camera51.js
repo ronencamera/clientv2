@@ -571,8 +571,8 @@ function Camera51WithQueue(){
     var processingResultCode = null;
     var res = JSON.parse(response_element.messageBody);
     var elem = response_element.arrayElement;
-    if( typeof res.ResultImage === 'string'){
-      var str = res.ResultImage;
+    if( typeof res.resultImageURL === 'string'){
+      var str = res.resultImageURL;
       str = str.replace("s3.amazonaws.com/cam51-img-proc", "d2f1mfcynop4j.cloudfront.net");
       img = str;
     }
