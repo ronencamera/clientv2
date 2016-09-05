@@ -81,7 +81,7 @@ export class Editoraa {
   imagewrapperSizeWidth;
   isGreen = false;
   flagShowResult = false;
-  AMOUNT_ZOOM = 0.05;
+  AMOUNT_ZOOM = 0.10;
   obj:Object;
   assetsUrl = _settings.assetsUrl;
   imageSizeWidth;
@@ -431,7 +431,7 @@ export class Editoraa {
 
     var imageCopy = response.imageCopyURL;
     imageCopy = imageCopy.replace("s3.amazonaws.com/cam51-img-proc", "d2f1mfcynop4j.cloudfront.net");
-    console.log(imageCopy);
+    //console.log(imageCopy);
 
   //  this.showEditorView = "block";
     var imageObj = new Image();
@@ -687,7 +687,7 @@ export class Editoraa {
 
     var repeat = function () {
       that.doZoom(type);
-      that.pressTimer = TimerWrapper.setTimeout(repeat, 100);
+      that.pressTimer = TimerWrapper.setTimeout(repeat, 50);
     }
     repeat();
   }

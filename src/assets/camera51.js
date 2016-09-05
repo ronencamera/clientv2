@@ -34,9 +34,9 @@ var camera51Text = {
 
   "error-header-default": "Press here for manual background removal",
   "error-header-image-failure": "Image error",
-  "error-text-7" : "<b>GRAFIC BANNER</b>",
-  "error-text-6" : "<b>GRAFIC BANNER</b>",
-  "error-text-100" : "<b>GRAFIC BANNER</b>",
+  "error-text-7" : "<b>GRAPHIC BANNER</b>",
+  "error-text-6" : "<b>GRAPHIC BANNER</b>",
+  "error-text-100" : "<b>GRAPHIC BANNER</b>",
   "error-text-5" : "<b>WHITE BACKGROUND</b>",
   "error-text-2" : "<b>LOW CONTRAST</b>",
   "error-text-4" : "<b>CLUTTERED IMAGE</b>",

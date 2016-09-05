@@ -1,7 +1,6 @@
 
 //var apiUrl = "http://sandbox-lb-1845392311.us-east-1.elb.amazonaws.com";
-//var apiUrl = "http://prod-elb-577420654.us-east-1.elb.amazonaws.com";
-var apiUrl = "http://api.malabi.co";
+var apiUrl = "https://api.malabi.co";
 
 var customerId = null;
 var customerToken = null;
@@ -247,7 +246,7 @@ create_box = function (e, file, size) {
 
   var template = '<div class="eachImage z-depth-1" id="eachImage-' + rand + '">';
   template += '<div class="save-option" onclick="updateRemoveImage()" >' +
-    '<i id="save-option" style="cursor: pointer !important;" title="remove" class="material-icons right" onclick="$(this).closest(\'.eachImage\').remove();">close</i></div>';
+    '<i id="save-option" style="margin: 5px;cursor: pointer !important;" title="remove" class="material-icons right" onclick="$(this).closest(\'.eachImage\').remove();">close</i></div>';
   template += '<div class="preview" id="' + rand + '" ><span class="camera51-darken"><img src="' + src + '" style="opacity: 0.6"></span><span class="overlay"><div class="progress" id="'+rand+'"><div class="determinate" style="width: 70%"></div></div>';
   template += '<div style="font-size: 14px;color: white; ">Uploading...</div></span>';
   template += '</div><div style="height: 20px;width: 100%"></div> ';
@@ -434,11 +433,14 @@ $(document).ready(function () {
   document.addEventListener("dragleave", function(event) {
 
     if ( event.target.className == "droptarget" ) {
-      event.target.style.border = "";
+      //event.target.style.border = "";
       //    that.visible = false;
      // that.displayNone = true;
       $('.droptarget').css('display','none');
 
     }
+
+
+
   });
 });
