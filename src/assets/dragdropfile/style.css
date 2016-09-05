@@ -137,7 +137,8 @@ button:focus {outline:0;}
 }
 .camera51-error-wrapper-failure{
   max-height: 200px;
-  margin: 0 auto;
+  /*margin: 0 auto;*/
+  margin-top: 35px;
 }
 .camera51-error-text-wrapper{
   /*background-color: white;*/
