@@ -47,6 +47,7 @@ var camera51Text = {
 
 function Camera51UserFunctions(){};
 
+// Function to send event on an Image. By sending the trackId as an identifier.
 Camera51UserFunctions.prototype.sendEventTrackId = function(trackId, customerId,type) {
   var xhttp = new XMLHttpRequest();
   xhttp.open("POST", window.location.protocol +"//api.malabi.co/Camera51Server/imageUsed?", true);
@@ -54,13 +55,13 @@ Camera51UserFunctions.prototype.sendEventTrackId = function(trackId, customerId,
   xhttp.send("customerId="+customerId+"&trackId="+trackId+"&type="+type);
 };
 
-Camera51UserFunctions.prototype.sendEventResultImage = function(resultImageUrl, customerId,type) {
+// Function to send event on an Image. By sending the sessionId as an identifier.
+Camera51UserFunctions.prototype.sendEventSessionId = function(sessionId, customerId,type) {
   var xhttp = new XMLHttpRequest();
   xhttp.open("POST", window.location.protocol +"//api.malabi.co/Camera51Server/imageUsed?", true);
   xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-  xhttp.send("customerId="+customerId+"&resultImageUrl="+resultImageUrl+"&type="+type);
+  xhttp.send("customerId="+customerId+"&sessionId="+sessionId+"&type="+type);
 };
-
 
 
 this.initCamera51 = function(obj) {
