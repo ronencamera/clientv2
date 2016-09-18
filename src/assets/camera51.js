@@ -48,19 +48,19 @@ var camera51Text = {
 function Camera51UserFunctions(){};
 
 // Function to send event on an Image. By sending the trackId as an identifier.
-Camera51UserFunctions.prototype.sendEventTrackId = function(trackId, customerId,type) {
+Camera51UserFunctions.prototype.sendEventTrackId = function(trackId, customerId,message) {
   var xhttp = new XMLHttpRequest();
   xhttp.open("POST", window.location.protocol +"//api.malabi.co/Camera51Server/imageUsed?", true);
   xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-  xhttp.send("customerId="+customerId+"&trackId="+trackId+"&type="+type);
+  xhttp.send("customerId="+customerId+"&trackId="+trackId+"&message="+message);
 };
 
 // Function to send event on an Image. By sending the sessionId as an identifier.
-Camera51UserFunctions.prototype.sendEventSessionId = function(sessionId, customerId,type) {
+Camera51UserFunctions.prototype.sendEventSessionId = function(sessionId, customerId,message) {
   var xhttp = new XMLHttpRequest();
   xhttp.open("POST", window.location.protocol +"//api.malabi.co/Camera51Server/imageUsed?", true);
   xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-  xhttp.send("customerId="+customerId+"&sessionId="+sessionId+"&type="+type);
+  xhttp.send("customerId="+customerId+"&sessionId="+sessionId+"&message="+message);
 };
 
 
@@ -867,6 +867,10 @@ function Camera51WithQueue(){
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send("token="+this.sessionToken+"&customerId="+this.customerId+"&trackId="+uniqueTrackId
         +"&origImgUrl="+origImgUrl+"&callbackURL="+this.sqsUrl);
+  };
+
+  this.parseStringToSessionId = function(str){
+    return url.substring(url.lastIndexOf("SID"), url.lastIndexOf("/"));
   };
 
   this.loaded();
