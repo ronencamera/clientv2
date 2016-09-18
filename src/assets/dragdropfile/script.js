@@ -1,5 +1,5 @@
 
-//var apiUrl = "http://sandbox-lb-1845392311.us-east-1.elb.amazonaws.com";
+//var apiUrl = "https://sandbox.malabi.co";
 var apiUrl = "https://api.malabi.co";
 
 var customerId = null;

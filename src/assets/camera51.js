@@ -37,7 +37,7 @@ var camera51Text = {
   "error-text-7" : "<b>GRAPHIC BANNER</b>",
   "error-text-6" : "<b>GRAPHIC BANNER</b>",
   "error-text-100" : "<b>GRAPHIC BANNER</b>",
-  "error-text-5" : "<b>WHITE BACKGROUND</b>",
+  "error-text-5" : "<b>CLEAR BACKGROUND</b>",
   "error-text-2" : "<b>LOW CONTRAST</b>",
   "error-text-4" : "<b>CLUTTERED IMAGE</b>",
   "error-text-103" : "Image <b>too small</b> to be processed<br><font size='2'>(image size should be at least 70x70px)</font>",
