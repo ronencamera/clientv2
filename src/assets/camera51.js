@@ -707,9 +707,14 @@ function Camera51WithQueue(){
     for(i=0; i < lengthMessages; i++){
       message = messages.getElementsByTagName("Message")[i];
       messageBody = message.getElementsByTagName("Body")[0].textContent;
-      //  console.log(messageBody);
-      var obj = JSON.parse(messageBody);
-
+      var obj = null;
+      try{
+        obj = JSON.parse(messageBody);
+      }catch(e){
+        console.log(e);
+        console.log(messageBody);
+        continue;
+      }
       var searchValue;
       for(searchValue in searchArray){
         //     console.log(obj[searchKey], searchArray[searchValue]);
@@ -807,14 +812,18 @@ function Camera51WithQueue(){
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (xhttp.readyState == 4 && xhttp.status == 200) {
-        var res = JSON.parse(xhttp.responseText);
+        var res = null;
+        try {
+          res = JSON.parse(xhttp.responseText);
+        } catch (e){
+          return;
+        }
         sqsUrl = res.response["queueURL"];
         if(sqsUrl == undefined || sqsUrl.length < 10){
           try {
             var errorM = res.response.errors;
             console.error("Error", errorM[0]);
             _this.callbackNewSQSRequestError(errorM[0]);
-            //alert("Camera51 error: "+errorM[0]);
           } catch (er){
             console.error(er);
           }
@@ -851,16 +860,21 @@ function Camera51WithQueue(){
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (xhttp.readyState == 4 && xhttp.status == 200) {
-
-          var res = JSON.parse(xhttp.responseText);
-          _this.callbackAsyncRequest(res);
-          if(res.hasOwnProperty("response") && res.response.hasOwnProperty("sessionId")){
-            _this.addSearchArray(element, res.response.sessionId);
-            _this.startSQS();
-          } else {
-            _this.callbackAsyncRequestError(JSON.stringify(res.response));
-            console.error(res.response);
-          }
+        var res = null;
+        try {
+          res = JSON.parse(xhttp.responseText);
+        } catch (e){
+          consle.log("error in response, expected JSON");
+          return;
+        }
+        _this.callbackAsyncRequest(res);
+        if(res.hasOwnProperty("response") && res.response.hasOwnProperty("sessionId")){
+          _this.addSearchArray(element, res.response.sessionId);
+          _this.startSQS();
+        } else {
+          _this.callbackAsyncRequestError(JSON.stringify(res.response));
+          console.error(res.response);
+        }
       }
     };
     xhttp.open("POST", this.apiUrl + "/Camera51Server/processImageAsync", true);
