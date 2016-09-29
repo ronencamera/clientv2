@@ -1165,8 +1165,8 @@ export class Editoraa {
       "userInputData" : this.clickSend,
       "previousMaskURL": this.preversioResponseObj.resultEditMaskImageUrl,
       "shadow": this.applyShadow,
-      "transparent": this.showimageService.applyTransparent,
-      "userInputImageData": dataURL
+      "transparent": this.showimageService.applyTransparent
+     // "userInputImageData": dataURL
     };
 
     var headers = new Headers();

@@ -850,12 +850,15 @@ function Camera51WithQueue(){
   };
 
 
-  this.requestAsync = function(origImgUrl, element, uniqueTrackId){
+  this.requestAsync = function(origImgUrl, element, uniqueTrackId, forceResultImage){
     var _this = this;
     if(uniqueTrackId == null || uniqueTrackId == ""){
       uniqueTrackId = this.sessionToken+"-"+Date.now()+"-"+Math.floor((1 + Math.random()) * 0x10000)
           .toString(16)
           .substring(1);
+    }
+    if(forceResultImage == null || forceResultImage == ""){
+      forceResultImage=false;
     }
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
@@ -880,7 +883,7 @@ function Camera51WithQueue(){
     xhttp.open("POST", this.apiUrl + "/Camera51Server/processImageAsync", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send("token="+this.sessionToken+"&customerId="+this.customerId+"&trackId="+uniqueTrackId
-        +"&origImgUrl="+origImgUrl+"&callbackURL="+this.sqsUrl);
+        +"&origImgUrl="+origImgUrl+"&callbackURL="+this.sqsUrl+"&forceResultImage="+forceResultImage);
   };
 
   this.parseStringToSessionId = function(str){
