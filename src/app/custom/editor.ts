@@ -263,6 +263,9 @@ export class Editoraa {
     if (obj.apiUrl && obj.apiUrl.length > 1) {
       this.setApiUrl(obj.apiUrl);
     }
+    if (obj.transparent && obj.transparent == true) {
+      this.showimageService.applyTransparent = true;
+    }
     this.showimageService.customerId = obj.customerId;
     if (obj.customerId && typeof obj.customerId === 'number') {
       this.showimageService.customerId = obj.customerId;

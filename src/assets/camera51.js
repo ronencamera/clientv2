@@ -79,6 +79,7 @@ function camera51obj(obj) {
   var iframeSrc = "";
   var trackId = null;
   var imageElement = null;
+  this.transparent = false;
   this.camera51Text = camera51Text;
   obj.showTutorial = showTutorial;
   this.overrideTutorialElement = overrideTutorialElement;
@@ -92,6 +93,10 @@ function camera51obj(obj) {
 
   if (obj.hasOwnProperty('camera51Text')) {
     this.camera51Text = Object.assign(this.camera51Text, obj.camera51Text);
+  }
+
+  if (obj.hasOwnProperty('transparent') && obj.transparent == true) {
+    this.transparent = true;
   }
 
   this.apiUrl = apiUrl;
@@ -474,7 +479,8 @@ function Camera51WithQueue(){
       elementId: obj.camera51EditorIframe, // Div to insert the iframe.
       apiUrl: apiUrl,
       customerId: obj.customerId,
-      camera51Text: obj.camera51Text
+      camera51Text: obj.camera51Text,
+      transparent: obj.transparent
       //
     };
     if(obj.hasOwnProperty('decreaseInnerHeight') && obj.decreaseInnerHeight > 1){
