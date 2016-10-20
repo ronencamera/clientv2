@@ -52,7 +52,7 @@ Camera51UserFunctions.prototype.sendEventTrackId = function(trackId, customerId,
   var xhttp = new XMLHttpRequest();
   xhttp.open("POST", window.location.protocol +"//api.malabi.co/Camera51Server/imageUsed?", true);
   xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-  xhttp.send("customerId="+customerId+"&trackId="+trackId+"&message="+message);
+  xhttp.send("customerId="+customerId+"&trackId="+encodeURIComponent(trackId)+"&message="+message);
 };
 
 // Function to send event on an Image. By sending the sessionId as an identifier.
@@ -106,9 +106,9 @@ function camera51obj(obj) {
   } else {
     iframeSrc = window.location.protocol+"//assets-malabi.s3.amazonaws.com/version/v2/index.html";
     // For development, if working in local host, use local iframe file:
-    if (document.location.hostname == "localhost" || document.location.hostname == "192.168.1.162"  ) {
-      iframeSrc ="index.html";
-    }
+    // if (document.location.hostname == "localhost" || document.location.hostname == "192.168.1.162"  ) {
+    //   iframeSrc ="index.html";
+    // }
     if (document.location.hostname.indexOf("sandbox-malabi") !== -1) {
       iframeSrc ="index.html";
     }
@@ -219,8 +219,10 @@ function camera51obj(obj) {
       this.obj.callbackEnableButtons();
     } else {
       var elms = document.querySelectorAll('*[id^="camera51-btn"]');
-      for (i=0;i<elms.length;i++) {
-        this.uclass.remove(elms[i],'disabled');
+      if(elms.length > 0){
+        for (i=0;i<elms.length;i++) {
+          this.uclass.remove(elms[i],'disabled');
+        }
       }
     }
   };
@@ -230,8 +232,10 @@ function camera51obj(obj) {
       this.obj.callbackEnableButtons();
     } else {
       var elms = document.querySelectorAll('*[id^="camera51-btn"]');
-      for (i=0;i<elms.length;i++) {
-        this.uclass.add(elms[i],'disabled');
+      if(elms.length > 0) {
+        for (i = 0; i < elms.length; i++) {
+          this.uclass.add(elms[i], 'disabled');
+        }
       }
     }
   };
@@ -244,7 +248,7 @@ function camera51obj(obj) {
         var elm= document.getElementById("camera51-btn-undo");
         this.uclass.add(elm,'disabled');
       } else {
-        console.error("Error Camera51 Init: camera51-btn-undo element not found, looking for #camera51-btn-undo element. Or add your override with your own callbackStopLoader function.");
+        console.error("Error Camera51 Init: camera51-btn-undo element not found, looking for #camera51-btn-undo element. Or add your override with your own callbackDisableUndo function.");
       }
     }
   };

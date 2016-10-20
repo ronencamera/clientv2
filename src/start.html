@@ -190,14 +190,17 @@ window.onload = function(){
 		wrappermarginTop:10,
 		backgroundColor: "#fff", // background color in the edit window
 		customerId: 3, //
+      transparent: true,
+      iframeSrc: window.location.protocol+"//assets-malabi.s3.amazonaws.com/version/v2/index.html",
+        trackId :"a059e275-52e0-4524-8050-3872fdd8d9af-1469973953332-551c",
 		callbackStartLoader: function(){
 			document.getElementById('imgLoader').style.visibility = "";
 			disableButtons();
 		},
-		callbackStopLoader: function(returnVar){
+		callbackStopLoader: function(response){
 			if(returnVar == camera51.obj.RETURN_IFRAME){
 				console.log( "callbackStopLoader RETURN_IFRAME" );
-        enableButtons();
+            enableButtons();
 			}
 
 			document.getElementById('imgLoader').style.visibility = "hidden";
@@ -226,19 +229,11 @@ window.onload = function(){
       },
       callbackEnableButtons: function(){
         enableButtons();
-      },
-      callbackDisableUndo: function(){
-        console.log("callbackDisableUndo ");
-        $('#undoButton').addClass( "disabled" );
-      },
-      callbackEnableUndo: function() {
-        console.log("callbackEnableUndo ");
-        $('#undoButton').removeClass("disabled");
       }
     });
 }
 </script>
-<script type="text/javascript" src="assets/camera51.js"></script>
+<script type="text/javascript" src="http://assets-malabi.s3.amazonaws.com/version/v2/assets/camera51.js"></script>
 <style>
 
 
