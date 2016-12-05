@@ -198,7 +198,7 @@ window.onload = function(){
 			disableButtons();
 		},
 		callbackStopLoader: function(response){
-			if(returnVar == camera51.obj.RETURN_IFRAME){
+			if(response == camera51.obj.RETURN_IFRAME){
 				console.log( "callbackStopLoader RETURN_IFRAME" );
             enableButtons();
 			}
