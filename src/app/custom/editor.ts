@@ -23,13 +23,13 @@ import {ShowimageService} from './showimage.service';
 
 import 'rxjs/Rx';
 
-var greenloader = require("url?mimetype=image/png!../../assets/tools/green_pointer_6.png");
+var greenloader = require("url?mimetype=image/png!../../../../ngcli/sgf/src/assets/tools/green_pointer_6.png");
 //var greenloaderCur = require("url?mimetype=image/png!../../../assets/tools/green_pointer_6_lastone.cur");
 
-var redloader = require("url?mimetype=image/png!../../assets/tools/red_pointer_6.png");
+var redloader = require("url?mimetype=image/png!../../../../ngcli/sgf/src/assets/tools/red_pointer_6.png");
 //var redloaderCur = require("url?mimetype=image/png!../../../assets/tools/red_pointer_6_lastone.cur");
 
-var transparentImage = require("url?mimetype=image/png!../../assets/tools/transparent_bg.png");
+var transparentImage = require("url?mimetype=image/png!../../../../ngcli/sgf/src/assets/tools/transparent_bg.png");
 
 @Component({
   selector: 'editor',
